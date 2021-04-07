@@ -1,0 +1,60 @@
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:surveyqu/home/mainhome.dart';
+import 'package:surveyqu/login/introslider.dart';
+import 'package:surveyqu/login/login.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'SurveyQu',
+      theme: ThemeData(
+        brightness: Brightness.light,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: CheckAuth(),
+    );
+  }
+}
+
+class CheckAuth extends StatefulWidget {
+  @override
+  _CheckAuthState createState() => _CheckAuthState();
+}
+
+class _CheckAuthState extends State<CheckAuth> {
+  bool isAuth = false;
+  @override
+  void initState() {
+    _checkIfLoggedIn();
+    super.initState();
+  }
+
+  void _checkIfLoggedIn() async{
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    var token = localStorage.getString('token');
+    if(token != null){
+      setState(() {
+        isAuth = true;
+      });
+    }
+  }
+  @override
+  Widget build(BuildContext context) {
+    Widget child;
+    if (isAuth) {
+      child = MainHome();
+    } else {
+      child = IntroScreen();
+    }
+    return Scaffold(
+      body: child,
+    );
+  }
+}
