@@ -179,7 +179,7 @@ class _Profile extends State<Profile> {
       SharedPreferences localStorage = await SharedPreferences.getInstance();
       localStorage.remove('user');
       localStorage.remove('token');
-      Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context)=>Login()));
+      Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(new MaterialPageRoute(builder: (context)=>Login()), (route) => false);
     }
   }
 }

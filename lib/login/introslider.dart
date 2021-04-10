@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intro_slider/dot_animation_enum.dart';
 import 'package:intro_slider/intro_slider.dart';
 import 'package:intro_slider/slide_object.dart';
@@ -36,6 +37,13 @@ class IntroScreenState extends State<IntroScreen> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    // bring the status bar back
+    SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+  }
+
+  @override
   void initState() {
     super.initState();
     this.getContent();
@@ -45,16 +53,12 @@ class IntroScreenState extends State<IntroScreen> {
         title: 'Slide 1',
         styleTitle: TextStyle(
             color: Colors.blue,
-            fontSize: 30.0,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'RobotoMono'),
+            fontSize: 30.0,),
         description:
         "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.",
         styleDescription: TextStyle(
             color: Colors.lightBlue,
-            fontSize: 20.0,
-            fontStyle: FontStyle.italic,
-            fontFamily: 'Raleway'),
+            fontSize: 20.0,),
         pathImage: "images/slide1.png",
       ),
     );
@@ -63,16 +67,12 @@ class IntroScreenState extends State<IntroScreen> {
         title: 'Slide 2',
         styleTitle: TextStyle(
             color: Colors.blue,
-            fontSize: 30.0,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'RobotoMono'),
+            fontSize: 30.0,),
         description:
         "Ye indulgence unreserved connection alteration appearance",
         styleDescription: TextStyle(
             color: Colors.lightBlue,
-            fontSize: 20.0,
-            fontStyle: FontStyle.italic,
-            fontFamily: 'Raleway'),
+            fontSize: 20.0,),
         pathImage: "images/slide2.png",
       ),
     );
@@ -81,27 +81,22 @@ class IntroScreenState extends State<IntroScreen> {
         title: 'Slide 3',
         styleTitle: TextStyle(
             color: Colors.blue,
-            fontSize: 30.0,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'RobotoMono'),
+            fontSize: 30.0,),
         description:
         "Much evil soon high in hope do view. Out may few northward believing attempted. Yet timed being songs marry one defer men our. Although finished blessing do of",
         styleDescription: TextStyle(
             color: Colors.lightBlue,
-            fontSize: 20.0,
-            fontStyle: FontStyle.italic,
-            fontFamily: 'Raleway'),
+            fontSize: 20.0,),
         pathImage: "images/slide3.png",
       ),
     );
   }
 
-  void onDonePress() {
-    // Back to the first tab
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Login()),
-    );
+  Future<void> onDonePress() async {
+    // Back to the first tab\
+    Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (context) => Login()), (route) => false);
+    // Navigator.of(context, rootNavigator: false).push(new MaterialPageRoute(builder: (context) => Login()),
+    // );
   }
 
   void onTabChangeCompleted(index) {

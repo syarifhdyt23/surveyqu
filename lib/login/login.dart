@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,9 @@ import 'package:surveyqu/home/mainhome.dart';
 import 'package:surveyqu/info.dart';
 import 'package:surveyqu/login/register.dart';
 import 'package:surveyqu/network_utils/api.dart';
+
+import '../hexacolor.dart';
+import '../hexacolor.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -74,6 +78,10 @@ class _LoginState extends State<Login> {
                   topLeft: Radius.circular(20),
                   topRight: Radius.circular(20),
                 ),
+                image: new DecorationImage(
+                  image: new AssetImage('images/banner.png'),
+                  fit: BoxFit.cover,
+                ),
               ),
               margin: const EdgeInsets.only(top: 300),
               child: new ListView(
@@ -84,7 +92,7 @@ class _LoginState extends State<Login> {
                         new Container(
                           padding: EdgeInsets.only(top: 20),
                           child: new Text(
-                            'SIGN IN',
+                            'MASUK',
                             style: new TextStyle(
                                 fontFamily: 'helvetica',
                                 fontWeight: FontWeight.w600,
@@ -215,17 +223,17 @@ class _LoginState extends State<Login> {
                                 padding: EdgeInsets.only(
                                     top: 8, bottom: 8, left: 10, right: 10),
                                 child: Text(
-                                  _isLoading ? 'Loading...' : 'Login',
+                                  _isLoading ? 'Loading...' : 'Masuk',
                                   textDirection: TextDirection.ltr,
                                   style: TextStyle(
-                                    color: Colors.white,
+                                    color: new HexColor('#3282B8'),
                                     fontSize: 15.0,
                                     decoration: TextDecoration.none,
                                     fontWeight: FontWeight.normal,
                                   ),
                                 ),
                               ),
-                              color: Colors.orange,
+                              color: new HexColor('#BBE1FA'),
                               disabledColor: Colors.grey,
                               shape: new RoundedRectangleBorder(
                                   borderRadius:
@@ -250,7 +258,7 @@ class _LoginState extends State<Login> {
                           width: 50,
                           margin: const EdgeInsets.only(
                               top: 40.0, left: 10.0, right: 10.0),
-                          color: Colors.black,
+                          color: Colors.white,
                         ),
                         new InkWell(
                           onTap: () {},
@@ -259,11 +267,11 @@ class _LoginState extends State<Login> {
                               child: new Row(
                                 children: <Widget>[
                                   new Text(
-                                    "Don't have account ? ",
+                                    "Belum punya akun? ",
                                     style: new TextStyle(
                                         fontSize: 17,
                                         fontWeight: FontWeight.w600,
-                                        color: Colors.black54),
+                                        color: Colors.white),
                                   ),
                                 ],
                               )),
@@ -273,7 +281,7 @@ class _LoginState extends State<Login> {
                           width: 50,
                           margin: const EdgeInsets.only(
                               top: 40.0, left: 10.0, right: 10.0),
-                          color: Colors.black,
+                          color: Colors.white,
                         )
                       ],
                     ),
@@ -294,7 +302,7 @@ class _LoginState extends State<Login> {
                               child: new Row(
                                 children: <Widget>[
                                   new Text(
-                                    "Register",
+                                    "Daftar",
                                     style: new TextStyle(
                                         fontSize: 17,
                                         color: Colors.white,

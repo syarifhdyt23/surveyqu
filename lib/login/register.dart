@@ -16,20 +16,13 @@ class _RegisterState extends State<Register> {
     size = MediaQuery.of(context).size;
 
     return new Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        iconTheme: IconThemeData(color: Colors.black),
-        centerTitle: true,
-        // title: new Text("Register", style: TextStyle(fontWeight: FontWeight.w600, color: Colors.black),),
-      ),
       body: new Container(
         color: Colors.white,
         child: new Stack(
           children: <Widget>[
             new Container(
               height: 250,
-              margin: const EdgeInsets.only(left: 30.0, right: 30.0, top: 10),
+              margin: const EdgeInsets.only(left: 30.0, right: 30.0),
               decoration: new BoxDecoration(
                 image: new DecorationImage(
                   image: new AssetImage('images/logo.png'),
@@ -39,14 +32,28 @@ class _RegisterState extends State<Register> {
               alignment: Alignment.center,
             ),
             new Container(
+              height: 70,
+              width: 70,
+              child: new InkWell(
+                onTap: (){
+                  Navigator.of(context).pop();
+                },
+                child: new Icon(Icons.arrow_back),
+              ),
+            ),
+            new Container(
               decoration: BoxDecoration(
                 color: Colors.blue,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(20),
                   topRight: Radius.circular(20),
                 ),
+                image: new DecorationImage(
+                  image: new AssetImage('images/banner.png'),
+                  fit: BoxFit.cover,
+                ),
               ),
-              margin: const EdgeInsets.only(top: 200),
+              margin: const EdgeInsets.only(top: 250),
               child: new GestureDetector(
                 behavior: HitTestBehavior.opaque,
                 onPanDown: (_) {

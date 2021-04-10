@@ -28,6 +28,7 @@ dependencies:
   shimmer: ^1.1.1
   intro_slider: ^2.3.4
   shared_preferences: ^2.0.5
+  extended_nested_scroll_view: ^3.0.0
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -55,6 +56,10 @@ flutter:
     - images/slide1.png
     - images/slide2.png
     - images/slide3.png
+    - images/banner.png
+    - images/bannersquare.png
+    - images/bannerlandscape.png
+    - images/bannersmall.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
