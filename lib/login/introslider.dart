@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intro_slider/dot_animation_enum.dart';
@@ -8,6 +9,7 @@ import 'package:surveyqu/domain.dart';
 import 'package:surveyqu/login/login.dart';
 import 'package:http/http.dart' as http;
 import 'package:surveyqu/model/slidercontent.dart';
+import '../model/slidercontent.dart';
 
 class IntroScreen extends StatefulWidget {
   IntroScreen({Key key}) : super(key: key);
@@ -17,24 +19,60 @@ class IntroScreen extends StatefulWidget {
 }
 class IntroScreenState extends State<IntroScreen> {
   List<Slide> slides = new List();
+  List<Slidercontent> _content;
   Domain domain = new Domain();
-  var dataJson;
   Function goToTab;
 
-  Future getContent() async {
+  Future<List<Slidercontent>> getContent() async {
     String url = domain.getDomain()+"auth/content";
     var headers = {
       //'content-type': 'application/json',
       'Client-Service' : domain.getHeaderClient(),
       'Auth-Key' : domain.getHeaderAuth()
     };
-    http.Response hasil = await http.post(url, headers: headers);
-    this.setState(() {
-      dataJson = jsonDecode(hasil.body);
-      SliderContent content = new SliderContent.fromJson(dataJson);
-      slides = content.content as List<Slide>;
-    });
+    try {
+      http.Response hasil = await http.post(url, headers: headers);
+      if (200 == hasil.statusCode) {
+        var dataJson = jsonDecode(hasil.body);
+        _content = slidercontentFromJson(hasil.body) as List<Slidercontent>;
+        final children = <Widget>[];
+        for (var i = 0; i < 10; i++) {
+          slides.add(
+            new Slide(
+              title: dataJson['result'][i]['konten'],
+              styleTitle: TextStyle(
+                color: Colors.blue,
+                fontSize: 30.0,),
+              description:
+              "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.",
+              styleDescription: TextStyle(
+                color: Colors.lightBlue,
+                fontSize: 20.0,),
+              pathImage: "images/slide1.png",
+            ),
+          );
+        }
+        return _content;
+      } else {
+        return List<Slidercontent>();
+      }
+    } catch (e) {
+      return List<Slidercontent>();
+    }
   }
+
+  // Future getContent() async {
+  //   String url = domain.getDomain()+"auth/content";
+  //   var headers = {
+  //     //'content-type': 'application/json',
+  //     'Client-Service' : domain.getHeaderClient(),
+  //     'Auth-Key' : domain.getHeaderAuth()
+  //   };
+  //   http.Response hasil = await http.post(url, headers: headers);
+  //   final jsonData = json.decode(hasil.body);
+  //   slides = List<dynamic>.from(slides.map((jsonData) => slides.add(jsonData)));
+  //   // slides = Content as List;
+  // }
 
   @override
   void dispose() {
@@ -46,11 +84,11 @@ class IntroScreenState extends State<IntroScreen> {
   @override
   void initState() {
     super.initState();
-    this.getContent();
+    getContent();
 
     slides.add(
       new Slide(
-        title: 'Slide 1',
+        title: 'slider 1',
         styleTitle: TextStyle(
             color: Colors.blue,
             fontSize: 30.0,),
@@ -60,34 +98,6 @@ class IntroScreenState extends State<IntroScreen> {
             color: Colors.lightBlue,
             fontSize: 20.0,),
         pathImage: "images/slide1.png",
-      ),
-    );
-    slides.add(
-      new Slide(
-        title: 'Slide 2',
-        styleTitle: TextStyle(
-            color: Colors.blue,
-            fontSize: 30.0,),
-        description:
-        "Ye indulgence unreserved connection alteration appearance",
-        styleDescription: TextStyle(
-            color: Colors.lightBlue,
-            fontSize: 20.0,),
-        pathImage: "images/slide2.png",
-      ),
-    );
-    slides.add(
-      new Slide(
-        title: 'Slide 3',
-        styleTitle: TextStyle(
-            color: Colors.blue,
-            fontSize: 30.0,),
-        description:
-        "Much evil soon high in hope do view. Out may few northward believing attempted. Yet timed being songs marry one defer men our. Although finished blessing do of",
-        styleDescription: TextStyle(
-            color: Colors.lightBlue,
-            fontSize: 20.0,),
-        pathImage: "images/slide3.png",
       ),
     );
   }

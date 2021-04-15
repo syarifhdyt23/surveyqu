@@ -35,8 +35,19 @@ class _Reward extends State<Reward> {
         child: new Stack(
           children: <Widget>[
             new Container(
+              height: 300,
                 width: size.width,
-                margin: const EdgeInsets.only(top: 100, left: 15, right: 15),
+                padding: const EdgeInsets.only(top: 100, left: 15, right: 15),
+                decoration: BoxDecoration(
+                  image: new DecorationImage(
+                    image: new AssetImage('images/bannerlandscape.png'),
+                    fit: BoxFit.cover,
+                  ),
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(20),
+                    bottomRight: Radius.circular(20),
+                  ),
+                ),
                 child: new Column(
                   children: [
                     new Container(
@@ -47,7 +58,7 @@ class _Reward extends State<Reward> {
                           fontFamily: "helvetica",
                           fontWeight: FontWeight.w600,
                           fontSize: 20,
-                          color: Colors.blue,
+                          color: Colors.white,
                         ),
                       ),
                     ),
@@ -60,7 +71,7 @@ class _Reward extends State<Reward> {
                           fontFamily: "helvetica",
                           fontWeight: FontWeight.w600,
                           fontSize: 25,
-                          color: Colors.blue,
+                          color: Colors.white,
                         ),
                       ),
                     ),
@@ -70,7 +81,7 @@ class _Reward extends State<Reward> {
                       margin: const EdgeInsets.only(top: 50, bottom: 20),
                       padding: EdgeInsets.all(5),
                       decoration: BoxDecoration(
-                          color: Colors.yellow,
+                          color: Colors.white,
                           borderRadius: BorderRadius.all(Radius.circular(5.0))
                       ),
                       child: new Text(
@@ -79,17 +90,16 @@ class _Reward extends State<Reward> {
                           fontFamily: "helvetica",
                           fontWeight: FontWeight.w600,
                           fontSize: 20,
-                          color: Colors.white,
+                          color: Colors.blue,
                         ),
                       ),
                     ),
-                    new Divider(thickness: 1,),
                   ],
                 )
             ),
             new Container(
-              padding: const EdgeInsets.only(
-                  top: 300, left: 15, right: 15
+              margin: const EdgeInsets.only(
+                  top: 330, left: 15, right: 15
               ),
               decoration: new BoxDecoration(
                 image: new DecorationImage(

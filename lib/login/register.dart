@@ -33,7 +33,8 @@ class _RegisterState extends State<Register> {
             ),
             new Container(
               height: 70,
-              width: 70,
+              width: 50,
+              padding: EdgeInsets.only(top: 20),
               child: new InkWell(
                 onTap: (){
                   Navigator.of(context).pop();

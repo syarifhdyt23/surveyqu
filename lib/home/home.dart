@@ -40,7 +40,7 @@ class _Home extends State<Home> {
           },
           body: Card(
             child: ListTile(
-              title: Text('3'),
+              title: Text('content'),
             ),
           )
       ),
@@ -158,7 +158,7 @@ class _Home extends State<Home> {
             child: new Stack(
               children: [
                 new Container(
-                  height: 25,
+                  height: 35,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(10),
@@ -176,7 +176,7 @@ class _Home extends State<Home> {
                   ),
                 ),
                 new Container(
-                  padding: EdgeInsets.only(left: 10, right: 10),
+                  padding: EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
                   child: new Card(
                     child: new Row(
                       mainAxisAlignment: MainAxisAlignment.start,

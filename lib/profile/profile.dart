@@ -56,13 +56,24 @@ class _Profile extends State<Profile> {
               ),
             ),
             new Container(
+              height: 300,
+              decoration: BoxDecoration(
+                image: new DecorationImage(
+                  image: new AssetImage('images/bannerlandscape.png'),
+                  fit: BoxFit.cover,
+                ),
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(20),
+                  bottomRight: Radius.circular(20),
+                ),
+              ),
               child: new Positioned(
-                top: 75,
+                top: 25,
                 left: .0,
                 right: .0,
                 child: Center(
                   child: new CircleAvatar(
-                    radius: 60.0,
+                    radius: 40.0,
                     backgroundColor: Colors.blue,
                     child: new InkWell(
                       onTap: (){
@@ -71,14 +82,14 @@ class _Profile extends State<Profile> {
                       },
                       child: new CircleAvatar(
                         radius: 53.0,
-                        backgroundColor: Colors.blue,
+                        backgroundColor: Colors.white,
                         child:
                         ClipRRect(
                           borderRadius: BorderRadius.circular(53.0),
                           child: new Icon(
                             Icons.person,
                             size: 60,
-                            color: Colors.white,
+                            color: Colors.lightBlue,
                           )
                         ),
                         // ClipRRect(
@@ -106,7 +117,7 @@ class _Profile extends State<Profile> {
                         fontFamily: "helvetica",
                         fontWeight: FontWeight.w600,
                         fontSize: 20,
-                        color: Colors.blue,
+                        color: Colors.white,
                       ),
                     ),
                   ),
@@ -118,7 +129,7 @@ class _Profile extends State<Profile> {
                         fontFamily: "helvetica",
                         fontWeight: FontWeight.w600,
                         fontSize: 20,
-                        color: Colors.blue,
+                        color: Colors.white,
                       ),
                     ),
                   ),
@@ -128,7 +139,7 @@ class _Profile extends State<Profile> {
                     margin: EdgeInsets.only(top: 10, bottom: 10),
                     padding: EdgeInsets.all(5),
                     decoration: BoxDecoration(
-                        color: Colors.yellow,
+                        color: Colors.white,
                         borderRadius: BorderRadius.all(Radius.circular(5.0))
                     ),
                     child: new Text(
@@ -137,11 +148,10 @@ class _Profile extends State<Profile> {
                         fontFamily: "helvetica",
                         fontWeight: FontWeight.w600,
                         fontSize: 20,
-                        color: Colors.white,
+                        color: Colors.blue,
                       ),
                     ),
                   ),
-                  new Divider(thickness: 1,),
                 ],
               )
             ),
