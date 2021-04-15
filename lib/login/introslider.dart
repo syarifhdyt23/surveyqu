@@ -22,6 +22,7 @@ class IntroScreenState extends State<IntroScreen> {
   List<Slidercontent> _content;
   Domain domain = new Domain();
   Function goToTab;
+  var dataJson;
 
   Future<List<Slidercontent>> getContent() async {
     String url = domain.getDomain()+"auth/content";
@@ -33,29 +34,30 @@ class IntroScreenState extends State<IntroScreen> {
     try {
       http.Response hasil = await http.post(url, headers: headers);
       if (200 == hasil.statusCode) {
-        var dataJson = jsonDecode(hasil.body);
-        _content = slidercontentFromJson(hasil.body) as List<Slidercontent>;
-        final children = <Widget>[];
-        for (var i = 0; i < 10; i++) {
+        dataJson = jsonDecode(hasil.body);
+        for (var i = 0; i < 3; i++) {
           slides.add(
             new Slide(
-              title: dataJson['result'][i]['konten'],
+              title: dataJson['result'][i]['urutan'],
               styleTitle: TextStyle(
                 color: Colors.blue,
                 fontSize: 30.0,),
               description:
-              "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.",
+              dataJson['result'][i]['konten'],
               styleDescription: TextStyle(
                 color: Colors.lightBlue,
                 fontSize: 20.0,),
-              pathImage: "images/slide1.png",
+              pathImage: dataJson['result'][i]['img'],
             ),
           );
         }
-        return _content;
-      } else {
-        return List<Slidercontent>();
+        // _content = slidercontentFromJson(hasil.body) as List<Slidercontent>;
+        // final children = <Widget>[];
+        // return _content;
       }
+      // else {
+      //   return List<Slidercontent>();
+      // }
     } catch (e) {
       return List<Slidercontent>();
     }
@@ -86,20 +88,20 @@ class IntroScreenState extends State<IntroScreen> {
     super.initState();
     getContent();
 
-    slides.add(
-      new Slide(
-        title: 'slider 1',
-        styleTitle: TextStyle(
-            color: Colors.blue,
-            fontSize: 30.0,),
-        description:
-        "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.",
-        styleDescription: TextStyle(
-            color: Colors.lightBlue,
-            fontSize: 20.0,),
-        pathImage: "images/slide1.png",
-      ),
-    );
+  //   slides.add(
+  //     new Slide(
+  //       title: 'slider 1',
+  //       styleTitle: TextStyle(
+  //           color: Colors.blue,
+  //           fontSize: 30.0,),
+  //       description:
+  //       "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.",
+  //       styleDescription: TextStyle(
+  //           color: Colors.lightBlue,
+  //           fontSize: 20.0,),
+  //       pathImage: "images/slide1.png",
+  //     ),
+  //   );
   }
 
   Future<void> onDonePress() async {
@@ -158,7 +160,7 @@ class IntroScreenState extends State<IntroScreen> {
                 margin: EdgeInsets.only(top: 20.0, left: 10, right: 10),
               ),
               GestureDetector(
-                  child: Image.asset(
+                  child: Image.network(
                     currentSlide.pathImage,
                     width: 200.0,
                     height: 200.0,
