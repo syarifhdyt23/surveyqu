@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:surveyqu/home/mainhome.dart';
 import 'package:surveyqu/login/introslider.dart';
 import 'package:surveyqu/login/login.dart';
+import 'package:surveyqu/login/slider.dart';
 
 import 'hexacolor.dart';
 
@@ -73,7 +74,7 @@ class _CheckAuthState extends State<CheckAuth> {
     if (isAuth) {
       child = MainHome();
     } else {
-      child = IntroScreen();
+      child = SliderInfo();
     }
     return Scaffold(
       body: child,
