@@ -17,9 +17,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: new HexColor('#256fa0'),
+      // statusBarColor: new HexColor('#256fa0'),
       statusBarBrightness: Brightness.light,
-      systemNavigationBarColor: Colors.black// status bar color
+      // systemNavigationBarColor: Colors.black// status bar color
     ));
     return MaterialApp(
       title: 'SurveyQu',

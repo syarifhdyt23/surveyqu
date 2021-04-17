@@ -8,6 +8,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:surveyqu/domain.dart';
+import 'package:surveyqu/hexacolor.dart';
 import 'package:surveyqu/loading.dart';
 
 import '../loading.dart';
@@ -104,7 +105,7 @@ class _SliderInfo extends State<SliderInfo> {
                     // color: Color[i],
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(20)),
-                        color: Colors.white.withOpacity(.5),
+                        color: Colors.white.withOpacity(.8),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -127,7 +128,7 @@ class _SliderInfo extends State<SliderInfo> {
                           ),
                         ),
                         new Container(
-                          padding: EdgeInsets.only(top: 30),
+                          padding: EdgeInsets.only(top: 20),
                           child: Column(
                             children: <Widget>[
                               // Text(
@@ -135,15 +136,16 @@ class _SliderInfo extends State<SliderInfo> {
                               //   // style: WithPages.style,
                               // ),
                               new Container(
+                                padding: EdgeInsets.only(left: 10, right: 10),
                                 child: Text(
-                                    dataJson['result'][i]['urutan'], style: TextStyle(color: Colors.white)
+                                    dataJson['result'][i]['judul'], style: TextStyle(color: new HexColor('#2670A1'),fontWeight: FontWeight.w600, fontSize: 17), textAlign: TextAlign.center,
                                   // style: WithPages.style,
                                 ),
                               ),
                               new Container(
-                                padding: EdgeInsets.only(top: 10),
+                                padding: EdgeInsets.only(top: 10, left: 10, right: 10),
                                 child: Text(
-                                    dataJson['result'][i]['konten'], style: TextStyle(color: Colors.white)
+                                    dataJson['result'][i]['konten'], style: TextStyle(color: new HexColor('#2670A1')), textAlign: TextAlign.justify,
                                   // style: WithPages.style,
                                 ),
                               ),
@@ -186,7 +188,7 @@ class _SliderInfo extends State<SliderInfo> {
                     liquidController.animateToPage(
                         page: 3 - 1, duration: 200);
                   },
-                  child: Text("Skip to End", style: TextStyle(color: Colors.white)),
+                  child: Text("Skip", style: TextStyle(color: Colors.white)),
                   color: Colors.white.withOpacity(0.01),
                 ),
               ),
