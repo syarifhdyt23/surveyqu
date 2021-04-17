@@ -38,7 +38,7 @@ class _Home extends State<Home> {
               pointWidget()
             ];
           },
-          body: Card(
+          body: Container(
             child: ListTile(
               title: Text('content'),
             ),
@@ -83,12 +83,20 @@ class _Home extends State<Home> {
 
   SliverAppBar appbarWidget() {
     return SliverAppBar(
-      backgroundColor: new HexColor('#256fa0'),
+      // backgroundColor: new HexColor('#256fa0'),
       pinned: true,
       expandedHeight: 80,
       elevation: 0,
       flexibleSpace: FlexibleSpaceBar(
         titlePadding: EdgeInsets.only(left: 20,bottom: 15),
+        // background: Container(
+        //   decoration: BoxDecoration(
+        //       image: new DecorationImage(
+        //       image: new AssetImage('images/bannerlandscape.png'),
+        //       fit: BoxFit.cover,
+        //     ),
+        //   ),
+        // ),
         title: new Container(
           child: new Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -146,6 +154,7 @@ class _Home extends State<Home> {
   }
 
   SliverAppBar pointWidget() {
+    size = MediaQuery.of(context).size;
     return SliverAppBar(
       backgroundColor: Colors.white,
       pinned: false,
@@ -176,6 +185,7 @@ class _Home extends State<Home> {
                   ),
                 ),
                 new Container(
+                  height: size.height,
                   padding: EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 5),
                   child: new Card(
                     child: new Row(
@@ -246,7 +256,7 @@ class _Home extends State<Home> {
                                     new Container(
                                       margin: const EdgeInsets.only(left: 10, right: 10),
                                       child: new Text(
-                                        'Score',
+                                        'Poin',
                                         overflow: TextOverflow.ellipsis,
                                         softWrap: false,
                                         style: new TextStyle(

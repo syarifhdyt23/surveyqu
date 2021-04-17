@@ -24,15 +24,16 @@ class _Profile extends State<Profile> {
   String name;
 
   @override
-  void initState(){
+  void initState() {
     _loadUserData();
     super.initState();
   }
-  _loadUserData() async{
+
+  _loadUserData() async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
     var user = jsonDecode(localStorage.getString('id'));
 
-    if(user != null) {
+    if (user != null) {
       setState(() {
         name = user;
       });
@@ -45,17 +46,9 @@ class _Profile extends State<Profile> {
     size = MediaQuery.of(context).size;
 
     return new Scaffold(
-      body: new Container(
-        color: Colors.white,
-        child: new Stack(
-          children: <Widget>[
-            new Container(
-              margin: const EdgeInsets.only(top: 250),
-              decoration: BoxDecoration(
-                color: Colors.white,
-              ),
-            ),
-            new Container(
+      body: new Stack(
+        children: <Widget>[
+          new Container(
               height: 300,
               decoration: BoxDecoration(
                 image: new DecorationImage(
@@ -67,49 +60,42 @@ class _Profile extends State<Profile> {
                   bottomRight: Radius.circular(20),
                 ),
               ),
-              child: new Positioned(
-                top: 25,
-                left: .0,
-                right: .0,
-                child: Center(
-                  child: new CircleAvatar(
-                    radius: 40.0,
-                    backgroundColor: Colors.blue,
-                    child: new InkWell(
-                      onTap: (){
-                        // _ShowChoiceDialog(context);
-                        // chooseImage();
-                      },
+              child: new Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  new Container(
+                    padding: EdgeInsets.only(top: 50),
+                    child: new Center(
                       child: new CircleAvatar(
-                        radius: 53.0,
-                        backgroundColor: Colors.white,
-                        child:
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(53.0),
-                          child: new Icon(
-                            Icons.person,
-                            size: 60,
-                            color: Colors.lightBlue,
-                          )
+                        radius: 50.0,
+                        backgroundColor: Colors.blue,
+                        child: new InkWell(
+                          onTap: () {
+                            // _ShowChoiceDialog(context);
+                            // chooseImage();
+                          },
+                          child: new CircleAvatar(
+                            radius: 63.0,
+                            backgroundColor: Colors.white,
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(53.0),
+                                child: new Icon(
+                                  Icons.person,
+                                  size: 60,
+                                  color: Colors.lightBlue,
+                                )),
+                            // ClipRRect(
+                            //   borderRadius: BorderRadius.circular(53.0),
+                            //   child:
+                            //   showImage(),
+                            // ),
+                          ),
                         ),
-                        // ClipRRect(
-                        //   borderRadius: BorderRadius.circular(53.0),
-                        //   child:
-                        //   showImage(),
-                        // ),
                       ),
                     ),
                   ),
-                ),
-              ),
-            ),
-
-            new Container(
-              width: size.width,
-              margin: const EdgeInsets.only(top: 200),
-              child: new Column(
-                children: [
                   new Container(
+                    padding: EdgeInsets.only(top: 30),
                     alignment: Alignment.center,
                     child: new Text(
                       'Faisal',
@@ -140,8 +126,7 @@ class _Profile extends State<Profile> {
                     padding: EdgeInsets.all(5),
                     decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(5.0))
-                    ),
+                        borderRadius: BorderRadius.all(Radius.circular(5.0))),
                     child: new Text(
                       'Akun Sudah Terverifikasi',
                       style: new TextStyle(
@@ -153,43 +138,40 @@ class _Profile extends State<Profile> {
                     ),
                   ),
                 ],
-              )
-            ),
-            new Container(
-              padding: const EdgeInsets.only(
-                top: 330, left: 15, right: 15
-              ),
-              child: new InkWell(
-                onTap: (){
-                  logout();
-                },
-                child: new Container(
-                  child: new Text(
-                    'Logout',
-                    style: new TextStyle(
-                        fontFamily: "helvetica",
-                        fontWeight: FontWeight.w600,
-                        fontSize: 20,
-                        color: Colors.blue
-                    ),
-                  ),
+              )),
+          new Container(
+            padding: const EdgeInsets.only(top: 330, left: 15, right: 15),
+            child: new InkWell(
+              onTap: () {
+                logout();
+              },
+              child: new Container(
+                child: new Text(
+                  'Logout',
+                  style: new TextStyle(
+                      fontFamily: "helvetica",
+                      fontWeight: FontWeight.w600,
+                      fontSize: 20,
+                      color: Colors.blue),
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
-  void logout() async{
+  void logout() async {
     var res = await Network().getData('/logout');
     var body = json.decode(res.body);
-    if(body['status'] == 200){
+    if (body['status'] == 200) {
       SharedPreferences localStorage = await SharedPreferences.getInstance();
       localStorage.remove('user');
       localStorage.remove('token');
-      Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(new MaterialPageRoute(builder: (context)=>Login()), (route) => false);
+      Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+          new MaterialPageRoute(builder: (context) => Login()),
+          (route) => false);
     }
   }
 }

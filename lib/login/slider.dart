@@ -10,6 +10,9 @@ import 'dart:convert';
 import 'package:surveyqu/domain.dart';
 import 'package:surveyqu/loading.dart';
 
+import '../loading.dart';
+import 'login.dart';
+
 class SliderInfo extends StatefulWidget {
   _SliderInfo createState() => _SliderInfo();
 }
@@ -80,57 +83,88 @@ class _SliderInfo extends State<SliderInfo> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: Stack(
+    size = MediaQuery.of(context).size;
+    return Container(
+        child: message == null ? new Loading() : Stack(
           children: <Widget>[
+            message == null ? new Loading() :
             LiquidSwipe.builder(
               itemCount: 3,
               itemBuilder: (context, i){
-                return Container(
-                  width: 500,
-                  color: Color[i],
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Image.network(
-                        dataJson['result'][i]['img'],
+                return new Container(
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage('images/banner.png'),
                         fit: BoxFit.cover,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(20.0),
-                      ),
-                      Column(
-                        children: <Widget>[
-                          // Text(
-                          //   dataJson['result'][i]['img'],
-                          //   // style: WithPages.style,
-                          // ),
-                          Text(
-                            dataJson['result'][i]['urutan'],
-                            // style: WithPages.style,
+                      )
+                  ),
+                  child: Container(
+                    margin: EdgeInsets.only(top: 50, bottom: 80, left: 20,right: 20),
+                    width: size.width,
+                    // color: Color[i],
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                        color: Colors.white.withOpacity(.5),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
+                      // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        new Container(
+                          height: 180,
+                          child: Image.asset(
+                            'images/logo.png',
+                            fit: BoxFit.fitHeight,
                           ),
-                          Text(
-                            dataJson['result'][i]['konten'],
-                            // style: WithPages.style,
+                        ),
+                        new Container(
+                          padding: EdgeInsets.only(left: 20,right: 20),
+                          height: 200,
+                          child:Image.network(
+                            dataJson['result'][i]['img'],
+                            fit: BoxFit.fitHeight,
                           ),
-                        ],
-                      ),
-                    ],
+                        ),
+                        new Container(
+                          padding: EdgeInsets.only(top: 30),
+                          child: Column(
+                            children: <Widget>[
+                              // Text(
+                              //   dataJson['result'][i]['img'],
+                              //   // style: WithPages.style,
+                              // ),
+                              new Container(
+                                child: Text(
+                                    dataJson['result'][i]['urutan'], style: TextStyle(color: Colors.white)
+                                  // style: WithPages.style,
+                                ),
+                              ),
+                              new Container(
+                                padding: EdgeInsets.only(top: 10),
+                                child: Text(
+                                    dataJson['result'][i]['konten'], style: TextStyle(color: Colors.white)
+                                  // style: WithPages.style,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },
               positionSlideIcon: 0.8,
               // slideIconWidget: Icon(Icons.arrow_back_ios),
               onPageChangeCallback: pageChangeCallback,
-              waveType: WaveType.liquidReveal,
+              waveType: WaveType.circularReveal,
               liquidController: liquidController,
               ignoreUserGestureWhileAnimating: true,
+              enableLoop: false,
             ),
             Padding(
-              padding: EdgeInsets.all(20),
+              padding: EdgeInsets.only(bottom: 42),
               child: Column(
                 children: <Widget>[
                   Expanded(child: SizedBox()),
@@ -141,24 +175,39 @@ class _SliderInfo extends State<SliderInfo> {
                 ],
               ),
             ),
-            Align(
-              alignment: Alignment.bottomRight,
+            liquidController.currentPage == 2 ? new Container()
+                :
+            new Align(
+              alignment: Alignment.bottomLeft,
               child: Padding(
-                padding: const EdgeInsets.all(25.0),
+                padding: const EdgeInsets.all(27.0),
                 child: FlatButton(
                   onPressed: () {
                     liquidController.animateToPage(
-                        page: 3 - 1, duration: 700);
+                        page: 3 - 1, duration: 200);
                   },
-                  child: Text("Skip to End"),
+                  child: Text("Skip to End", style: TextStyle(color: Colors.white)),
                   color: Colors.white.withOpacity(0.01),
                 ),
               ),
             ),
-            Align(
-              alignment: Alignment.bottomLeft,
+
+            liquidController.currentPage == 2 ? Align(
+              alignment: Alignment.bottomRight,
               child: Padding(
-                padding: const EdgeInsets.all(25.0),
+                padding: const EdgeInsets.all(27.0),
+                child: FlatButton(
+                  onPressed: () {
+                    Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (context) => new Login()), (route) => false);
+                  },
+                  child: Text("Login", style: TextStyle(color: Colors.white)),
+                  color: Colors.white.withOpacity(0.01),
+                ),
+              ),
+            ) : Align(
+              alignment: Alignment.bottomRight,
+              child: Padding(
+                padding: const EdgeInsets.all(27.0),
                 child: FlatButton(
                   onPressed: () {
                     liquidController.jumpToPage(
@@ -167,14 +216,13 @@ class _SliderInfo extends State<SliderInfo> {
                             ? 0
                             : liquidController.currentPage + 1);
                   },
-                  child: Text("Next"),
+                  child: Text("Next", style: TextStyle(color: Colors.white),),
                   color: Colors.white.withOpacity(0.01),
                 ),
               ),
             )
           ],
         ),
-      ),
     );
   }
 
