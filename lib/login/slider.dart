@@ -188,7 +188,7 @@ class _SliderInfo extends State<SliderInfo> {
                     liquidController.animateToPage(
                         page: 3 - 1, duration: 200);
                   },
-                  child: Text("Skip", style: TextStyle(color: Colors.white)),
+                  child: Text("Lewati", style: TextStyle(color: Colors.white)),
                   color: Colors.white.withOpacity(0.01),
                 ),
               ),
@@ -202,7 +202,7 @@ class _SliderInfo extends State<SliderInfo> {
                   onPressed: () {
                     Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (context) => new Login()), (route) => false);
                   },
-                  child: Text("Login", style: TextStyle(color: Colors.white)),
+                  child: Text("Masuk", style: TextStyle(color: Colors.white)),
                   color: Colors.white.withOpacity(0.01),
                 ),
               ),
@@ -218,7 +218,7 @@ class _SliderInfo extends State<SliderInfo> {
                             ? 0
                             : liquidController.currentPage + 1);
                   },
-                  child: Text("Next", style: TextStyle(color: Colors.white),),
+                  child: Text("Selanjutnya", style: TextStyle(color: Colors.white),),
                   color: Colors.white.withOpacity(0.01),
                 ),
               ),
@@ -234,99 +234,3 @@ class _SliderInfo extends State<SliderInfo> {
     });
   }
 }
-
-// @override
-  // Widget build(BuildContext context) {
-  //   // TODO: implement build
-  //   size = MediaQuery.of(context).size;
-  //   return new Scaffold(
-  //     body: new Stack(
-  //       children: [
-  //         new Container(
-  //           alignment: Alignment.center,
-  //           child: message == null ? new Loading() :
-  //           new Swiper(
-  //             itemBuilder: (context, i) {
-  //               return new Container(
-  //                 height: size.height,
-  //                 color: Colors.red,
-  //                 child: Stack(
-  //                   children: [
-  //                     new Container(
-  //                       //alignment: Alignment.center,
-  //                       //height: 200,
-  //                       margin: const EdgeInsets.only(bottom: 200.0,),
-  //                       decoration: new BoxDecoration(
-  //                         image: new DecorationImage(
-  //                             image: new NetworkImage(dataJson['result'][i]['img']),
-  //                             fit: BoxFit.scaleDown),
-  //                       ),
-  //                     ),
-  //
-  //                     new Align(
-  //                         alignment: Alignment.center,
-  //                         child: new Container(
-  //                           margin: const EdgeInsets.only(top: 115),
-  //                           child: new Text(dataJson['result'][i]['urutan'], style: new TextStyle(fontFamily: 'robotomedium', fontSize: 17),),
-  //                         )
-  //                     ),
-  //
-  //                     new Align(
-  //                       alignment: Alignment.center,
-  //                       child: new Container(
-  //                         //alignment: Alignment.center,
-  //                         margin: const EdgeInsets.only(top: 210.0),
-  //                         child: new Text(dataJson['result'][i]['konten'],
-  //                           style: new TextStyle(fontFamily: 'robotoregular',), textAlign: TextAlign.center,
-  //                         ),
-  //                       ),
-  //                     ),
-  //                   ],
-  //                 ),
-  //               );
-  //             },
-  //             loop: false,
-  //             itemCount: 3,
-  //             pagination: new SwiperPagination(
-  //                 margin: new EdgeInsets.only(bottom: 50),
-  //                 builder: new DotSwiperPaginationBuilder(
-  //                     color: Colors.grey, activeColor: Colors.white)
-  //             ),
-  //             // control: new SwiperControl(),
-  //             // viewportFraction: 0.95,
-  //             autoplay: false,
-  //             // scale: 0.96,
-  //           ),
-  //         ),
-  //         new Align(
-  //           alignment: Alignment.bottomCenter,
-  //           child: new Container(
-  //               height: 40,
-  //               width: size.width/1.2,
-  //               margin: const EdgeInsets.only(bottom: 37),
-  //               child: new Row(
-  //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                   children:[
-  //                     new FlatButton(
-  //                       onPressed: (){
-  //                       },
-  //                       child: new Text("Skip", style: new TextStyle(color: Colors.white, fontFamily: 'robotomedium'),),
-  //                       color: Colors.black,
-  //                       shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(50)),
-  //                     ),
-  //                     new FlatButton(
-  //                       onPressed: (){
-  //                       },
-  //                       child: new Text("Next", style: new TextStyle(color: Colors.white, fontFamily: 'robotomedium'),),
-  //                       color: Colors.black,
-  //                       shape: new RoundedRectangleBorder(borderRadius: new BorderRadius.circular(50)),
-  //                     ),
-  //                   ]
-  //               )
-  //           ),
-  //         ),
-  //       ],
-  //     )
-  //   );
-  // }
-// }

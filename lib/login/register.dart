@@ -10,13 +10,25 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
   Size size;
 
+  // http://surveyqu.com/sqws/sqmid/index.php/auth/register
+  TextEditingController textName = new TextEditingController();
+  TextEditingController textEmail = new TextEditingController();
+  TextEditingController textPass = new TextEditingController();
+  TextEditingController textRef = new TextEditingController();
+
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     size = MediaQuery.of(context).size;
 
     return new Scaffold(
-      body: new Container(
+      body: new GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onPanDown: (_) {
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
+        child: new Container(
         color: Colors.white,
         child: new Stack(
           children: <Widget>[
@@ -55,25 +67,15 @@ class _RegisterState extends State<Register> {
                 ),
               ),
               margin: const EdgeInsets.only(top: 250),
-              child: new GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onPanDown: (_) {
-                  FocusScope.of(context).requestFocus(FocusNode());
-                },
-                child: new ListView(
+              child: new ListView(
                   padding: const EdgeInsets.only(left: 15, right: 15),
                   children: <Widget>[
                     new Container(
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.only(top: 20),
-                      child: new Text('Register', style: new TextStyle(fontFamily: 'helvetica', fontWeight: FontWeight.w600, fontSize: 20, color: Colors.white
-                      ),),
-                    ),
-                    new Container(
                       width: size.width,
                       height: 45,
-                      margin: const EdgeInsets.only(top: 10),
+                      margin: const EdgeInsets.only(top: 20),
                       child: new TextField(
+                        controller: textName,
                         decoration: InputDecoration(
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
@@ -106,6 +108,7 @@ class _RegisterState extends State<Register> {
                       height: 45,
                       margin: const EdgeInsets.only(top: 10),
                       child: new TextField(
+                        controller: textEmail,
                         decoration: InputDecoration(
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
@@ -131,6 +134,7 @@ class _RegisterState extends State<Register> {
                           ),
                         ),
                         textInputAction: TextInputAction.next,
+                        keyboardType: TextInputType.emailAddress,
                       ),
                     ),
                     new Container(
@@ -138,6 +142,8 @@ class _RegisterState extends State<Register> {
                       height: 45,
                       margin: const EdgeInsets.only(top: 10),
                       child: new TextField(
+                        controller: textPass,
+                        obscureText: true,
                         decoration: InputDecoration(
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
@@ -170,6 +176,7 @@ class _RegisterState extends State<Register> {
                       height: 45,
                       margin: const EdgeInsets.only(top: 10),
                       child: new TextField(
+                        controller: textRef,
                         decoration: InputDecoration(
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
@@ -208,7 +215,7 @@ class _RegisterState extends State<Register> {
                               side: new BorderSide(
                                   color: new HexColor("#F07B3F"))),
                           child: new Text(
-                            'Register',
+                            'Daftar',
                             style: new TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w600),
@@ -217,8 +224,9 @@ class _RegisterState extends State<Register> {
                   ],
                 ),
               ),
-            ),
-          ],
+
+            ],
+        ),
         ),
       ),
     );

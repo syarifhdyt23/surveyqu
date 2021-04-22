@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -184,5 +185,15 @@ class Info {
       context: context,
       builder: (BuildContext context) => fancyDialog,
     );
+  }
+
+  void messages(BuildContext context, String title, String desc) {
+    AwesomeDialog(
+      context: context,
+      headerAnimationLoop: true,
+      animType: AnimType.BOTTOMSLIDE,
+      title: title,
+      desc: desc,
+    )..show();
   }
 }
