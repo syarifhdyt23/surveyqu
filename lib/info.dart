@@ -187,7 +187,7 @@ class Info {
     );
   }
 
-  void messages(BuildContext context, String title, String desc) {
+  void messagesNoButton(BuildContext context, String title, String desc) {
     AwesomeDialog(
       context: context,
       headerAnimationLoop: true,
@@ -196,4 +196,63 @@ class Info {
       desc: desc,
     )..show();
   }
+
+  void messagesAutoHide(BuildContext context, String title, String desc) {
+    AwesomeDialog(
+      context: context,
+      headerAnimationLoop: true,
+      animType: AnimType.BOTTOMSLIDE,
+      title: title,
+      desc: desc,
+      autoHide: Duration(seconds: 2),
+    )..show();
+  }
+
+  void messagesSuccess(BuildContext context, String title, String desc) {
+    AwesomeDialog(
+        context: context,
+        animType: AnimType.LEFTSLIDE,
+        headerAnimationLoop: false,
+        dialogType: DialogType.SUCCES,
+        title: title,
+        desc: desc,
+        btnOkOnPress: () {
+          debugPrint('OnClcik');
+        },
+        btnOkIcon: Icons.check_circle,
+        onDissmissCallback: () {
+          debugPrint('Dialog Dissmiss from callback');
+        })
+      ..show();
+  }
+
+  void messagesWarning(BuildContext context, String title, String desc) {
+    AwesomeDialog(
+        context: context,
+        dialogType: DialogType.WARNING,
+        headerAnimationLoop: false,
+        animType: AnimType.TOPSLIDE,
+        showCloseIcon: true,
+        closeIcon: Icon(Icons.close_fullscreen_outlined),
+        title: title,
+        desc: desc,
+        btnCancelOnPress: () {},
+        btnOkOnPress: () {})
+      ..show();
+  }
+
+  void messagesError(BuildContext context, String title, String desc) {
+    AwesomeDialog(
+        context: context,
+        dialogType: DialogType.ERROR,
+        animType: AnimType.RIGHSLIDE,
+        headerAnimationLoop: false,
+        title: title,
+        desc: desc,
+        btnOkOnPress: () {},
+        btnOkIcon: Icons.cancel,
+        btnOkColor: Colors.red)
+      ..show();
+  }
+
 }

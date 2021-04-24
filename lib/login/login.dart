@@ -106,7 +106,7 @@ class _LoginState extends State<Login> {
                                 filled: true,
                               ),
 
-                              textInputAction: TextInputAction.next,
+                              textInputAction: TextInputAction.done,
                               //autofocus: true,
 
                             ),
@@ -169,11 +169,11 @@ class _LoginState extends State<Login> {
                           setState(() async {
                             if(textEmaill.text == ''){
                               // info.MessageInfo(context, 'Message', 'Please input email address');
-                              info.messages(context, "Message", "Masukkan email anda");
+                              info.messagesNoButton(context, "Info", "Masukkan email anda");
                             }else if(!textEmaill.text.contains('@') || !textEmaill.text.contains('.')) {
-                              info.messages(context, 'Message', 'Your email is not valid');
+                              info.messagesNoButton(context, 'Info', 'Your email is not valid');
                             }else if(textPassword.text == '') {
-                              info.messages(context, 'Message', 'Please input your password');
+                              info.messagesNoButton(context, 'Info', 'Please input your password');
                             }else {
                               _onLoading();
                               //Navigator.push(context,
@@ -305,19 +305,19 @@ class _LoginState extends State<Login> {
     var data = {
       'username': textEmaill.text,
       'password': textPassword.text,
-      'ref': '',
     };
 
-    var res = await Network().authData(data, '/login');
+    var res = await Network().postDataAuth(data, '/login');
     if (res.statusCode == 200) {
       var body = jsonDecode(res.body);
       SharedPreferences localStorage = await SharedPreferences.getInstance();
       localStorage.setString('token', json.encode(body['token']));
       localStorage.setString('id', json.encode(body['id']));
+      localStorage.setString('sqpoint', json.encode(body['sqpoint']));
       Navigator.push(context, new MaterialPageRoute(builder: (context) => MainHome()),
       );
     } else {
-      info.messages(context, 'message','Login Failed');
+      info.messagesNoButton(context, 'info','Gagal Masuk');
     }
 
     setState(() {

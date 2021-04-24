@@ -19,7 +19,7 @@ class _Loading extends State<Loading> {
           new CupertinoActivityIndicator(),
           new Container(
             margin: const EdgeInsets.only(left: 10, top: 10),
-            child: new Text('Loading...', style: new TextStyle(color: Colors.grey[500], fontSize: 17, fontWeight: FontWeight.w400),),
+            child: new Text('Memuat...', style: new TextStyle(color: Colors.grey[500], fontSize: 17, fontWeight: FontWeight.w400),),
           )
         ],
       ),
@@ -27,30 +27,35 @@ class _Loading extends State<Loading> {
   }
 }
 
-class LoadingVertical extends StatefulWidget {
+class LoadingLogo extends StatefulWidget {
 
-  _LoadingVertical createState() => new _LoadingVertical();
+  _LoadingLogoState createState() => new _LoadingLogoState();
 }
 
-class _LoadingVertical extends State<LoadingVertical> {
+class _LoadingLogoState extends State<LoadingLogo> {
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return new Row(
+    return new Column(
       mainAxisAlignment: MainAxisAlignment.center,
-        children: [
+      children: [
         new Container(
-          height: 20,
-          width: 20,
-          child: new CircularProgressIndicator(
-            valueColor: new AlwaysStoppedAnimation<Color>(Colors.white),
-          ),
+          height: 240,
+          child: new Image.asset('images/logo.png',fit: BoxFit.scaleDown,),
         ),
         new Container(
-          margin: EdgeInsets.only(left: 10),
-          child: new Text('Loading...', style: new TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.w400),),
-        )
+          child: new Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              new CupertinoActivityIndicator(),
+              new Container(
+                margin: EdgeInsets.only(left: 10),
+                child: new Text('Memuat...', style: new TextStyle(color: Colors.black, fontSize: 17, fontWeight: FontWeight.w400),),
+              )
+            ],
+          )
+        ),
       ],
     );
   }

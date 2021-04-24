@@ -86,9 +86,12 @@ class _SliderInfo extends State<SliderInfo> {
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
     return Container(
-        child: message == null ? new Loading() : Stack(
+        child: message == null ? new Container(
+          alignment: Alignment.center,
+          child: new LoadingLogo(),
+        ) :
+        new Stack(
           children: <Widget>[
-            message == null ? new Loading() :
             LiquidSwipe.builder(
               itemCount: 3,
               itemBuilder: (context, i){
