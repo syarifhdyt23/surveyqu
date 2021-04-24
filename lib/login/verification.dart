@@ -33,7 +33,7 @@ class _VerificationState extends State<Verification> {
       'code': code
     };
 
-    var res = await Network().postDataAuth(data, '/register');
+    var res = await Network().postDataAuth(data, '/verifyreg');
     if (res.statusCode == 200) {
       // var body = jsonDecode(res.body);
       // print(json.encode(body['message']));
