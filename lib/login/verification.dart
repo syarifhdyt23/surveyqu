@@ -37,7 +37,8 @@ class _VerificationState extends State<Verification> {
     if (res.statusCode == 200) {
       // var body = jsonDecode(res.body);
       // print(json.encode(body['message']));
-      info.messagesAutoHide(context, 'info','Email berhasil di verifikasi');
+      // info.messagesAutoHide(context, 'info','Email berhasil di verifikasi');
+      snackBar("Verifikasi sukses...");
       Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (context) => new Login()), (route) => false);
     } else if (res.statusCode == 204){
       info.messagesNoButton(context, 'info','Email Sudah terdaftar');
@@ -195,24 +196,24 @@ class _VerificationState extends State<Verification> {
               SizedBox(
                 height: 20,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Didn't receive the code? ",
-                    style: TextStyle(color: Colors.black54, fontSize: 15),
-                  ),
-                  TextButton(
-                      onPressed: () => snackBar("OTP resend!!"),
-                      child: Text(
-                        "RESEND",
-                        style: TextStyle(
-                            color: Color(0xFF91D3B3),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16),
-                      ))
-                ],
-              ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   children: [
+              //     Text(
+              //       "Didn't receive the code? ",
+              //       style: TextStyle(color: Colors.black54, fontSize: 15),
+              //     ),
+              //     TextButton(
+              //         onPressed: () => snackBar("OTP resend!!"),
+              //         child: Text(
+              //           "RESEND",
+              //           style: TextStyle(
+              //               color: Color(0xFF91D3B3),
+              //               fontWeight: FontWeight.bold,
+              //               fontSize: 16),
+              //         ))
+              //   ],
+              // ),
               SizedBox(
                 height: 14,
               ),
