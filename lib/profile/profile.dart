@@ -41,6 +41,36 @@ class _Profile extends State<Profile> {
     }
   }
 
+  void messagesLogout(BuildContext context, String title, String desc) async {
+    new AwesomeDialog(
+        context: context,
+        dialogType: DialogType.QUESTION,
+        headerAnimationLoop: false,
+        animType: AnimType.TOPSLIDE,
+        title: title,
+        desc: desc,
+        useRootNavigator: true,
+        btnCancelOnPress: () {},
+        btnOkOnPress: () {
+          logout();
+        })
+      ..show();
+  }
+
+  void logout() async {
+    var res = await Network().postDataId('/logout');
+    var body = json.decode(res.body);
+    if (body['status'] == 200) {
+      SharedPreferences localStorage = await SharedPreferences.getInstance();
+      localStorage.remove('user');
+      localStorage.remove('token');
+      localStorage.remove('sqpoint');
+      Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+          new MaterialPageRoute(builder: (context) => Login()),
+              (route) => false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -161,35 +191,5 @@ class _Profile extends State<Profile> {
         ],
       ),
     );
-  }
-
-  void messagesLogout(BuildContext context, String title, String desc) async {
-    new AwesomeDialog(
-        context: context,
-        dialogType: DialogType.QUESTION,
-        headerAnimationLoop: false,
-        animType: AnimType.TOPSLIDE,
-        title: title,
-        desc: desc,
-        useRootNavigator: true,
-        btnCancelOnPress: () {},
-        btnOkOnPress: () {
-          logout();
-        })
-      ..show();
-  }
-
-  void logout() async {
-    var res = await Network().postDataTokenAuth('/logout');
-    var body = json.decode(res.body);
-    if (body['status'] == 200) {
-      SharedPreferences localStorage = await SharedPreferences.getInstance();
-      localStorage.remove('user');
-      localStorage.remove('token');
-      localStorage.remove('sqpoint');
-      Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-          new MaterialPageRoute(builder: (context) => Login()),
-          (route) => false);
-    }
   }
 }

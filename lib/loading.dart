@@ -41,10 +41,11 @@ class _LoadingLogoState extends State<LoadingLogo> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         new Container(
-          height: 240,
+          height: 140,
           child: new Image.asset('images/logo.png',fit: BoxFit.scaleDown,),
         ),
         new Container(
+          margin: EdgeInsets.only(top: 20),
           child: new Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

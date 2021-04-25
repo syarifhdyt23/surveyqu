@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:surveyqu/home/mainhome.dart';
-import 'package:surveyqu/login/introslider.dart';
-import 'package:surveyqu/login/login.dart';
 import 'package:surveyqu/login/slider.dart';
 
 import 'hexacolor.dart';

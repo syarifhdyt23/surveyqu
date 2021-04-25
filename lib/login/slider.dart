@@ -38,10 +38,10 @@ class _SliderInfo extends State<SliderInfo> {
     };
     http.Response hasil = await http.post(url, headers: headers);
     if (200 == hasil.statusCode) {
+      dataJson = jsonDecode(hasil.body);
       setState(() {
-        dataJson = jsonDecode(hasil.body);
+        message = dataJson['result'][0]['img'] == null ? '1' : dataJson['result'][0]['img'];
       });
-      message = dataJson['result'][0]['img'] == null ? '1' : dataJson['result'][0]['img'];
     }
   }
 
@@ -116,7 +116,8 @@ class _SliderInfo extends State<SliderInfo> {
                       // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
                         new Container(
-                          height: 180,
+                          padding: EdgeInsets.only(top: 20, bottom: 20),
+                          height: 150,
                           child: Image.asset(
                             'images/logo.png',
                             fit: BoxFit.fitHeight,

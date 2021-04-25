@@ -314,6 +314,7 @@ class _LoginState extends State<Login> {
       localStorage.setString('token', json.encode(body['token']));
       localStorage.setString('id', json.encode(body['id']));
       localStorage.setString('sqpoint', json.encode(body['sqpoint']));
+      localStorage.setString('nama', json.encode(body['nama']));
       Navigator.push(context, new MaterialPageRoute(builder: (context) => MainHome()),
       );
     } else {
