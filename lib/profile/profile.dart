@@ -22,7 +22,7 @@ class _Profile extends State<Profile> {
   Size size;
   Domain domain = new Domain();
   bool _visible = false;
-  String name;
+  String id, email, nama;
 
   @override
   void initState() {
@@ -32,11 +32,13 @@ class _Profile extends State<Profile> {
 
   _loadUserData() async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
-    var user = jsonDecode(localStorage.getString('id'));
+    var id = jsonDecode(localStorage.getString('id'));
 
-    if (user != null) {
+    if (id != null) {
       setState(() {
-        name = user;
+        id = id;
+        email = jsonDecode(localStorage.getString('email'));
+        nama = jsonDecode(localStorage.getString('nama'));
       });
     }
   }
@@ -129,7 +131,7 @@ class _Profile extends State<Profile> {
                     padding: EdgeInsets.only(top: 30),
                     alignment: Alignment.center,
                     child: new Text(
-                      'Faisal',
+                      '$nama',
                       style: new TextStyle(
                         fontFamily: "helvetica",
                         fontWeight: FontWeight.w600,
@@ -141,7 +143,7 @@ class _Profile extends State<Profile> {
                   new Container(
                     alignment: Alignment.center,
                     child: new Text(
-                      'icalec_03@yahoo.com',
+                      '$email',
                       style: new TextStyle(
                         fontFamily: "helvetica",
                         fontWeight: FontWeight.w600,

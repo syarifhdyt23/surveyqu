@@ -36,7 +36,6 @@ class _Home extends State<Home> {
       sqpoint = jsonDecode(localStorage.getString('sqpoint'));
       nama = jsonDecode(localStorage.getString('nama'));
     });
-
     var res = await Network().postDataToken('/pengumuman');
     if (res.statusCode == 200) {
       var body = jsonDecode(res.body);
@@ -84,7 +83,7 @@ class _Home extends State<Home> {
             ];
           },
           body: SingleChildScrollView(
-            child: Column(
+            child:  Column(
               children: <Widget>[
                 listQna == null ? new Loading() :
                 new Container(

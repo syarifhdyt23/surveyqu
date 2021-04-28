@@ -337,8 +337,9 @@ class _RegisterState extends State<Register> {
                           child: new Text(
                             'Daftar',
                             style: new TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600),
+                              fontSize: 17,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600),
                           )),
                     ),
                   ],

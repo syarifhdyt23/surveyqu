@@ -10,6 +10,7 @@ import 'package:surveyqu/hexacolor.dart';
 import 'package:surveyqu/home/home.dart';
 import 'package:surveyqu/home/mainhome.dart';
 import 'package:surveyqu/info.dart';
+import 'package:surveyqu/login/forgotpass.dart';
 import 'package:surveyqu/login/register.dart';
 import 'package:surveyqu/network_utils/api.dart';
 
@@ -30,6 +31,67 @@ class _LoginState extends State<Login> {
 
   TextEditingController textEmaill = new TextEditingController();
   TextEditingController textPassword = new TextEditingController();
+
+
+
+  void _onLoading() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+          insetPadding: EdgeInsets.all(5),
+          child: new Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              new Container(
+                padding: EdgeInsets.all(10),
+                child: new CircularProgressIndicator(),
+              ),
+              new Container(
+                padding: EdgeInsets.all(10),
+                child: new Text("Loading"),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+    new Future.delayed(new Duration(seconds: 3), () {
+      Navigator.pop(context); //pop dialog
+      _login();
+    });
+  }
+
+  void _login() async {
+    setState(() {
+      _isLoading = true;
+    });
+    var data = {
+      'username': textEmaill.text,
+      'password': textPassword.text,
+    };
+
+    var res = await Network().postDataAuth(data, '/login');
+    if (res.statusCode == 200) {
+      var body = jsonDecode(res.body);
+      SharedPreferences localStorage = await SharedPreferences.getInstance();
+      localStorage.setString('token', json.encode(body['token']));
+      localStorage.setString('id', json.encode(body['id']));
+      localStorage.setString('sqpoint', json.encode(body['sqpoint']));
+      localStorage.setString('nama', json.encode(body['nama']));
+      localStorage.setString('email', json.encode(body['email']));
+      Navigator.push(context, new MaterialPageRoute(builder: (context) => MainHome()),
+      );
+    } else {
+      info.messagesNoButton(context, 'info','Gagal Masuk');
+    }
+
+    setState(() {
+      _isLoading = false;
+    });
+  }
 
   @override
   void initState() {
@@ -160,6 +222,25 @@ class _LoginState extends State<Login> {
                       ),
                     ),
 
+                    new InkWell(
+                      highlightColor: Colors.transparent,
+                      splashColor: Colors.transparent,
+                      onTap: (){
+                        Navigator.push(context, new MaterialPageRoute(builder: (context) => ForgotPass()));
+                      },
+                      child: new Container(
+                        alignment: Alignment.centerRight,
+                        margin: const EdgeInsets.only(top: 5.0, right: 20),
+                        child: new Text(
+                          "Lupa Password",
+                          style: new TextStyle(
+                              fontSize: 17,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                    ),
+
                     new Container(
                       width: size.width,
                       height: 45,
@@ -266,63 +347,5 @@ class _LoginState extends State<Login> {
         )
       ),
     );
-  }
-
-  void _onLoading() {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return Dialog(
-          insetPadding: EdgeInsets.all(5),
-          child: new Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              new Container(
-                padding: EdgeInsets.all(10),
-                child: new CircularProgressIndicator(),
-              ),
-              new Container(
-                padding: EdgeInsets.all(10),
-                child: new Text("Loading"),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-    new Future.delayed(new Duration(seconds: 3), () {
-      Navigator.pop(context); //pop dialog
-      _login();
-    });
-  }
-
-  void _login() async {
-    setState(() {
-      _isLoading = true;
-    });
-    var data = {
-      'username': textEmaill.text,
-      'password': textPassword.text,
-    };
-
-    var res = await Network().postDataAuth(data, '/login');
-    if (res.statusCode == 200) {
-      var body = jsonDecode(res.body);
-      SharedPreferences localStorage = await SharedPreferences.getInstance();
-      localStorage.setString('token', json.encode(body['token']));
-      localStorage.setString('id', json.encode(body['id']));
-      localStorage.setString('sqpoint', json.encode(body['sqpoint']));
-      localStorage.setString('nama', json.encode(body['nama']));
-      Navigator.push(context, new MaterialPageRoute(builder: (context) => MainHome()),
-      );
-    } else {
-      info.messagesNoButton(context, 'info','Gagal Masuk');
-    }
-
-    setState(() {
-      _isLoading = false;
-    });
   }
 }
