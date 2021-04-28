@@ -1,18 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:surveyqu/domain.dart';
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:surveyqu/info.dart';
 import 'package:surveyqu/loading.dart';
-
-import '../hexacolor.dart';
+import 'package:surveyqu/survey/surveyview.dart';
 import '../hexacolor.dart';
 import '../network_utils/api.dart';
 
@@ -29,6 +25,7 @@ class _Home extends State<Home> {
   String message;
   List<Pengumuman> listNews;
   List<Question> listQna;
+  Timer timer;
 
   Future<List<Pengumuman>> getPengumuman() async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
@@ -63,6 +60,16 @@ class _Home extends State<Home> {
     return listQna;
   }
 
+  Future<void> _onRefresh() {
+    Completer<void> completer = new Completer<void>();
+    timer = new Timer(new Duration(seconds: 2), () {
+      this.getPengumuman();
+      this.getQuestion();
+      completer.complete();
+    });
+    return completer.future;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -75,17 +82,19 @@ class _Home extends State<Home> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: NestedScrollView(
-          headerSliverBuilder: (BuildContext context, bool innerBoxScrolled) {
-            return <Widget>[
-              appbarWidget(),
-              imageWidget(),
-              pointWidget()
-            ];
-          },
-          body: SingleChildScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxScrolled) {
+          return <Widget>[
+            appbarWidget(),
+            imageWidget(),
+            pointWidget()
+          ];
+        },
+        body: new RefreshIndicator(
+          onRefresh: _onRefresh,
+          child: SingleChildScrollView(
             child:  Column(
               children: <Widget>[
-                listQna == null ? new Loading() :
+                listNews == null ? new Loading() :
                 new Container(
                   height: 160,
                   child: new Swiper(
@@ -112,7 +121,10 @@ class _Home extends State<Home> {
                     },
                   )
                 ),
-                new ListView.builder(
+                listQna == null ? new Container(
+                  margin: EdgeInsets.only(top: 30),
+                  child: new Loading(),
+                ) : new ListView.builder(
                   physics: BouncingScrollPhysics(),
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
@@ -150,6 +162,7 @@ class _Home extends State<Home> {
               ]
             )
           )
+        )
       )
     );
   }
@@ -208,20 +221,30 @@ class _Home extends State<Home> {
               new Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  new Container(
-                    margin: const EdgeInsets.only(right: 10.0,),
-                    child: new Icon(
-                      Icons.search,
-                      color: Colors.white,
-                      size: kToolbarHeight - 30,
+                  new InkWell(
+                    onTap: (){
+
+                    },
+                    child:new Container(
+                      margin: const EdgeInsets.only(right: 10.0,),
+                      child: new Icon(
+                        Icons.search,
+                        color: Colors.white,
+                        size: kToolbarHeight - 30,
+                      ),
                     ),
                   ),
-                  new Container(
-                    margin: const EdgeInsets.only(right: 15.0,),
-                    child: new Icon(
-                      Icons.notifications,
-                      color: Colors.white,
-                      size: kToolbarHeight - 30,
+                  new InkWell(
+                    onTap: (){
+                      Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context) => SurveyView()));
+                    },
+                    child: new Container(
+                      margin: const EdgeInsets.only(right: 15.0,),
+                      child: new Icon(
+                        Icons.notifications,
+                        color: Colors.white,
+                        size: kToolbarHeight - 30,
+                      ),
                     ),
                   ),
                 ],
