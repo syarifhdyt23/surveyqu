@@ -33,7 +33,7 @@ class _Home extends State<Home> {
       sqpoint = jsonDecode(localStorage.getString('sqpoint'));
       nama = jsonDecode(localStorage.getString('nama'));
     });
-    var res = await Network().postDataToken('/pengumuman');
+    var res = await Network().postToken('/pengumuman');
     if (res.statusCode == 200) {
       var body = jsonDecode(res.body);
       var dataJson = body['result'] as List;
@@ -47,7 +47,7 @@ class _Home extends State<Home> {
   }
 
   Future<List<Question>> getQuestion() async {
-    var res = await Network().postDataToken('/question');
+    var res = await Network().postToken('/question');
     if (res.statusCode == 200) {
       var body = jsonDecode(res.body);
       var dataJson = body['result'] as List;
@@ -130,17 +130,21 @@ class _Home extends State<Home> {
                   shrinkWrap: true,
                   itemCount: listQna == null ? 0 : listQna.length,
                   itemBuilder: (context, i){
-                    return Container(
-                        margin: EdgeInsets.only(bottom: 10, left: 10, right: 10),
-                        width: size.width,
-                        height: 160,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          color: new HexColor(listQna[i].color),
-                        ),
-                        child: new Container(
-                          alignment: Alignment.center,
-                          child: new ListTile(
+                    return new InkWell(
+                      onTap: (){
+                        Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context) => SurveyView(judul: listQna[i].judul, deskripsi: listQna[i].deskripsi, id: listQna[i].id,)));
+                      },
+                      child: Container(
+                          margin: EdgeInsets.only(bottom: 10, left: 10, right: 10),
+                          width: size.width,
+                          height: 160,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            color: new HexColor(listQna[i].color),
+                          ),
+                          child: new Container(
+                            alignment: Alignment.center,
+                            child: new ListTile(
                               isThreeLine: true,
                               title: new Text(listQna[i].judul, style: TextStyle(color: Colors.white)),
                               subtitle: new Text(listQna[i].deskripsi, style: TextStyle(color: Colors.white)),
@@ -154,8 +158,9 @@ class _Home extends State<Home> {
                                     )
                                 ),
                               ),
-                          ),
-                        )
+                            ),
+                          )
+                      ),
                     );
                   }),
 
@@ -236,7 +241,7 @@ class _Home extends State<Home> {
                   ),
                   new InkWell(
                     onTap: (){
-                      Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context) => SurveyView()));
+
                     },
                     child: new Container(
                       margin: const EdgeInsets.only(right: 15.0,),

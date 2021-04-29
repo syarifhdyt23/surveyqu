@@ -40,7 +40,7 @@ class Network{
     );
   }
 
-  postDataToken(apiUrl) async {
+  postToken(apiUrl) async {
     var fullUrl = _urlauth + apiUrl;
     await _getToken();
     return await http.post(
@@ -48,7 +48,21 @@ class Network{
       headers: {
         'Client-Service' : 'surveyqu',
         'Auth-Key' : 'svq1234',
-        'Token' : token,
+        'token' : token,
+      },
+    );
+  }
+
+  postDataToken(data, apiUrl) async {
+    var fullUrl = _urlauth + apiUrl;
+    await _getToken();
+    return await http.post(
+      fullUrl,
+      body: jsonEncode(data),
+      headers: {
+        'Client-Service' : 'surveyqu',
+        'Auth-Key' : 'svq1234',
+        'token' : token,
       },
     );
   }

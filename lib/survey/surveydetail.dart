@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:surveyqu/hexacolor.dart';
 
 class SurveyDetail extends StatefulWidget {
   @override
@@ -7,6 +8,7 @@ class SurveyDetail extends StatefulWidget {
 }
 
 class _SurveyDetailState extends State<SurveyDetail> {
+  Size size;
   int _radioValue1 = -1;
   int correctScore = 0;
   int _radioValue2 = -1;
@@ -126,119 +128,136 @@ class _SurveyDetailState extends State<SurveyDetail> {
 
   @override
   Widget build(BuildContext context) {
+    size = MediaQuery.of(context).size;
     return new Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: new Text('Soal 1'),
-          centerTitle: true,
-        ),
         body: new Container(
-            padding: EdgeInsets.all(8.0),
-            child: new Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  new Text(
-                    'Select correct answers from below:',
-                    style: new TextStyle(
-                        fontSize: 20.0, fontWeight: FontWeight.bold),
-                  ),
-                  new Padding(
-                    padding: new EdgeInsets.all(8.0),
-                  ),
-                  new Divider(height: 5.0, color: Colors.black),
-                  new Padding(
-                    padding: new EdgeInsets.all(8.0),
-                  ),
-                  new Text(
-                    'Lion is :',
-                    style: new TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18.0,
+          width: size.width,
+            decoration: BoxDecoration(
+              image: new DecorationImage(
+                image: new AssetImage('images/bannerlandscape.png'),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: new Stack(
+              children: [
+                new Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(20),
                     ),
                   ),
-                  new Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      new Radio(
-                        value: 0,
-                        groupValue: _radioValue1,
-                        onChanged: _handleRadioValueChange1,
-                      ),
-                      new Text(
-                        'Carnivore',
-                        style: new TextStyle(fontSize: 16.0),
-                      ),
-                      new Radio(
-                        value: 1,
-                        groupValue: _radioValue1,
-                        onChanged: _handleRadioValueChange1,
-                      ),
-                      new Text(
-                        'Herbivore',
-                        style: new TextStyle(
-                          fontSize: 16.0,
+                  margin: EdgeInsets.only(top: 50, left: 20, right: 20, bottom: 90),
+                  child: new Container(
+                    margin: EdgeInsets.only(left: 10, right: 10),
+                    child: new ListView(
+                        // mainAxisAlignment: MainAxisAlignment.start,
+                        // crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          new Text(
+                            'Select correct answers from below:Select correct answers from below:',
+                            style: new TextStyle(
+                                fontSize: 20.0, fontWeight: FontWeight.bold),
+                          ),
+                          new Padding(
+                            padding: new EdgeInsets.all(8.0),
+                          ),
+                          new Padding(
+                            padding: new EdgeInsets.all(8.0),
+                          ),
+                          new Text(
+                            'Lion is :',
+                            style: new TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18.0,
+                            ),
+                          ),
+                          new Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              new Radio(
+                                value: 0,
+                                groupValue: _radioValue1,
+                                onChanged: _handleRadioValueChange1,
+                              ),
+                              new Text(
+                                'Carnivore',
+                                style: new TextStyle(fontSize: 16.0),
+                              ),
+                              new Radio(
+                                value: 1,
+                                groupValue: _radioValue1,
+                                onChanged: _handleRadioValueChange1,
+                              ),
+                              new Text(
+                                'Herbivore',
+                                style: new TextStyle(
+                                  fontSize: 16.0,
+                                ),
+                              ),
+                              new Radio(
+                                value: 2,
+                                groupValue: _radioValue1,
+                                onChanged: _handleRadioValueChange1,
+                              ),
+                              new Text(
+                                'Omnivore',
+                                style: new TextStyle(fontSize: 16.0),
+                              ),
+                            ],
+                          ),
+                          new Padding(
+                            padding: new EdgeInsets.all(8.0),
+                          ),
+                        ]
+                    ),
+                  ),
+                ),
+                new Positioned(
+                  // alignment: Alignment.bottomCenter,
+                  // color: new HexColor('#256fa0'),
+                  height: 60,
+                  width: size.width,
+                  bottom: 20,
+                  child: new Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      new Container(
+                        height: 40,
+                        margin: const EdgeInsets.only(left: 20, right: 20.0, top: 5),
+                        child: new FlatButton(
+                          onPressed: () async {
+                          },
+                          splashColor: new HexColor("#F07B3F"),
+                          highlightColor: new HexColor("#F07B3F"),
+                          child: new Text('Prev', style: new TextStyle( color: Colors.white, fontSize: 19)),
+                          shape: new RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(20.0),
+                              side: new BorderSide(color: new HexColor("#F07B3F"))
+                          ),
+                          color: new HexColor("#F07B3F"),
                         ),
                       ),
-                      new Radio(
-                        value: 2,
-                        groupValue: _radioValue1,
-                        onChanged: _handleRadioValueChange1,
-                      ),
-                      new Text(
-                        'Omnivore',
-                        style: new TextStyle(fontSize: 16.0),
+                      new Container(
+                        height: 40,
+                        margin: const EdgeInsets.only(left: 20, right: 20.0, top: 5),
+                        child: new FlatButton(
+                          onPressed: () async {
+                          },
+                          splashColor: new HexColor("#F07B3F"),
+                          highlightColor: new HexColor("#F07B3F"),
+                          child: new Text('Next', style: new TextStyle( color: Colors.white, fontSize: 19)),
+                          shape: new RoundedRectangleBorder(
+                              borderRadius: new BorderRadius.circular(20.0),
+                              side: new BorderSide(color: new HexColor("#F07B3F"))
+                          ),
+                          color: new HexColor("#F07B3F"),
+                        ),
                       ),
                     ],
                   ),
-                  new Divider(
-                    height: 5.0,
-                    color: Colors.black,
-                  ),
-                  new Padding(
-                    padding: new EdgeInsets.all(8.0),
-                  ),
-                  new Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      new Divider(
-                        height: 5.0,
-                        color: Colors.black,
-                      ),
-                      new Padding(
-                        padding: new EdgeInsets.all(8.0),
-                      ),
-                      new RaisedButton(
-                        onPressed: validateAnswers,
-                        child: new Text(
-                          'Check Final Score',
-                          style: new TextStyle(
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.normal,
-                              color: Colors.white),
-                        ),
-                        color: Theme.of(context).accentColor,
-                        shape: new RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(20.0)),
-                      ),
-                      new Padding(
-                        padding: EdgeInsets.all(4.0),
-                      ),
-                      new RaisedButton(
-                        onPressed: resetSelection,
-                        child: new Text(
-                          'Reset Selection',
-                          style: new TextStyle(
-                              fontWeight: FontWeight.normal,
-                              fontSize: 16.0,
-                              color: Colors.white),
-                        ),
-                        color: Theme.of(context).accentColor,
-                        shape: new RoundedRectangleBorder(
-                            borderRadius: new BorderRadius.circular(20.0)),
-                      )
-                    ],
-                  ),
-                ]
+                ),
+              ]
             )
         )
     );
