@@ -113,7 +113,7 @@ class _SurveyViewState extends State<SurveyView> {
                 itemBuilder: (context, i){
                   return new InkWell(
                     onTap: (){
-                      Navigator.of(context).push(new MaterialPageRoute(builder: (context) => SurveyDetail()));
+                      Navigator.of(context).push(new MaterialPageRoute(builder: (context) => SurveyDetail(id: id)));
                     },
                     child: new Container(
                         decoration: BoxDecoration(

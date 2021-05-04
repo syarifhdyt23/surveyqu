@@ -1,18 +1,28 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:surveyqu/hexacolor.dart';
+import 'package:surveyqu/home/home.dart';
+import 'package:surveyqu/info.dart';
 import 'package:surveyqu/loading.dart';
+import 'package:surveyqu/network_utils/api.dart';
 
 class SurveyDetail extends StatefulWidget {
+  String id;
+  SurveyDetail({this.id});
   @override
-  _SurveyDetailState createState() => _SurveyDetailState();
+  _SurveyDetailState createState() => _SurveyDetailState(id: id);
 }
 
 class _SurveyDetailState extends State<SurveyDetail> {
   Size size;
   String _selection = '';
   bool start, end;
+  String id;
+  Info info = new Info();
   int i;
+  String type, soal;
   TextEditingController _textanswer = new TextEditingController();
   List<List<String>> choices = [// 1st qns has 3 choices
     ["AND", "CQA", "QWE", "QAL"], //3rd qns has 3 choices
@@ -22,9 +32,30 @@ class _SurveyDetailState extends State<SurveyDetail> {
     'bar': false,
   };
 
+  _SurveyDetailState({this.id});
+
+  Future getQuestion() async {
+    var data = {
+      'id': id,
+    };
+    var res = await Network().postDataToken(data, '/detailQ');
+    if (res.statusCode == 200) {
+      final jsonData = json.decode(res.body);
+      Question question = Question.fromJson(jsonData);
+      setState(() {
+        type = question.type;
+        soal = question.pertanyaan;
+        // sample.name => you can access field from class model
+      });
+    } else {
+      info.messagesNoButton(context, 'info','Survey Error');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    getQuestion();
     start = true;
     end = false;
     i = 0;
@@ -51,9 +82,11 @@ class _SurveyDetailState extends State<SurveyDetail> {
                     ),
                   ),
                   margin: EdgeInsets.only(top: 50, left: 20, right: 20, bottom: 90),
-                  child: new Container(
+                  child: type == null ? new Loading() : type == '' ? new Container(child: new Text('no data'),) :
+                  new Container(
                     margin: EdgeInsets.only(left: 10, right: 10),
-                    child: i == 0 ? answerWidget() : i == 1 ? radioWidget() : i == 2 ? checkBoxWidget() : finish(),
+                    child: type == "check_opt" ? checkBoxWidget() :  type == "radio_opt" ? radioWidget() : answerWidget()
+                    // i == 0 ? answerWidget() : i == 1 ? radioWidget() : i == 2 ? checkBoxWidget() : finish(),
                   ),
                 ),
                 new Positioned(
@@ -173,7 +206,7 @@ class _SurveyDetailState extends State<SurveyDetail> {
     return new ListView(
         children: <Widget>[
           new Text(
-            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. ",
+            soal,
             style: new TextStyle(
                 fontSize: 20.0, fontWeight: FontWeight.bold),
           ),
@@ -218,7 +251,7 @@ class _SurveyDetailState extends State<SurveyDetail> {
     return new ListView(
       children: <Widget>[
         new Text(
-        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. ",
+          soal,
           style: new TextStyle(
               fontSize: 20.0, fontWeight: FontWeight.bold),
         ),
@@ -246,7 +279,7 @@ class _SurveyDetailState extends State<SurveyDetail> {
     return new ListView(
         children: <Widget>[
           new Text(
-            "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. ",
+            soal,
             style: new TextStyle(
                 fontSize: 20.0, fontWeight: FontWeight.bold),
           ),
@@ -274,5 +307,42 @@ class _SurveyDetailState extends State<SurveyDetail> {
           ),
         ]
     );
+  }
+}
+
+class Question {
+  int status;
+  String id;
+  String pertanyaan;
+  String type;
+  String opsi;
+  String urutan;
+
+  Question(
+      {this.status,
+        this.id,
+        this.pertanyaan,
+        this.type,
+        this.opsi,
+        this.urutan});
+
+  Question.fromJson(Map<String, dynamic> json) {
+    status = json['status'];
+    id = json['id'];
+    pertanyaan = json['pertanyaan'];
+    type = json['type'];
+    opsi = json['opsi'];
+    urutan = json['urutan'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['status'] = this.status;
+    data['id'] = this.id;
+    data['pertanyaan'] = this.pertanyaan;
+    data['type'] = this.type;
+    data['opsi'] = this.opsi;
+    data['urutan'] = this.urutan;
+    return data;
   }
 }
