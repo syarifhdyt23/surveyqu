@@ -9,10 +9,10 @@ import 'package:surveyqu/loading.dart';
 import 'package:surveyqu/network_utils/api.dart';
 
 class SurveyDetail extends StatefulWidget {
-  String id;
-  SurveyDetail({this.id});
+  String id, urutanSoal, message;
+  SurveyDetail({this.id, this.urutanSoal, this.message});
   @override
-  _SurveyDetailState createState() => _SurveyDetailState(id: id);
+  _SurveyDetailState createState() => _SurveyDetailState(id: id, urutanSoal: urutanSoal, message: message);
 }
 
 class _SurveyDetailState extends State<SurveyDetail> {
@@ -22,7 +22,7 @@ class _SurveyDetailState extends State<SurveyDetail> {
   String id;
   Info info = new Info();
   int i;
-  String type, soal;
+  String type, soal, idSoal, urutanSoal, nextId, nextUrutan, message, prevId, prevUrutan;
   TextEditingController _textanswer = new TextEditingController();
   List<List<String>> choices = [// 1st qns has 3 choices
     ["AND", "CQA", "QWE", "QAL"], //3rd qns has 3 choices
@@ -32,17 +32,20 @@ class _SurveyDetailState extends State<SurveyDetail> {
     'bar': false,
   };
 
-  _SurveyDetailState({this.id});
+  _SurveyDetailState({this.id, this.urutanSoal, this.message});
 
   Future getQuestion() async {
     var data = {
       'id': id,
+      'urutan' : urutanSoal,
     };
     var res = await Network().postDataToken(data, '/detailQ');
     if (res.statusCode == 200) {
       final jsonData = json.decode(res.body);
       Question question = Question.fromJson(jsonData);
       setState(() {
+        idSoal = question.id;
+        urutanSoal = question.urutan;
         type = question.type;
         soal = question.pertanyaan;
         // sample.name => you can access field from class model
@@ -52,10 +55,52 @@ class _SurveyDetailState extends State<SurveyDetail> {
     }
   }
 
+  Future nextQuestion(id, urutan, jawaban) async {
+    var data = {
+      'id': id,
+      'urutan': urutan,
+      'jawaban' : jawaban
+    };
+    var res = await Network().postDataToken(data, '/nextQ');
+    if (res.statusCode == 200) {
+      final jsonData = json.decode(res.body);
+      nextQ nextQuest = nextQ.fromJson(jsonData);
+      setState(() {
+        nextId = nextQuest.id;
+        nextUrutan = nextQuest.urutan;
+        message = nextQuest.message;
+        Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context) => SurveyDetail(id: nextId, urutanSoal: nextUrutan, message: message,)));
+      });
+    } else {
+      info.messagesNoButton(context, 'info','Survey Error');
+    }
+  }
+
+  Future prevQuestion(id, urutan, jawaban) async {
+    var data = {
+      'id': id,
+      'urutan': urutan,
+      'jawaban' : jawaban
+    };
+    var res = await Network().postDataToken(data, '/prevQ');
+    if (res.statusCode == 200) {
+      final jsonData = json.decode(res.body);
+      nextQ nextQuest = nextQ.fromJson(jsonData);
+      setState(() {
+        prevId = nextQuest.id;
+        prevUrutan = nextQuest.urutan;
+        message = nextQuest.message;
+        Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context) => SurveyDetail(id: prevId, urutanSoal: prevUrutan, message: message,)));
+      });
+    } else {
+      info.messagesNoButton(context, 'info','Survey Error');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    getQuestion();
+    this.getQuestion();
     start = true;
     end = false;
     i = 0;
@@ -75,14 +120,14 @@ class _SurveyDetailState extends State<SurveyDetail> {
             ),
             child: new Stack(
               children: [
-                new Container(
+                 new Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.all(Radius.circular(20),
                     ),
                   ),
                   margin: EdgeInsets.only(top: 50, left: 20, right: 20, bottom: 90),
-                  child: type == null ? new Loading() : type == '' ? new Container(child: new Text('no data'),) :
+                  child: message == 'done' ? finish() : type == null ? new Loading() : type == '' ? new Container(child: new Text('no data'),) :
                   new Container(
                     margin: EdgeInsets.only(left: 10, right: 10),
                     child: type == "check_opt" ? checkBoxWidget() :  type == "radio_opt" ? radioWidget() : answerWidget()
@@ -98,20 +143,12 @@ class _SurveyDetailState extends State<SurveyDetail> {
                   child: new Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      start == true || end == true ? new Container() : new Container(
+                      urutanSoal == "1"? new Container() : new Container(
                         height: 40,
                         margin: const EdgeInsets.only(left: 20, right: 20.0, top: 5),
                         child: new FlatButton(
                           onPressed: () async {
-                            setState(() {
-                              if(i == 1){
-                                start = true;
-                                i--;
-                              } else {
-                                i--;
-                              }
-                            });
-                            print(i);
+                            this.prevQuestion(idSoal, urutanSoal, _textanswer.text);
                           },
                           splashColor: new HexColor("#F07B3F"),
                           highlightColor: new HexColor("#F07B3F"),
@@ -129,24 +166,28 @@ class _SurveyDetailState extends State<SurveyDetail> {
                         child: new FlatButton(
                           onPressed: () async {
                             setState(() {
-                              if(end == false){
-                                if(i < 2){
-                                  start = false;
-                                  i++;
-                                } else {
-                                  end = true;
-                                  i++;
-                                }
-                              } else {
+                              if(message == 'done'){
                                 Navigator.of(context, rootNavigator: true).pop();
+                              } else {
+                                this.nextQuestion(idSoal, urutanSoal, _textanswer.text);
                               }
-
+                              // if(end == false){
+                              //   if(i < 2){
+                              //     start = false;
+                              //     i++;
+                              //   } else {
+                              //     end = true;
+                              //     i++;
+                              //   }
+                              // } else {
+                              //   Navigator.of(context, rootNavigator: true).pop();
+                              // }
                             });
                             print(i);
                           },
                           splashColor: new HexColor("#F07B3F"),
                           highlightColor: new HexColor("#F07B3F"),
-                          child: new Text(end == false ? 'Next' : 'Finish', style: new TextStyle( color: Colors.white, fontSize: 19)),
+                          child: new Text(message == 'done' ? 'Finish' : 'Next', style: new TextStyle( color: Colors.white, fontSize: 19)),
                           shape: new RoundedRectangleBorder(
                               borderRadius: new BorderRadius.circular(20.0),
                               side: new BorderSide(color: new HexColor("#F07B3F"))
@@ -324,7 +365,7 @@ class Question {
         this.pertanyaan,
         this.type,
         this.opsi,
-        this.urutan});
+        this.urutan,});
 
   Question.fromJson(Map<String, dynamic> json) {
     status = json['status'];
@@ -343,6 +384,64 @@ class Question {
     data['type'] = this.type;
     data['opsi'] = this.opsi;
     data['urutan'] = this.urutan;
+    return data;
+  }
+}
+
+class nextQ {
+  int status;
+  String id;
+  String urutan;
+  String message;
+
+  nextQ(
+      {this.status,
+        this.id,
+        this.urutan,
+        this.message});
+
+  nextQ.fromJson(Map<String, dynamic> json) {
+    status = json['status'];
+    id = json['id'];
+    urutan = json['urutan'];
+    message = json['message'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['status'] = this.status;
+    data['id'] = this.id;
+    data['urutan'] = this.urutan;
+    data['message'] = this.message;
+    return data;
+  }
+}
+
+class prevQ {
+  int status;
+  String id;
+  String urutan;
+  String message;
+
+  prevQ(
+      {this.status,
+        this.id,
+        this.urutan,
+        this.message});
+
+  prevQ.fromJson(Map<String, dynamic> json) {
+    status = json['status'];
+    id = json['id'];
+    urutan = json['urutan'];
+    message = json['message'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['status'] = this.status;
+    data['id'] = this.id;
+    data['urutan'] = this.urutan;
+    data['message'] = this.message;
     return data;
   }
 }

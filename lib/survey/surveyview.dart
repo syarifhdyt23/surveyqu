@@ -113,7 +113,7 @@ class _SurveyViewState extends State<SurveyView> {
                 itemBuilder: (context, i){
                   return new InkWell(
                     onTap: (){
-                      Navigator.of(context).push(new MaterialPageRoute(builder: (context) => SurveyDetail(id: id)));
+                      Navigator.of(context).push(new MaterialPageRoute(builder: (context) => SurveyDetail(id: listSurvey[i].id, urutanSoal: '1',)));
                     },
                     child: new Container(
                         decoration: BoxDecoration(
@@ -138,18 +138,21 @@ class _SurveyViewState extends State<SurveyView> {
 }
 
 class Result {
+  String id;
   String subJudul;
   String deskripsi;
 
-  Result({this.subJudul, this.deskripsi});
+  Result({this.id, this.subJudul, this.deskripsi});
 
   Result.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
     subJudul = json['sub_judul'];
     deskripsi = json['deskripsi'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
     data['sub_judul'] = this.subJudul;
     data['deskripsi'] = this.deskripsi;
     return data;
