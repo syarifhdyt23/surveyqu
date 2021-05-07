@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:surveyqu/hexacolor.dart';
 import 'package:surveyqu/info.dart';
 import 'package:surveyqu/loading.dart';
+import 'package:surveyqu/model/survey.dart';
 import 'package:surveyqu/network_utils/api.dart';
 import 'package:surveyqu/survey/surveydetail.dart';
 
@@ -134,27 +135,5 @@ class _SurveyViewState extends State<SurveyView> {
         ],
       ),
     );
-  }
-}
-
-class Result {
-  String id;
-  String subJudul;
-  String deskripsi;
-
-  Result({this.id, this.subJudul, this.deskripsi});
-
-  Result.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    subJudul = json['sub_judul'];
-    deskripsi = json['deskripsi'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['sub_judul'] = this.subJudul;
-    data['deskripsi'] = this.deskripsi;
-    return data;
   }
 }

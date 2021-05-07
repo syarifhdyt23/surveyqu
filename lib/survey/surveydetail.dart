@@ -6,6 +6,7 @@ import 'package:surveyqu/hexacolor.dart';
 import 'package:surveyqu/home/home.dart';
 import 'package:surveyqu/info.dart';
 import 'package:surveyqu/loading.dart';
+import 'package:surveyqu/model/survey.dart';
 import 'package:surveyqu/network_utils/api.dart';
 
 class SurveyDetail extends StatefulWidget {
@@ -18,19 +19,19 @@ class SurveyDetail extends StatefulWidget {
 class _SurveyDetailState extends State<SurveyDetail> {
   Size size;
   String _selection = '';
-  bool start, end;
   String id;
   Info info = new Info();
-  int i;
   String type, soal, idSoal, urutanSoal, nextId, nextUrutan, message, prevId, prevUrutan;
   TextEditingController _textanswer = new TextEditingController();
-  List<List<String>> choices = [// 1st qns has 3 choices
-    ["AND", "CQA", "QWE", "QAL"], //3rd qns has 3 choices
+  List<List<String>> choices = [
+    ['a','b','c','d']
   ];
   Map<String, bool> values = {
     'foo': true,
     'bar': false,
   };
+  var multi;
+  List radio;
 
   _SurveyDetailState({this.id, this.urutanSoal, this.message});
 
@@ -48,6 +49,13 @@ class _SurveyDetailState extends State<SurveyDetail> {
         urutanSoal = question.urutan;
         type = question.type;
         soal = question.pertanyaan;
+        if(question.type == "check_opt"){
+          // choices = jsonEncode(question.opsi) as List<List<String>>;
+          multi = jsonEncode(question.opsi) as Map<String, bool>;
+        }else if (question.type == "radio_opt"){
+          // values = question.opsi as Map<String, dynamic>;
+          radio = jsonEncode(question.opsi) as List<List<String>>;
+        }
         // sample.name => you can access field from class model
       });
     } else {
@@ -101,9 +109,6 @@ class _SurveyDetailState extends State<SurveyDetail> {
   void initState() {
     super.initState();
     this.getQuestion();
-    start = true;
-    end = false;
-    i = 0;
   }
 
   @override
@@ -143,7 +148,7 @@ class _SurveyDetailState extends State<SurveyDetail> {
                   child: new Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      urutanSoal == "1"? new Container() : new Container(
+                      urutanSoal == "1" || message == 'done'? new Container() : new Container(
                         height: 40,
                         margin: const EdgeInsets.only(left: 20, right: 20.0, top: 5),
                         child: new FlatButton(
@@ -183,7 +188,6 @@ class _SurveyDetailState extends State<SurveyDetail> {
                               //   Navigator.of(context, rootNavigator: true).pop();
                               // }
                             });
-                            print(i);
                           },
                           splashColor: new HexColor("#F07B3F"),
                           highlightColor: new HexColor("#F07B3F"),
@@ -348,100 +352,5 @@ class _SurveyDetailState extends State<SurveyDetail> {
           ),
         ]
     );
-  }
-}
-
-class Question {
-  int status;
-  String id;
-  String pertanyaan;
-  String type;
-  String opsi;
-  String urutan;
-
-  Question(
-      {this.status,
-        this.id,
-        this.pertanyaan,
-        this.type,
-        this.opsi,
-        this.urutan,});
-
-  Question.fromJson(Map<String, dynamic> json) {
-    status = json['status'];
-    id = json['id'];
-    pertanyaan = json['pertanyaan'];
-    type = json['type'];
-    opsi = json['opsi'];
-    urutan = json['urutan'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['id'] = this.id;
-    data['pertanyaan'] = this.pertanyaan;
-    data['type'] = this.type;
-    data['opsi'] = this.opsi;
-    data['urutan'] = this.urutan;
-    return data;
-  }
-}
-
-class nextQ {
-  int status;
-  String id;
-  String urutan;
-  String message;
-
-  nextQ(
-      {this.status,
-        this.id,
-        this.urutan,
-        this.message});
-
-  nextQ.fromJson(Map<String, dynamic> json) {
-    status = json['status'];
-    id = json['id'];
-    urutan = json['urutan'];
-    message = json['message'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['id'] = this.id;
-    data['urutan'] = this.urutan;
-    data['message'] = this.message;
-    return data;
-  }
-}
-
-class prevQ {
-  int status;
-  String id;
-  String urutan;
-  String message;
-
-  prevQ(
-      {this.status,
-        this.id,
-        this.urutan,
-        this.message});
-
-  prevQ.fromJson(Map<String, dynamic> json) {
-    status = json['status'];
-    id = json['id'];
-    urutan = json['urutan'];
-    message = json['message'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['id'] = this.id;
-    data['urutan'] = this.urutan;
-    data['message'] = this.message;
-    return data;
   }
 }
