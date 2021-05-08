@@ -38,7 +38,9 @@ class _SliderInfo extends State<SliderInfo> {
     };
     http.Response hasil = await http.post(url, headers: headers);
     if (200 == hasil.statusCode) {
-      dataJson = jsonDecode(hasil.body);
+      if(this.mounted) {
+        dataJson = jsonDecode(hasil.body);
+      }
       setState(() {
         message = dataJson['result'][0]['img'] == null ? '1' : dataJson['result'][0]['img'];
       });

@@ -18,7 +18,7 @@ class SurveyDetail extends StatefulWidget {
 
 class _SurveyDetailState extends State<SurveyDetail> {
   Size size;
-  String _selection = '';
+  String radioValue = '';
   String id;
   Info info = new Info();
   String type, soal, idSoal, urutanSoal, nextId, nextUrutan, message, prevId, prevUrutan;
@@ -30,37 +30,37 @@ class _SurveyDetailState extends State<SurveyDetail> {
     'foo': true,
     'bar': false,
   };
-  var multi;
-  List radio;
+  List<Result> listSoal;
+  List<dynamic> opsi;
+  var opsiStatus = List<bool>();
+  var opsiValue = List<String>();
 
   _SurveyDetailState({this.id, this.urutanSoal, this.message});
 
-  Future getQuestion() async {
+  Future<List<Result>> getQuestion() async {
     var data = {
       'id': id,
       'urutan' : urutanSoal,
     };
     var res = await Network().postDataToken(data, '/detailQ');
     if (res.statusCode == 200) {
-      final jsonData = json.decode(res.body);
-      Question question = Question.fromJson(jsonData);
+      var body = jsonDecode(res.body);
+      var dataJson = body['result'];
       setState(() {
-        idSoal = question.id;
-        urutanSoal = question.urutan;
-        type = question.type;
-        soal = question.pertanyaan;
-        if(question.type == "check_opt"){
-          // choices = jsonEncode(question.opsi) as List<List<String>>;
-          multi = jsonEncode(question.opsi) as Map<String, bool>;
-        }else if (question.type == "radio_opt"){
-          // values = question.opsi as Map<String, dynamic>;
-          radio = jsonEncode(question.opsi) as List<List<String>>;
-        }
-        // sample.name => you can access field from class model
+        listSoal = dataJson.map<Result>((json) => Result.fromJson(json)).toList();
       });
+      idSoal = listSoal[0].id;
+      soal = listSoal[0].question;
+      type = listSoal[0].type;
+      urutanSoal = listSoal[0].urutan;
+      opsi = listSoal[0].opsi;
+      for (var i = 0; i < 5; i++) {
+        opsiStatus.add(false);
+      }
     } else {
       info.messagesNoButton(context, 'info','Survey Error');
     }
+    return listSoal;
   }
 
   Future nextQuestion(id, urutan, jawaban) async {
@@ -174,19 +174,26 @@ class _SurveyDetailState extends State<SurveyDetail> {
                               if(message == 'done'){
                                 Navigator.of(context, rootNavigator: true).pop();
                               } else {
-                                this.nextQuestion(idSoal, urutanSoal, _textanswer.text);
+                                if (type == "check_opt"){
+                                  if(opsiValue == null || opsiValue.length == 0){
+                                    info.messagesNoButton(context, "info", "Pilih jawaban anda");
+                                  } else {
+                                    this.nextQuestion(idSoal, urutanSoal, opsiValue);
+                                  }
+                                } else if (type == "radio_opt"){
+                                  if(radioValue == ''){
+                                    info.messagesNoButton(context, "info", "Pilih salah satu jawaban anda");
+                                  } else {
+                                    this.nextQuestion(idSoal, urutanSoal, radioValue);
+                                  }
+                                } else {
+                                  if(_textanswer.text == ''){
+                                    info.messagesNoButton(context, "info", "Jawaban anda masih kosong");
+                                  } else {
+                                    this.nextQuestion(idSoal, urutanSoal, _textanswer.text);
+                                  }
+                                }
                               }
-                              // if(end == false){
-                              //   if(i < 2){
-                              //     start = false;
-                              //     i++;
-                              //   } else {
-                              //     end = true;
-                              //     i++;
-                              //   }
-                              // } else {
-                              //   Navigator.of(context, rootNavigator: true).pop();
-                              // }
                             });
                           },
                           splashColor: new HexColor("#F07B3F"),
@@ -303,19 +310,46 @@ class _SurveyDetailState extends State<SurveyDetail> {
         new Padding(
          padding: new EdgeInsets.all(8.0),
         ),
-        new Column(
-          children: values.keys.map((String key) {
-            return new CheckboxListTile(
-              title: Text(key),
-              value: values[key],
-              onChanged: (bool value) {
-                setState(() {
-                  values[key] = value;
-                });
-              },
-            );
-          }).toList(),
-        )
+        new Container(
+          height: size.height,
+          child: ListView.builder(
+            itemCount: opsi.length,
+            itemBuilder: (BuildContext context, int index) {
+              return ListTile(
+                title: Text(opsi[index]),
+                subtitle: Text(opsi[index]),
+                leading: Checkbox(
+                    value: opsiStatus[index],
+                    onChanged: (bool val) {
+                      setState(() {
+                        if(opsiStatus[index] == false){
+                          opsiStatus[index] = !opsiStatus[index];
+                          opsiValue.remove(opsi);
+                          opsiValue.add(opsi[index]);
+                        } else {
+                          opsiStatus[index] = !opsiStatus[index];
+                          opsiValue.remove(opsi[index]);
+                        }
+                        print(opsiValue);
+                      });
+                    }),
+              );
+            },
+          ),
+        ),
+        // new Column(
+        //   children: listSoal[0].opsi.map((String key) {
+        //     return new CheckboxListTile(
+        //       title: Text(key),
+        //       value: values[key],
+        //       onChanged: (bool value) {
+        //         setState(() {
+        //           values[key] = true;
+        //         });
+        //       },
+        //     );
+        //   }).toList(),
+        // )
       ]
     );
   }
@@ -332,16 +366,16 @@ class _SurveyDetailState extends State<SurveyDetail> {
             padding: new EdgeInsets.all(8.0),
           ),
           new Column(
-            children: choices[0].map((item) { //change index of choices array as you need
+            children: opsi.map((item) { //change index of choices array as you need
               return RadioListTile(
-                groupValue: _selection,
+                groupValue: radioValue,
                 title: Text(item),
                 value: item,
                 activeColor: Colors.blue,
                 onChanged: (val) {
-                  print(val);
                   setState(() {
-                    _selection = val;
+                    radioValue = val;
+                    print(radioValue);
                   });
                 },
               );

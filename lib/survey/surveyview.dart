@@ -19,11 +19,11 @@ class _SurveyViewState extends State<SurveyView> {
   String judul, deskripsi, id;
   Size size;
   Info info = new Info();
-  List<Result> listSurvey;
+  List<HeaderSurvey> listSurvey;
 
   _SurveyViewState({this.deskripsi, this.judul, this.id});
 
-  Future<List<Result>> getSurvey() async {
+  Future<List<HeaderSurvey>> getSurvey() async {
     var data = {
       'id': id,
     };
@@ -32,7 +32,7 @@ class _SurveyViewState extends State<SurveyView> {
       var body = jsonDecode(res.body);
       var dataJson = body['result'] as List;
       setState(() {
-        listSurvey = dataJson.map<Result>((json) => Result.fromJson(json)).toList();
+        listSurvey = dataJson.map<HeaderSurvey>((json) => HeaderSurvey.fromJson(json)).toList();
       });
     } else {
       info.messagesNoButton(context, 'info','Survey Error');

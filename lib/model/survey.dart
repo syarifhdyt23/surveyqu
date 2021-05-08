@@ -1,34 +1,50 @@
-
-class Question {
+class ResultQ {
   int status;
-  String id;
-  String pertanyaan;
-  String type;
-  String opsi;
-  String urutan;
+  List<Result> result;
 
-  Question(
-      {this.status,
-        this.id,
-        this.pertanyaan,
-        this.type,
-        this.opsi,
-        this.urutan,});
+  ResultQ({this.status, this.result});
 
-  Question.fromJson(Map<String, dynamic> json) {
+  ResultQ.fromJson(Map<String, dynamic> json) {
     status = json['status'];
-    id = json['id'];
-    pertanyaan = json['pertanyaan'];
-    type = json['type'];
-    opsi = json['opsi'];
-    urutan = json['urutan'];
+    if (json['result'] != null) {
+      result = new List<Result>();
+      json['result'].forEach((v) {
+        result.add(new Result.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['status'] = this.status;
+    if (this.result != null) {
+      data['result'] = this.result.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class Result {
+  String id;
+  String question;
+  String type;
+  List<dynamic> opsi;
+  String urutan;
+
+  Result({this.id, this.question, this.type, this.opsi, this.urutan});
+
+  Result.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    question = json['question'];
+    type = json['type'];
+    opsi = json['opsi'] == '' ? null : json['opsi'].map((item) => item as String)?.toList();
+    urutan = json['urutan'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['pertanyaan'] = this.pertanyaan;
+    data['question'] = this.question;
     data['type'] = this.type;
     data['opsi'] = this.opsi;
     data['urutan'] = this.urutan;
@@ -94,14 +110,14 @@ class prevQ {
   }
 }
 
-class Result {
+class HeaderSurvey {
   String id;
   String subJudul;
   String deskripsi;
 
-  Result({this.id, this.subJudul, this.deskripsi});
+  HeaderSurvey({this.id, this.subJudul, this.deskripsi});
 
-  Result.fromJson(Map<String, dynamic> json) {
+  HeaderSurvey.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     subJudul = json['sub_judul'];
     deskripsi = json['deskripsi'];
