@@ -57,10 +57,10 @@ class _SurveyViewState extends State<SurveyView> {
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
     return Scaffold(
-      body: new ListView(
-        children: [
-          Container(
-            height: 200,
+      appBar: PreferredSize(
+        preferredSize: MediaQuery.of(context).size,
+        child: new Container(
+            height: 250,
             decoration: BoxDecoration(
               image: new DecorationImage(
                 image: new AssetImage('images/bannerlandscape.png'),
@@ -70,6 +70,7 @@ class _SurveyViewState extends State<SurveyView> {
             child: new Stack(
               children: [
                 new Container(
+                  padding: EdgeInsets.only(top: 20),
                   child: new IconButton(
                       icon: new Icon(Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back, color: Colors.white,),
                       onPressed: (){
@@ -77,7 +78,7 @@ class _SurveyViewState extends State<SurveyView> {
                       }),
                 ),
                 new Container(
-                  padding: EdgeInsets.only(top: 40, left: 10, right: 10, bottom: 10),
+                  padding: EdgeInsets.only(top: 60, left: 10, right: 10, bottom: 10),
                   child: new Column(
                     // mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -105,7 +106,10 @@ class _SurveyViewState extends State<SurveyView> {
                 )
               ],
             )
-          ),
+        ),
+      ),
+      body: new ListView(
+        children: [
           listSurvey == null
               ? new Container(
                   margin: EdgeInsets.only(top: 30),
