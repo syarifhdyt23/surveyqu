@@ -25,7 +25,9 @@ class _Home extends State<Home> {
   var token, id, sqpoint, nama;
   String message;
   List<Pengumuman> listNews;
+  List<Advertising> listAds;
   List<Question> listQna;
+  List<QSurvey> listSurv;
   Timer timer;
 
   Future<List<Pengumuman>> getPengumuman() async {
@@ -34,7 +36,10 @@ class _Home extends State<Home> {
       sqpoint = jsonDecode(localStorage.getString('sqpoint'));
       nama = jsonDecode(localStorage.getString('nama'));
     });
-    var res = await Network().postToken('/pengumuman');
+    var body = {
+      "jenis": 'p'
+    };
+    var res = await Network().postDataToken(body, '/pengumuman');
     if (res.statusCode == 200) {
       var body = jsonDecode(res.body);
       var dataJson = body['result'] as List;
@@ -47,8 +52,28 @@ class _Home extends State<Home> {
     return listNews;
   }
 
+  Future<List<Advertising>> getAds() async {
+    var body = {
+      "jenis": 'p'
+    };
+    var res = await Network().postDataToken(body, '/pengumuman');
+    if (res.statusCode == 200) {
+      var body = jsonDecode(res.body);
+      var dataJson = body['result'] as List;
+      setState(() {
+        listAds = dataJson.map<Advertising>((json) => Advertising.fromJson(json)).toList();
+      });
+    } else {
+      info.messagesNoButton(context, 'info','Gagal Masuk');
+    }
+    return listAds;
+  }
+
   Future<List<Question>> getQuestion() async {
-    var res = await Network().postToken('/question');
+    var body = {
+      "jenis": 'qc'
+    };
+    var res = await Network().postDataToken(body, '/question');
     if (res.statusCode == 200) {
       var body = jsonDecode(res.body);
       var dataJson = body['result'] as List;
@@ -59,6 +84,23 @@ class _Home extends State<Home> {
       info.messagesNoButton(context, 'info','Gagal Masuk');
     }
     return listQna;
+  }
+
+  Future<List<QSurvey>> getSurvey() async {
+    var body = {
+      "jenis": 'qt'
+    };
+    var res = await Network().postDataToken(body, '/question');
+    if (res.statusCode == 200) {
+      var body = jsonDecode(res.body);
+      var dataJson = body['result'] as List;
+      setState(() {
+        listSurv = dataJson.map<QSurvey>((json) => QSurvey.fromJson(json)).toList();
+      });
+    } else {
+      info.messagesNoButton(context, 'info','Gagal Masuk');
+    }
+    return listSurv;
   }
 
   Future<void> _onRefresh() {
@@ -76,6 +118,8 @@ class _Home extends State<Home> {
     super.initState();
     this.getPengumuman();
     this.getQuestion();
+    this.getAds();
+    this.getSurvey();
   }
 
   @override
@@ -122,10 +166,7 @@ class _Home extends State<Home> {
                     },
                   )
                 ),
-                listQna == null ? new Container(
-                  margin: EdgeInsets.only(top: 30),
-                  child: new Loading(),
-                ) : new ListView.builder(
+                listQna == null ? new Container() : new ListView.builder(
                   physics: BouncingScrollPhysics(),
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
@@ -133,7 +174,7 @@ class _Home extends State<Home> {
                   itemBuilder: (context, i){
                     return new InkWell(
                       onTap: (){
-                        Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context) => SurveyView(judul: listQna[i].judul, deskripsi: listQna[i].deskripsi, id: listQna[i].id,)));
+                        Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context) => SurveyView(judul: listQna[i].judul, deskripsi: listQna[i].deskripsi, id: listQna[i].id, jenis: 'qc',)));
                       },
                       child: Container(
                           margin: EdgeInsets.only(bottom: 10, left: 10, right: 10),
@@ -164,7 +205,72 @@ class _Home extends State<Home> {
                       ),
                     );
                   }),
-
+                listAds == null ? new Container() :
+                new Container(
+                    height: 160,
+                    child: new Swiper(
+                      itemCount: listAds == null ? 0 : listAds.length,
+                      viewportFraction: 0.8,
+                      scale: 0.9,
+                      autoplay: true,
+                      pagination: new SwiperPagination(),
+                      itemBuilder: (BuildContext context, int i) {
+                        return new Container(
+                          alignment: Alignment.topCenter,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(10)),
+                              image: DecorationImage(
+                                image: NetworkImage(listAds[i].gambar),
+                                fit: BoxFit.cover,
+                              )
+                          ),
+                          child: new Container(
+                            margin: EdgeInsets.only(top: 10),
+                            child: new Text(listAds[i].isi, style: TextStyle(fontWeight: FontWeight.w600),),
+                          ),
+                        );
+                      },
+                    )
+                ),
+                listSurv == null ? new Container() : new ListView.builder(
+                    physics: BouncingScrollPhysics(),
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: listSurv == null ? 0 : listSurv.length,
+                    itemBuilder: (context, i){
+                      return new InkWell(
+                        onTap: (){
+                          Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context) => SurveyView(judul: listSurv[i].judul, deskripsi: listSurv[i].deskripsi, id: listSurv[i].id, jenis: 'qt',)));
+                        },
+                        child: Container(
+                            margin: EdgeInsets.only(bottom: 10, left: 10, right: 10),
+                            width: size.width,
+                            height: 160,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(10)),
+                              color: new HexColor(listSurv[i].color),
+                            ),
+                            child: new Container(
+                              alignment: Alignment.center,
+                              child: new ListTile(
+                                isThreeLine: true,
+                                title: new Text(listSurv[i].judul, style: TextStyle(color: Colors.white)),
+                                subtitle: new Text(listSurv[i].deskripsi, style: TextStyle(color: Colors.white)),
+                                trailing: new Container(
+                                  height: 60,
+                                  width: 80,
+                                  decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: NetworkImage(listSurv[i].gambar),
+                                        fit: BoxFit.cover,
+                                      )
+                                  ),
+                                ),
+                              ),
+                            )
+                        ),
+                      );
+                    }),
               ]
             )
           )

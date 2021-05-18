@@ -10,10 +10,10 @@ import 'package:surveyqu/model/survey.dart';
 import 'package:surveyqu/network_utils/api.dart';
 
 class SurveyDetail extends StatefulWidget {
-  String id, urutanSoal, message;
-  SurveyDetail({this.id, this.urutanSoal, this.message});
+  String id, urutanSoal, message, jenis;
+  SurveyDetail({this.id, this.urutanSoal, this.message, this.jenis});
   @override
-  _SurveyDetailState createState() => _SurveyDetailState(id: id, urutanSoal: urutanSoal, message: message);
+  _SurveyDetailState createState() => _SurveyDetailState(id: id, urutanSoal: urutanSoal, message: message, jenis:jenis);
 }
 
 class _SurveyDetailState extends State<SurveyDetail> {
@@ -21,7 +21,7 @@ class _SurveyDetailState extends State<SurveyDetail> {
   String radioValue = '';
   String id;
   Info info = new Info();
-  String type, soal, idSoal, urutanSoal, nextId, nextUrutan, message, prevId, prevUrutan;
+  String type, soal, idSoal, urutanSoal, nextId, nextUrutan, message, prevId, prevUrutan, jenis;
   TextEditingController _textanswer = new TextEditingController();
   List<List<String>> choices = [
     ['a','b','c','d']
@@ -35,12 +35,13 @@ class _SurveyDetailState extends State<SurveyDetail> {
   var opsiStatus = List<bool>();
   var opsiValue = List<String>();
 
-  _SurveyDetailState({this.id, this.urutanSoal, this.message});
+  _SurveyDetailState({this.id, this.urutanSoal, this.message, this.jenis});
 
   Future<List<Result>> getQuestion() async {
     var data = {
       'id': id,
       'urutan' : urutanSoal,
+      'jenis' : jenis
     };
     var res = await Network().postDataToken(data, '/detailQ');
     if (res.statusCode == 200) {
@@ -67,7 +68,8 @@ class _SurveyDetailState extends State<SurveyDetail> {
     var data = {
       'id': id,
       'urutan': urutan,
-      'jawaban' : jawaban
+      'jawaban' : jawaban,
+      'jenis' : jenis
     };
     var res = await Network().postDataToken(data, '/nextQ');
     if (res.statusCode == 200) {
@@ -88,7 +90,8 @@ class _SurveyDetailState extends State<SurveyDetail> {
     var data = {
       'id': id,
       'urutan': urutan,
-      'jawaban' : jawaban
+      'jawaban' : jawaban,
+      'jenis' : jenis
     };
     var res = await Network().postDataToken(data, '/prevQ');
     if (res.statusCode == 200) {

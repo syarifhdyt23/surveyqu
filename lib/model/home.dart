@@ -47,3 +47,53 @@ class Question {
     return data;
   }
 }
+
+class Advertising {
+  String isi;
+  String urutan;
+  String gambar;
+
+  Advertising({this.isi, this.urutan, this.gambar});
+
+  Advertising.fromJson(Map<String, dynamic> json) {
+    isi = json['isi'];
+    urutan = json['urutan'];
+    gambar = json['gambar'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['isi'] = this.isi;
+    data['urutan'] = this.urutan;
+    data['gambar'] = this.gambar;
+    return data;
+  }
+}
+
+class QSurvey {
+  String judul;
+  String deskripsi;
+  String id;
+  String color;
+  String gambar;
+
+  QSurvey({this.judul, this.deskripsi, this.id, this.color, this.gambar});
+
+  QSurvey.fromJson(Map<String, dynamic> json) {
+    judul = json['judul'];
+    deskripsi = json['deskripsi'];
+    id = json['id'];
+    color = json['color'];
+    gambar = json['gambar'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['judul'] = this.judul;
+    data['deskripsi'] = this.deskripsi;
+    data['id'] = this.id;
+    data['color'] = this.color;
+    data['gambar'] = this.gambar;
+    return data;
+  }
+}
