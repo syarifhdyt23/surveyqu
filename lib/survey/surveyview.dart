@@ -70,7 +70,7 @@ class _SurveyViewState extends State<SurveyView> {
             child: new Stack(
               children: [
                 new Container(
-                  padding: EdgeInsets.only(top: 20),
+                  padding: EdgeInsets.only(top: 30),
                   child: new IconButton(
                       icon: new Icon(Platform.isIOS ? Icons.arrow_back_ios : Icons.arrow_back, color: Colors.white,),
                       onPressed: (){

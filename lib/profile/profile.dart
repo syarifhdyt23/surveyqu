@@ -211,6 +211,7 @@ class _Profile extends State<Profile> {
                               )
                           ),
                         ),
+                        new Divider(height: 0.1,),
                         new Container(
                           color: Colors.white,
                           
@@ -267,6 +268,7 @@ class _Profile extends State<Profile> {
                               )
                           ),
                         ),
+                        new Divider(height: 0.1,),
                         new Container(
                           color: Colors.white,
                           
