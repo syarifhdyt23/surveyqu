@@ -12,6 +12,7 @@ import 'dart:convert';
 import 'package:surveyqu/info.dart';
 import 'package:surveyqu/login/login.dart';
 import 'package:surveyqu/network_utils/api.dart';
+import 'package:surveyqu/profile/privacypolicy.dart';
 
 class Profile extends StatefulWidget {
   _Profile createState() => _Profile();
@@ -153,41 +154,142 @@ class _Profile extends State<Profile> {
                     ),
                   ),
                   new Container(
-                    width: 250,
-                    alignment: Alignment.center,
-                    margin: EdgeInsets.only(top: 10, bottom: 10),
-                    padding: EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                    child: new Text(
-                      'Akun Sudah Terverifikasi',
-                      style: new TextStyle(
-                        fontFamily: "helvetica",
-                        fontWeight: FontWeight.w600,
-                        fontSize: 20,
-                        color: Colors.blue,
-                      ),
-                    ),
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.only(top: 10, bottom: 10),
+                      child: new Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          new Icon(Icons.verified, color: Colors.yellow[700], size: 20,),
+                          new Container(
+                            padding: EdgeInsets.only(left: 5),
+                            child: new Text('Akun terverifikasi',
+                              style: TextStyle(
+                                  fontFamily: 'proxinovaregular',
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                          ),
+                        ],
+                      )
                   ),
                 ],
               )),
           new Container(
-            padding: const EdgeInsets.only(top: 330, left: 15, right: 15),
-            child: new InkWell(
-              onTap: () {
-                this.messagesLogout(context, 'keluar', 'anda yakin ingin keluar?');
-              },
-              child: new Container(
-                child: new Text(
-                  'Logout',
-                  style: new TextStyle(
-                      fontFamily: "helvetica",
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20,
-                      color: Colors.blue),
-                ),
-              ),
+            margin: const EdgeInsets.only(top: 280),
+            child: new ListView(
+                children: [
+                  new Container(
+                    padding: EdgeInsets.only(left: 15, right: 15, bottom: 10, top: 10),
+                    child: new Text(
+                      'Akun',
+                      style: new TextStyle(
+                          fontFamily: "helvetica",
+                          fontWeight: FontWeight.w600,
+                          fontSize: 17,),
+                    ),
+                  ),
+                  new Container(
+                    child: new Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        new Container(
+                          color: Colors.white,
+                          child: new InkWell(
+                              onTap: () {
+                                // this.messagesLogout(context, 'keluar', 'anda yakin ingin keluar?');
+                              },
+                              child: new ListTile(
+                                title: new Text(
+                                  'Ubah Data Diri',
+                                  style: new TextStyle(
+                                      fontFamily: "helvetica",
+                                      fontSize: 15,),
+                                ),
+                                leading: new Icon(CupertinoIcons.person,color: Colors.blue,),
+                                trailing: new Icon(Icons.arrow_forward_ios,color: Colors.blue,),
+                              )
+                          ),
+                        ),
+                        new Container(
+                          color: Colors.white,
+                          
+                          child: new InkWell(
+                              onTap: () {
+                                // this.messagesLogout(context, 'keluar', 'anda yakin ingin keluar?');
+                              },
+                              child: new ListTile(
+                                title: new Text(
+                                  'Ubah Kata Sandi',
+                                  style: new TextStyle(
+                                      fontFamily: "helvetica",
+                                      fontSize: 15,),
+                                ),
+                                leading: new Icon(CupertinoIcons.lock,color: Colors.blue,),
+                                trailing: new Icon(Icons.arrow_forward_ios,color: Colors.blue,),
+                              )
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  new Container(
+                    padding: EdgeInsets.only(left: 15, right: 15, bottom: 10, top: 10),
+                    child: new Text(
+                      'Info Lainnya',
+                      style: new TextStyle(
+                          fontFamily: "helvetica",
+                          fontWeight: FontWeight.w600,
+                          fontSize: 17,),
+                    ),
+                  ),
+                  new Container(
+                    child: new Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        new Container(
+                          color: Colors.white,
+                          
+                          child: new InkWell(
+                              onTap: () {
+                                // this.messagesLogout(context, 'keluar', 'anda yakin ingin keluar?');
+                                Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context,) => new PrivacyPolicy()));
+                              },
+                              child: new ListTile(
+                                title: new Text(
+                                  'Kebijakan Privasi',
+                                  style: new TextStyle(
+                                      fontFamily: "helvetica",
+                                      fontSize: 15,),
+                                ),
+                                leading: new Icon(CupertinoIcons.lock_shield,color: Colors.blue,),
+                                trailing: new Icon(Icons.arrow_forward_ios,color: Colors.blue,),
+                              )
+                          ),
+                        ),
+                        new Container(
+                          color: Colors.white,
+                          
+                          child: new InkWell(
+                              onTap: () {
+                                this.messagesLogout(context, 'keluar', 'anda yakin ingin keluar?');
+                              },
+                              child: new ListTile(
+                                title: new Text(
+                                  'Keluar',
+                                  style: new TextStyle(
+                                      fontFamily: "helvetica",
+                                      fontSize: 15,),
+                                ),
+                                leading: new Icon(Icons.logout,color: Colors.blue,),
+                                trailing: new Icon(Icons.arrow_forward_ios,color: Colors.blue,),
+                              )
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+              ],
             ),
           ),
         ],

@@ -435,7 +435,7 @@ class _Home extends State<Home> {
                                     margin: const EdgeInsets.only(
                                       left: 10,
                                     ),
-                                    child: new Icon(CupertinoIcons.bookmark)),
+                                    child: new Icon(Icons.account_balance_wallet_outlined)),
                                 new Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -480,7 +480,7 @@ class _Home extends State<Home> {
                             child: new Row(
                               children: [
                                 new Container(
-                                    child: new Icon(CupertinoIcons.money_dollar)),
+                                    child: new Icon(Icons.payment_outlined)),
                                 new Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.start,
