@@ -12,6 +12,7 @@ import 'dart:convert';
 import 'package:surveyqu/info.dart';
 import 'package:surveyqu/login/login.dart';
 import 'package:surveyqu/network_utils/api.dart';
+import 'package:surveyqu/profile/changepass.dart';
 import 'package:surveyqu/profile/privacypolicy.dart';
 
 class Profile extends StatefulWidget {
@@ -134,7 +135,7 @@ class _Profile extends State<Profile> {
                     child: new Text(
                       '$nama',
                       style: new TextStyle(
-                        fontFamily: "helvetica",
+                        
                         fontWeight: FontWeight.w600,
                         fontSize: 20,
                         color: Colors.white,
@@ -146,7 +147,7 @@ class _Profile extends State<Profile> {
                     child: new Text(
                       '$email',
                       style: new TextStyle(
-                        fontFamily: "helvetica",
+                        
                         fontWeight: FontWeight.w600,
                         fontSize: 20,
                         color: Colors.white,
@@ -164,7 +165,7 @@ class _Profile extends State<Profile> {
                             padding: EdgeInsets.only(left: 5),
                             child: new Text('Akun terverifikasi',
                               style: TextStyle(
-                                  fontFamily: 'proxinovaregular',
+                                  
                                   color: Colors.white,
                                   fontSize: 15,
                                   fontWeight: FontWeight.w600),
@@ -184,7 +185,7 @@ class _Profile extends State<Profile> {
                     child: new Text(
                       'Akun',
                       style: new TextStyle(
-                          fontFamily: "helvetica",
+                          
                           fontWeight: FontWeight.w600,
                           fontSize: 17,),
                     ),
@@ -203,7 +204,7 @@ class _Profile extends State<Profile> {
                                 title: new Text(
                                   'Ubah Data Diri',
                                   style: new TextStyle(
-                                      fontFamily: "helvetica",
+                                      
                                       fontSize: 15,),
                                 ),
                                 leading: new Icon(CupertinoIcons.person,color: Colors.blue,),
@@ -218,12 +219,13 @@ class _Profile extends State<Profile> {
                           child: new InkWell(
                               onTap: () {
                                 // this.messagesLogout(context, 'keluar', 'anda yakin ingin keluar?');
+                                Navigator.of(context).push(new MaterialPageRoute(builder: (context,) => new ChangePass()));
                               },
                               child: new ListTile(
                                 title: new Text(
                                   'Ubah Kata Sandi',
                                   style: new TextStyle(
-                                      fontFamily: "helvetica",
+                                      
                                       fontSize: 15,),
                                 ),
                                 leading: new Icon(CupertinoIcons.lock,color: Colors.blue,),
@@ -239,7 +241,7 @@ class _Profile extends State<Profile> {
                     child: new Text(
                       'Info Lainnya',
                       style: new TextStyle(
-                          fontFamily: "helvetica",
+                          
                           fontWeight: FontWeight.w600,
                           fontSize: 17,),
                     ),
@@ -260,7 +262,7 @@ class _Profile extends State<Profile> {
                                 title: new Text(
                                   'Kebijakan Privasi',
                                   style: new TextStyle(
-                                      fontFamily: "helvetica",
+                                      
                                       fontSize: 15,),
                                 ),
                                 leading: new Icon(CupertinoIcons.lock_shield,color: Colors.blue,),
@@ -280,7 +282,7 @@ class _Profile extends State<Profile> {
                                 title: new Text(
                                   'Keluar',
                                   style: new TextStyle(
-                                      fontFamily: "helvetica",
+                                      
                                       fontSize: 15,),
                                 ),
                                 leading: new Icon(Icons.logout,color: Colors.blue,),

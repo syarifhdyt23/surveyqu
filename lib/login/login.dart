@@ -32,8 +32,6 @@ class _LoginState extends State<Login> {
   TextEditingController textEmaill = new TextEditingController();
   TextEditingController textPassword = new TextEditingController();
 
-
-
   void _onLoading() {
     showDialog(
       context: context,

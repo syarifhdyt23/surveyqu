@@ -64,7 +64,7 @@ class _SurveyDetailState extends State<SurveyDetail> {
     return listSoal;
   }
 
-  Future nextQuestion(id, urutan, jawaban) async {
+  Future<void> nextQuestion(id, urutan, jawaban) async {
     var data = {
       'id': id,
       'urutan': urutan,
@@ -86,7 +86,7 @@ class _SurveyDetailState extends State<SurveyDetail> {
     }
   }
 
-  Future prevQuestion(id, urutan, jawaban) async {
+  Future<void> prevQuestion(id, urutan, jawaban) async {
     var data = {
       'id': id,
       'urutan': urutan,
