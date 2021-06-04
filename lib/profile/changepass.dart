@@ -26,7 +26,6 @@ class _ChangePass extends State<ChangePass> {
   Timer timer;
   Info info = new Info();
   bool visibleNewPassword, visibleRePassword, visibleCurPassword;
-  bool _isLoading = false;
 
   TextEditingController textNewPassword = new TextEditingController();
   TextEditingController textRePassword = new TextEditingController();
@@ -36,6 +35,8 @@ class _ChangePass extends State<ChangePass> {
   FocusNode nodeOne = FocusNode();
   FocusNode nodeTwo = FocusNode();
   FocusNode nodeThree = FocusNode();
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   _loadUserData() async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
@@ -52,7 +53,7 @@ class _ChangePass extends State<ChangePass> {
   void _onLoading() {
     showDialog(
       context: context,
-      barrierDismissible: false,
+      // barrierDismissible: false,
       builder: (BuildContext context) {
         return Dialog(
           insetPadding: EdgeInsets.all(5),
@@ -80,26 +81,18 @@ class _ChangePass extends State<ChangePass> {
   }
 
   void changePass() async {
-    setState(() {
-      _isLoading = true;
-    });
     var data = {
       'email': email,
       'oldpass': textCurPassword.text,
       'newpass' : textNewPassword.text
     };
 
-    var res = await Network().postDataAuth(data, '/changepass');
+    var res = await Network().postDataToken(data, '/changepass');
     if (res.statusCode == 200) {
-      var body = jsonDecode(res.body);
-      print (body);
+      info.messagesSuccess(context, true, 'info','Ganti password sukses');
     } else {
-      info.messagesNoButton(context, 'info','Gagal Masuk');
+      info.messagesNoButton(context, 'info','Password lama anda salah');
     }
-
-    setState(() {
-      _isLoading = false;
-    });
   }
 
   @override
@@ -118,6 +111,7 @@ class _ChangePass extends State<ChangePass> {
     return
       // message == "0" ?
       new Scaffold(
+        key: _scaffoldKey,
           backgroundColor: Colors.white,
           appBar: new AppBar(
             brightness: Brightness.dark,
@@ -149,6 +143,7 @@ class _ChangePass extends State<ChangePass> {
                         info.MessageInfo(context, 'Message', 'Password min 6 character');
                       } else {
                         setState(() {
+                          this._onLoading();
                           // this.getCurPassword(textCurPassword.text);
                         });
                       }
@@ -160,112 +155,117 @@ class _ChangePass extends State<ChangePass> {
 
             ],
           ),
-          body: new Container(
-            height: size.height,
-            width: size.width,
-            child: new ListView(
-              padding: EdgeInsets.only(left: 20, right: 20),
-              children: [
-                new Container(
-                  padding: EdgeInsets.only(top: 20),
-                  child: new Text('Current Password', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
+          body: new GestureDetector(
+            onTap: () {
+            FocusScopeNode currentFocus = FocusScope.of(context);
+            },
+            child: new Container(
+              height: size.height,
+              width: size.width,
+              child: new ListView(
+                padding: EdgeInsets.only(left: 20, right: 20),
+                children: [
+                  new Container(
+                    padding: EdgeInsets.only(top: 20),
+                    child: new Text('Current Password', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
+                    ),
                   ),
-                ),
 
-                new Container(
-                  width: size.width,
-                  height: 40,
-                  margin: const EdgeInsets.only(top: 5),
-                  child: new CupertinoTextField(
-                      controller: textCurPassword,
+                  new Container(
+                    width: size.width,
+                    height: 40,
+                    margin: const EdgeInsets.only(top: 5),
+                    child: new CupertinoTextField(
+                        controller: textCurPassword,
+                        // placeholder: "test",
+                        focusNode: nodeOne,
+                        obscureText: !visibleCurPassword,
+                        textInputAction: TextInputAction.next,
+                        suffix: new Padding(
+                          padding: EdgeInsets.only(right: 10),
+                          child: GestureDetector(
+                            onTap: (){
+                              setState(() {
+                                if(visibleCurPassword){
+                                  visibleCurPassword = false;
+                                }else{
+                                  visibleCurPassword = true;
+                                }
+
+                              });
+                            },
+                            child: new Icon(visibleCurPassword ? Icons.visibility : Icons.visibility_off),
+                          ),)),
+                  ),
+
+                  new Container(
+                    margin: const EdgeInsets.only(top: 20),
+                    child: new Text('New Password', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),),
+                  ),
+
+                  new Container(
+                    width: size.width,
+                    height: 40,
+                    margin: const EdgeInsets.only(top: 5),
+                    child: new CupertinoTextField(
                       // placeholder: "test",
-                      focusNode: nodeOne,
-                      obscureText: !visibleCurPassword,
-                      textInputAction: TextInputAction.next,
-                      suffix: new Padding(
-                        padding: EdgeInsets.only(right: 10),
-                        child: GestureDetector(
-                          onTap: (){
-                            setState(() {
-                              if(visibleCurPassword){
-                                visibleCurPassword = false;
-                              }else{
-                                visibleCurPassword = true;
-                              }
+                        focusNode: nodeTwo,
+                        obscureText: !visibleNewPassword,
+                        controller: textNewPassword,
+                        textInputAction: TextInputAction.next,
+                        suffix: new Padding(
+                          padding: EdgeInsets.only(right: 10),
+                          child: GestureDetector(
+                            onTap: (){
+                              setState(() {
+                                if(visibleNewPassword){
+                                  visibleNewPassword = false;
+                                }else{
+                                  visibleNewPassword = true;
+                                }
 
-                            });
-                          },
-                          child: new Icon(visibleCurPassword ? Icons.visibility : Icons.visibility_off),
-                        ),)),
-                ),
-
-                new Container(
-                  margin: const EdgeInsets.only(top: 20),
-                  child: new Text('New Password', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),),
-                ),
-
-                new Container(
-                  width: size.width,
-                  height: 40,
-                  margin: const EdgeInsets.only(top: 5),
-                  child: new CupertinoTextField(
-                    // placeholder: "test",
-                      focusNode: nodeTwo,
-                      obscureText: !visibleNewPassword,
-                      controller: textNewPassword,
-                      textInputAction: TextInputAction.next,
-                      suffix: new Padding(
-                        padding: EdgeInsets.only(right: 10),
-                        child: GestureDetector(
-                          onTap: (){
-                            setState(() {
-                              if(visibleNewPassword){
-                                visibleNewPassword = false;
-                              }else{
-                                visibleNewPassword = true;
-                              }
-
-                            });
-                          },
-                          child: new Icon(visibleNewPassword ? Icons.visibility : Icons.visibility_off),
-                        ),
-                      )
+                              });
+                            },
+                            child: new Icon(visibleNewPassword ? Icons.visibility : Icons.visibility_off),
+                          ),
+                        )
+                    ),
                   ),
-                ),
 
-                new Container(
-                  margin: const EdgeInsets.only(top: 20),
-                  child: new Text('Retype Password', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),),
-                ),
+                  new Container(
+                    margin: const EdgeInsets.only(top: 20),
+                    child: new Text('Retype Password', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),),
+                  ),
 
-                new Container(
-                  width: size.width,
-                  height: 40,
-                  margin: const EdgeInsets.only(top: 5),
-                  child: new CupertinoTextField(
-                    // placeholder: "test",
-                      focusNode: nodeThree,
-                      controller: textRePassword,
-                      obscureText: !visibleRePassword,
-                      textInputAction: TextInputAction.done,
-                      suffix: new Padding(
-                        padding: EdgeInsets.only(right: 10),
-                        child: GestureDetector(
-                          onTap: (){
-                            setState(() {
-                              if(visibleRePassword){
-                                visibleRePassword = false;
-                              }else{
-                                visibleRePassword = true;
-                              }
-                            });
-                          },
-                          child: new Icon(visibleRePassword ? Icons.visibility : Icons.visibility_off),
-                        ),)),
-                ),
-              ],
+                  new Container(
+                    width: size.width,
+                    height: 40,
+                    margin: const EdgeInsets.only(top: 5),
+                    child: new CupertinoTextField(
+                      // placeholder: "test",
+                        focusNode: nodeThree,
+                        controller: textRePassword,
+                        obscureText: !visibleRePassword,
+                        textInputAction: TextInputAction.done,
+                        suffix: new Padding(
+                          padding: EdgeInsets.only(right: 10),
+                          child: GestureDetector(
+                            onTap: (){
+                              setState(() {
+                                if(visibleRePassword){
+                                  visibleRePassword = false;
+                                }else{
+                                  visibleRePassword = true;
+                                }
+                              });
+                            },
+                            child: new Icon(visibleRePassword ? Icons.visibility : Icons.visibility_off),
+                          ),)),
+                  ),
+                ],
+              ),
             ),
-          )
+          ),
       );
   }
 }

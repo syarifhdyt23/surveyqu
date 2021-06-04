@@ -201,6 +201,7 @@ class Info {
     AwesomeDialog(
       context: context,
       headerAnimationLoop: true,
+      // useRootNavigator: true,
       animType: AnimType.BOTTOMSLIDE,
       title: title,
       desc: desc,
@@ -208,16 +209,18 @@ class Info {
     )..show();
   }
 
-  void messagesSuccess(BuildContext context, String title, String desc) {
+  void messagesSuccess(BuildContext context, bool root, String title, String desc) {
     AwesomeDialog(
         context: context,
         animType: AnimType.LEFTSLIDE,
         headerAnimationLoop: false,
+        useRootNavigator: root,
         dialogType: DialogType.SUCCES,
         title: title,
         desc: desc,
         btnOkOnPress: () {
-          debugPrint('OnClcik');
+          // debugPrint('OnClick');
+          Navigator.of(context, rootNavigator: true).pop();
         },
         btnOkIcon: Icons.check_circle,
         onDissmissCallback: () {

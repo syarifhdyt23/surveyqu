@@ -135,7 +135,6 @@ class _Profile extends State<Profile> {
                     child: new Text(
                       '$nama',
                       style: new TextStyle(
-                        
                         fontWeight: FontWeight.w600,
                         fontSize: 20,
                         color: Colors.white,
@@ -147,7 +146,6 @@ class _Profile extends State<Profile> {
                     child: new Text(
                       '$email',
                       style: new TextStyle(
-                        
                         fontWeight: FontWeight.w600,
                         fontSize: 20,
                         color: Colors.white,
@@ -185,7 +183,6 @@ class _Profile extends State<Profile> {
                     child: new Text(
                       'Akun',
                       style: new TextStyle(
-                          
                           fontWeight: FontWeight.w600,
                           fontSize: 17,),
                     ),
@@ -203,9 +200,7 @@ class _Profile extends State<Profile> {
                               child: new ListTile(
                                 title: new Text(
                                   'Ubah Data Diri',
-                                  style: new TextStyle(
-                                      
-                                      fontSize: 15,),
+                                  style: new TextStyle(fontSize: 15,),
                                 ),
                                 leading: new Icon(CupertinoIcons.person,color: Colors.blue,),
                                 trailing: new Icon(Icons.arrow_forward_ios,color: Colors.blue,),
@@ -215,18 +210,16 @@ class _Profile extends State<Profile> {
                         new Divider(height: 0.1,),
                         new Container(
                           color: Colors.white,
-                          
                           child: new InkWell(
                               onTap: () {
                                 // this.messagesLogout(context, 'keluar', 'anda yakin ingin keluar?');
-                                Navigator.of(context).push(new MaterialPageRoute(builder: (context,) => new ChangePass()));
+                                Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context,) => new ChangePass()));
+                                // info.messagesSuccess(context, true, 'info','Ganti password sukses');
                               },
                               child: new ListTile(
                                 title: new Text(
                                   'Ubah Kata Sandi',
-                                  style: new TextStyle(
-                                      
-                                      fontSize: 15,),
+                                  style: new TextStyle(fontSize: 15,),
                                 ),
                                 leading: new Icon(CupertinoIcons.lock,color: Colors.blue,),
                                 trailing: new Icon(Icons.arrow_forward_ios,color: Colors.blue,),
@@ -241,7 +234,6 @@ class _Profile extends State<Profile> {
                     child: new Text(
                       'Info Lainnya',
                       style: new TextStyle(
-                          
                           fontWeight: FontWeight.w600,
                           fontSize: 17,),
                     ),
@@ -252,7 +244,6 @@ class _Profile extends State<Profile> {
                       children: [
                         new Container(
                           color: Colors.white,
-                          
                           child: new InkWell(
                               onTap: () {
                                 // this.messagesLogout(context, 'keluar', 'anda yakin ingin keluar?');
@@ -261,9 +252,7 @@ class _Profile extends State<Profile> {
                               child: new ListTile(
                                 title: new Text(
                                   'Kebijakan Privasi',
-                                  style: new TextStyle(
-                                      
-                                      fontSize: 15,),
+                                  style: new TextStyle(fontSize: 15,),
                                 ),
                                 leading: new Icon(CupertinoIcons.lock_shield,color: Colors.blue,),
                                 trailing: new Icon(Icons.arrow_forward_ios,color: Colors.blue,),
@@ -273,7 +262,6 @@ class _Profile extends State<Profile> {
                         new Divider(height: 0.1,),
                         new Container(
                           color: Colors.white,
-                          
                           child: new InkWell(
                               onTap: () {
                                 this.messagesLogout(context, 'keluar', 'anda yakin ingin keluar?');
@@ -281,9 +269,7 @@ class _Profile extends State<Profile> {
                               child: new ListTile(
                                 title: new Text(
                                   'Keluar',
-                                  style: new TextStyle(
-                                      
-                                      fontSize: 15,),
+                                  style: new TextStyle(fontSize: 15,),
                                 ),
                                 leading: new Icon(Icons.logout,color: Colors.blue,),
                                 trailing: new Icon(Icons.arrow_forward_ios,color: Colors.blue,),
