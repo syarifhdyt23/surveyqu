@@ -13,6 +13,7 @@ import 'package:surveyqu/info.dart';
 import 'package:surveyqu/login/login.dart';
 import 'package:surveyqu/network_utils/api.dart';
 import 'package:surveyqu/profile/changepass.dart';
+import 'package:surveyqu/profile/changeprofile.dart';
 import 'package:surveyqu/profile/privacypolicy.dart';
 
 class Profile extends StatefulWidget {
@@ -196,6 +197,7 @@ class _Profile extends State<Profile> {
                           child: new InkWell(
                               onTap: () {
                                 // this.messagesLogout(context, 'keluar', 'anda yakin ingin keluar?');
+                                Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context,) => new ChangeProfile()));
                               },
                               child: new ListTile(
                                 title: new Text(

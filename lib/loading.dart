@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:surveyqu/hexacolor.dart';
 
 class Loading extends StatefulWidget {
 
@@ -58,6 +60,41 @@ class _LoadingLogoState extends State<LoadingLogo> {
           )
         ),
       ],
+    );
+  }
+}
+
+class LoadingHome extends StatefulWidget {
+  @override
+  _LoadingHomeState createState() => _LoadingHomeState();
+}
+
+class _LoadingHomeState extends State<LoadingHome> {
+  @override
+  Widget build(BuildContext context) {
+    return new ListView.builder(
+      padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+      physics: NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: 4,
+      itemBuilder: (context, i) {
+        return new InkWell(
+          onTap: () {},
+          child: new Container(
+            padding: const EdgeInsets.only(
+                top: 20.0, left: 20, right: 20),
+            child: new Shimmer.fromColors(
+              baseColor: new HexColor("#f0f0f0"),
+              highlightColor: new HexColor("#f8f8f8"),
+              child: new Container(
+                width: 300,
+                height: 150,
+                color: Colors.grey,
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

@@ -136,10 +136,9 @@ class _Home extends State<Home> {
         },
         body: new RefreshIndicator(
           onRefresh: _onRefresh,
-          child: SingleChildScrollView(
+          child: listNews == null ? new LoadingHome() : new SingleChildScrollView(
             child:  Column(
               children: <Widget>[
-                listNews == null ? new Loading() :
                 new Container(
                   height: 160,
                   child: new Swiper(

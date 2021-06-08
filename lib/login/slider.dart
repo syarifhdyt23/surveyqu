@@ -36,7 +36,7 @@ class _SliderInfo extends State<SliderInfo> {
       'Client-Service' : domain.getHeaderClient(),
       'Auth-Key' : domain.getHeaderAuth()
     };
-    http.Response hasil = await http.post(url, headers: headers);
+    http.Response hasil = await http.post(Uri.parse(url), headers: headers);
     if (200 == hasil.statusCode) {
       if(this.mounted) {
         dataJson = jsonDecode(hasil.body);

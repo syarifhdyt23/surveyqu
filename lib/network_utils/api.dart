@@ -15,7 +15,7 @@ class Network{
   postDataAuth(data, apiUrl) async{
     var fullUrl = _urlauth + apiUrl;
     return await http.post(
-        fullUrl,
+        Uri.parse(fullUrl),
         body: jsonEncode(data),
         headers: {
           'Client-Service' : 'surveyqu',
@@ -28,7 +28,7 @@ class Network{
     var fullUrl = _urlauth + apiUrl;
     await _getToken();
     return await http.post(
-        fullUrl,
+        Uri.parse(fullUrl),
         body:{
           'id' : id,
         },
@@ -44,7 +44,7 @@ class Network{
     var fullUrl = _urlauth + apiUrl;
     await _getToken();
     return await http.post(
-      fullUrl,
+      Uri.parse(fullUrl),
       headers: {
         'Client-Service' : 'surveyqu',
         'Auth-Key' : 'svq1234',
@@ -57,7 +57,7 @@ class Network{
     var fullUrl = _urlauth + apiUrl;
     await _getToken();
     return await http.post(
-      fullUrl,
+      Uri.parse(fullUrl),
       body: jsonEncode(data),
       headers: {
         'Client-Service' : 'surveyqu',
