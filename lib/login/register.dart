@@ -19,6 +19,8 @@ class _RegisterState extends State<Register> {
   Domain domain = new Domain();
   Info info = new Info();
   var dataJson;
+  bool visiblePassword = false;
+  bool visibleConfPassword = false;
 
 
   // http://surveyqu.com/sqws/sqmid/index.php/auth/register
@@ -27,6 +29,7 @@ class _RegisterState extends State<Register> {
   TextEditingController textHp = new TextEditingController();
   TextEditingController textEmail = new TextEditingController();
   TextEditingController textPass = new TextEditingController();
+  TextEditingController textConfPass = new TextEditingController();
   TextEditingController textRef = new TextEditingController();
 
   void register(String email, String password, String name, String referral, String hp) async {
@@ -82,7 +85,6 @@ class _RegisterState extends State<Register> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -92,7 +94,7 @@ class _RegisterState extends State<Register> {
       body: new GestureDetector(
         behavior: HitTestBehavior.opaque,
         onPanDown: (_) {
-          FocusScope.of(context).requestFocus(FocusNode());
+          FocusScope.of(context).unfocus();
         },
         child: new Container(
         color: Colors.white,
@@ -162,9 +164,9 @@ class _RegisterState extends State<Register> {
                           ),
                           fillColor: Colors.grey[200],
                           filled: true,
-                          prefixIcon: Padding(padding: const EdgeInsets.fromLTRB(0.0, 0.0, 1.0, 1.0),
-                            child: Icon(Icons.person,),
-                          ),
+                          // prefixIcon: Padding(padding: const EdgeInsets.fromLTRB(0.0, 0.0, 1.0, 1.0),
+                          //   child: Icon(Icons.person,),
+                          // ),
                         ),
                         textInputAction: TextInputAction.done,
                       ),
@@ -195,9 +197,9 @@ class _RegisterState extends State<Register> {
                           ),
                           fillColor: Colors.grey[200],
                           filled: true,
-                          prefixIcon: Padding(padding: const EdgeInsets.fromLTRB(0.0, 0.0, 1.0, 1.0),
-                            child: Icon(Icons.phone,),
-                          ),
+                          // prefixIcon: Padding(padding: const EdgeInsets.fromLTRB(0.0, 0.0, 1.0, 1.0),
+                          //   child: Icon(Icons.phone,),
+                          // ),
                         ),
                         textInputAction: TextInputAction.done,
                         keyboardType: TextInputType.number,
@@ -229,9 +231,9 @@ class _RegisterState extends State<Register> {
                           ),
                           fillColor: Colors.grey[200],
                           filled: true,
-                          prefixIcon: Padding(padding: const EdgeInsets.fromLTRB(0.0, 0.0, 1.0, 1.0),
-                            child: Icon(Icons.email,),
-                          ),
+                          // prefixIcon: Padding(padding: const EdgeInsets.fromLTRB(0.0, 0.0, 1.0, 1.0),
+                          //   child: Icon(Icons.email,),
+                          // ),
                         ),
                         textInputAction: TextInputAction.done,
                         keyboardType: TextInputType.emailAddress,
@@ -243,7 +245,7 @@ class _RegisterState extends State<Register> {
                       margin: const EdgeInsets.only(top: 10),
                       child: new TextField(
                         controller: textPass,
-                        obscureText: true,
+                        obscureText: !visiblePassword,
                         decoration: InputDecoration(
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
@@ -264,9 +266,70 @@ class _RegisterState extends State<Register> {
                           ),
                           fillColor: Colors.grey[200],
                           filled: true,
-                          prefixIcon: Padding(padding: const EdgeInsets.fromLTRB(0.0, 0.0, 1.0, 1.0),
-                            child: Icon(Icons.lock,),
+                          suffixIcon: GestureDetector(
+                            onTap: (){
+                              FocusScope.of(context).unfocus();
+                              setState(() {
+                                if(visiblePassword){
+                                  visiblePassword = false;
+                                }else{
+                                  visiblePassword = true;
+                                }
+
+                              });
+                            },
+                            child: Icon(visiblePassword ? Icons.visibility : Icons.visibility_off),
                           ),
+                          // prefixIcon: Padding(padding: const EdgeInsets.fromLTRB(0.0, 0.0, 1.0, 1.0),
+                          //   child: Icon(Icons.lock,),
+                          // ),
+                        ),
+                        textInputAction: TextInputAction.done,
+                      ),
+                    ),
+                    new Container(
+                      width: size.width,
+                      height: 45,
+                      margin: const EdgeInsets.only(top: 10),
+                      child: new TextField(
+                        controller: textConfPass,
+                        obscureText: !visibleConfPassword,
+                        decoration: InputDecoration(
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Colors.grey.withOpacity(.2), width: 1.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Colors.grey.withOpacity(.2), width: 1.0),
+                          ),
+                          contentPadding: const EdgeInsets.only(
+                              left: 10.0, bottom: 0.0, top: 7.0),
+                          //border: InputBorder.none,
+                          hintText: "Konfirmasi Password",
+                          hintStyle: TextStyle(
+                              color: Colors.grey, fontFamily: 'helvetica'),
+                          labelStyle: TextStyle(
+                            color: Colors.black,
+                          ),
+                          fillColor: Colors.grey[200],
+                          filled: true,
+                          suffixIcon: GestureDetector(
+                            onTap: (){
+                              FocusScope.of(context).unfocus();
+                              setState(() {
+                                if(visibleConfPassword){
+                                  visibleConfPassword = false;
+                                }else{
+                                  visibleConfPassword = true;
+                                }
+                              });
+                            },
+                            child: Icon(visibleConfPassword ? Icons.visibility : Icons.visibility_off),
+                          ),
+                          // prefixIcon: Padding(padding: const EdgeInsets.fromLTRB(0.0, 0.0, 1.0, 1.0),
+                          //   child: Icon(Icons.lock,),
+                          // ),
                         ),
                         textInputAction: TextInputAction.done,
                       ),
@@ -297,9 +360,9 @@ class _RegisterState extends State<Register> {
                           ),
                           fillColor: Colors.grey[200],
                           filled: true,
-                          prefixIcon: Padding(padding: const EdgeInsets.fromLTRB(0.0, 0.0, 1.0, 1.0),
-                            child: Icon(CupertinoIcons.ticket_fill),
-                          ),
+                          // prefixIcon: Padding(padding: const EdgeInsets.fromLTRB(0.0, 0.0, 1.0, 1.0),
+                          //   child: Icon(CupertinoIcons.ticket_fill),
+                          // ),
                         ),
                         textInputAction: TextInputAction.done,
                       ),
@@ -321,6 +384,8 @@ class _RegisterState extends State<Register> {
                               info.messagesNoButton(context, "Info", "Email anda tidak valid");
                             } else if (textPass.text == ''){
                               info.messagesNoButton(context, "Info", "Input password anda");
+                            } else if (textPass.text != textConfPass.text){
+                              info.messagesNoButton(context, "Info", "Konfirmasi password tidak sesuai");
                             } else if (textPass.text.length < 6){
                               info.messagesNoButton(context, "Info", "Password minimal 6 karakter");
                             } else {

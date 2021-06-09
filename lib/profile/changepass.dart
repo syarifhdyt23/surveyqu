@@ -8,6 +8,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import '../domain.dart';
+import '../hexacolor.dart';
 import '../info.dart';
 
 
@@ -118,42 +119,81 @@ class _ChangePass extends State<ChangePass> {
             elevation: 0,
             centerTitle: true,
             title: new Text("Change Password", style: TextStyle(color: Colors.white),),
-            actions: [
-              new Container(
-                margin: EdgeInsets.only(right: 15, top: 17),
-                child: new InkWell(
-                    highlightColor: Colors.transparent,
-                    splashColor: Colors.transparent,
-                    onTap: (){
-                      String passwordA = textNewPassword.text;
-                      String passwordB = textRePassword.text;
-                      String passwordC = textCurPassword.text;
+            // actions: [
+            //   new Container(
+            //     margin: EdgeInsets.only(right: 15, top: 17),
+            //     child: new InkWell(
+            //         highlightColor: Colors.transparent,
+            //         splashColor: Colors.transparent,
+            //         onTap: (){
+            //           String passwordA = textNewPassword.text;
+            //           String passwordB = textRePassword.text;
+            //           String passwordC = textCurPassword.text;
+            //
+            //           if (textCurPassword.text == '' && textNewPassword.text == '' && textRePassword.text == '') {
+            //             info.MessageInfo(context, 'Message', 'Please input data to change password');
+            //           } else if(textNewPassword.text == '') {
+            //             info.MessageInfo(context, 'Message', 'Please input new password');
+            //           } else if(textRePassword.text == '') {
+            //             info.MessageInfo(context, 'Message', 'Please input retype password');
+            //           } else if(textCurPassword.text == '') {
+            //             info.MessageInfo(context, 'Message', 'Please input current password');
+            //           } else if(textNewPassword.text != textRePassword.text) {
+            //             info.MessageInfo(context, 'Message', 'Retype Password not match');
+            //           } else if(passwordA.length < 6 || passwordB.length < 6 || passwordC.length < 6){
+            //             info.MessageInfo(context, 'Message', 'Password min 6 character');
+            //           } else {
+            //             setState(() {
+            //               this._onLoading();
+            //               // this.getCurPassword(textCurPassword.text);
+            //             });
+            //           }
+            //         },
+            //         child: new Text('Save',
+            //           style: new TextStyle(color: Colors.white, fontWeight: FontWeight.w400, fontSize: 20),)
+            //     ),
+            //   ),
+            // ],
+          ),
+          bottomNavigationBar: new Container(
+            height: 45,
+            margin: const EdgeInsets.only(top: 20, bottom: 30, left: 20, right: 20),
+            child: new FlatButton(
+                onPressed: () {
+                  String passwordA = textNewPassword.text;
+                  String passwordB = textRePassword.text;
+                  String passwordC = textCurPassword.text;
 
-                      if (textCurPassword.text == '' && textNewPassword.text == '' && textRePassword.text == '') {
-                        info.MessageInfo(context, 'Message', 'Please input data to change password');
-                      } else if(textNewPassword.text == '') {
-                        info.MessageInfo(context, 'Message', 'Please input new password');
-                      } else if(textRePassword.text == '') {
-                        info.MessageInfo(context, 'Message', 'Please input retype password');
-                      } else if(textCurPassword.text == '') {
-                        info.MessageInfo(context, 'Message', 'Please input current password');
-                      } else if(textNewPassword.text != textRePassword.text) {
-                        info.MessageInfo(context, 'Message', 'Retype Password not match');
-                      } else if(passwordA.length < 6 || passwordB.length < 6 || passwordC.length < 6){
-                        info.MessageInfo(context, 'Message', 'Password min 6 character');
-                      } else {
-                        setState(() {
-                          this._onLoading();
-                          // this.getCurPassword(textCurPassword.text);
-                        });
-                      }
-                    },
-                    child: new Text('Save',
-                      style: new TextStyle(color: Colors.white, fontWeight: FontWeight.w400, fontSize: 20),)
+                  if (textCurPassword.text == '' && textNewPassword.text == '' && textRePassword.text == '') {
+                    info.MessageInfo(context, 'Message', 'Please input data to change password');
+                  } else if(textNewPassword.text == '') {
+                    info.MessageInfo(context, 'Message', 'Please input new password');
+                  } else if(textRePassword.text == '') {
+                    info.MessageInfo(context, 'Message', 'Please input retype password');
+                  } else if(textCurPassword.text == '') {
+                    info.MessageInfo(context, 'Message', 'Please input current password');
+                  } else if(textNewPassword.text != textRePassword.text) {
+                    info.MessageInfo(context, 'Message', 'Retype Password not match');
+                  } else if(passwordA.length < 6 || passwordB.length < 6 || passwordC.length < 6){
+                    info.MessageInfo(context, 'Message', 'Password min 6 character');
+                  } else {
+                    setState(() {
+                      this._onLoading();
+                      // this.getCurPassword(textCurPassword.text);
+                    });
+                  }
+                },
+                color: new HexColor("#EA5455"),
+                shape: new RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(7.0),
                 ),
-              ),
-
-            ],
+                child: new Text(
+                  'Kirim',
+                  style: new TextStyle(
+                      fontSize: 17,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600),
+                )),
           ),
           body: new GestureDetector(
             onTap: () {

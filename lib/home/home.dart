@@ -139,74 +139,10 @@ class _Home extends State<Home> {
           child: listNews == null ? new LoadingHome() : new SingleChildScrollView(
             child:  Column(
               children: <Widget>[
-                new Container(
-                  height: 160,
-                  child: new Swiper(
-                    itemCount: listNews == null ? 0 : listNews.length,
-                    viewportFraction: 0.8,
-                    scale: 0.9,
-                    autoplay: true,
-                    pagination: new SwiperPagination(),
-                    itemBuilder: (BuildContext context, int i) {
-                      return new Container(
-                        alignment: Alignment.topCenter,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                            image: DecorationImage(
-                              image: NetworkImage(listNews[i].gambar),
-                              fit: BoxFit.cover,
-                            )
-                        ),
-                        child: new Container(
-                          margin: EdgeInsets.only(top: 10),
-                          child: new Text(listNews[i].isi, style: TextStyle(fontWeight: FontWeight.w600),),
-                        ),
-                      );
-                    },
-                  )
-                ),
-                listQna == null ? new Container() : new ListView.builder(
-                  physics: BouncingScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: listQna == null ? 0 : listQna.length,
-                  itemBuilder: (context, i){
-                    return new InkWell(
-                      onTap: (){
-                        Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context) => SurveyView(judul: listQna[i].judul, deskripsi: listQna[i].deskripsi, id: listQna[i].id, jenis: 'qc',)));
-                      },
-                      child: Container(
-                          margin: EdgeInsets.only(bottom: 10, left: 10, right: 10),
-                          width: size.width,
-                          height: 160,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                            color: new HexColor(listQna[i].color),
-                          ),
-                          child: new Container(
-                            alignment: Alignment.center,
-                            child: new ListTile(
-                              isThreeLine: true,
-                              title: new Text(listQna[i].judul, style: TextStyle(color: Colors.white)),
-                              subtitle: new Text(listQna[i].deskripsi, style: TextStyle(color: Colors.white)),
-                              trailing: new Container(
-                                height: 60,
-                                width: 80,
-                                decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      image: NetworkImage(listQna[i].gambar),
-                                      fit: BoxFit.cover,
-                                    )
-                                ),
-                              ),
-                            ),
-                          )
-                      ),
-                    );
-                  }),
                 listAds == null ? new Container() :
                 new Container(
                     height: 160,
+                    margin: EdgeInsets.only(top: 10),
                     child: new Swiper(
                       itemCount: listAds == null ? 0 : listAds.length,
                       viewportFraction: 0.8,
@@ -231,43 +167,205 @@ class _Home extends State<Home> {
                       },
                     )
                 ),
+                listQna == null ? new Container() : new ListView.builder(
+                  physics: BouncingScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  padding: EdgeInsets.only(top: 10,bottom: 10),
+                  shrinkWrap: true,
+                  itemCount: listQna == null ? 0 : listQna.length,
+                  itemBuilder: (context, i){
+                    return Container(
+                        margin: EdgeInsets.only(bottom: 10, left: 35, right: 35, top: 20),
+                        width: size.width,
+                        height: 200,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          color: new HexColor(listQna[i].color),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 2,
+                              blurRadius: 4,
+                              offset: Offset(1, 2), // changes position of shadow
+                            ),
+                          ],
+                        ),
+                        child: new Column(
+                          children: [
+                            new Expanded(
+                                flex:5,
+                                child: new Container(
+                                  alignment: Alignment.center,
+                                  child: new ListTile(
+                                    isThreeLine: true,
+                                    title: new Container(
+                                      child: new Text(listQna[i].judul, style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 20,)),
+                                    ),
+                                    subtitle: new Container(
+                                      margin: EdgeInsets.only(top: 20),
+                                      child: new Text(listQna[i].deskripsi, style: TextStyle(color: Colors.white)),
+                                    ),
+                                    trailing: new Container(
+                                      width: 100,
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image: NetworkImage(listQna[i].gambar),
+                                          fit: BoxFit.scaleDown,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                            ),
+                            new Expanded(
+                              flex:3,
+                              child: new Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                ),
+                                child: new ListTile(
+                                  title: new Text('Reward per tugas'),
+                                  subtitle: new Row(
+                                    children: [
+                                      new Icon(Icons.control_point_duplicate_sharp),
+                                      new Padding(padding: EdgeInsets.only(left: 10)),
+                                      new Text('100 poin'),
+                                    ],
+                                  ),
+                                  trailing: new InkWell(
+                                    onTap: (){
+                                      Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context) => SurveyView(judul: listQna[i].judul, deskripsi: listQna[i].deskripsi, id: listQna[i].id, jenis: 'qc',)));
+                                    },
+                                    child: new Container(
+                                      alignment: Alignment.center,
+                                      height: 40,
+                                      width: 80,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                                        color: new HexColor("#F07B3F"),
+                                      ),
+                                      child: new Text('Mulai', style: TextStyle(color: Colors.white),),
+                                    ),
+                                  ),
+                                ),
+                              ),),
+                          ],
+                        )
+                    );
+                  }),
+                new Container(
+                    height: 160,
+                    margin: EdgeInsets.only(top: 10),
+                    child: new Swiper(
+                      itemCount: listNews == null ? 0 : listNews.length,
+                      viewportFraction: 0.8,
+                      scale: 0.9,
+                      autoplay: true,
+                      pagination: new SwiperPagination(),
+                      itemBuilder: (BuildContext context, int i) {
+                        return new Container(
+                          alignment: Alignment.topCenter,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(10)),
+                              image: DecorationImage(
+                                image: NetworkImage(listNews[i].gambar),
+                                fit: BoxFit.cover,
+                              )
+                          ),
+                          child: new Container(
+                            margin: EdgeInsets.only(top: 10),
+                            child: new Text(listNews[i].isi, style: TextStyle(fontWeight: FontWeight.w600),),
+                          ),
+                        );
+                      },
+                    )
+                ),
                 listSurv == null ? new Container() : new ListView.builder(
                     physics: BouncingScrollPhysics(),
+                    padding: EdgeInsets.only(top: 10,bottom: 10),
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     itemCount: listSurv == null ? 0 : listSurv.length,
                     itemBuilder: (context, i){
-                      return new InkWell(
-                        onTap: (){
-                          Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context) => SurveyView(judul: listSurv[i].judul, deskripsi: listSurv[i].deskripsi, id: listSurv[i].id, jenis: 'qt',)));
-                        },
-                        child: Container(
-                            margin: EdgeInsets.only(bottom: 10, left: 10, right: 10),
+                      return Container(
+                            margin: EdgeInsets.only(bottom: 10, left: 35, right: 35, top: 20),
                             width: size.width,
-                            height: 160,
+                            height: 200,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.all(Radius.circular(10)),
                               color: new HexColor(listSurv[i].color),
-                            ),
-                            child: new Container(
-                              alignment: Alignment.center,
-                              child: new ListTile(
-                                isThreeLine: true,
-                                title: new Text(listSurv[i].judul, style: TextStyle(color: Colors.white)),
-                                subtitle: new Text(listSurv[i].deskripsi, style: TextStyle(color: Colors.white)),
-                                trailing: new Container(
-                                  height: 60,
-                                  width: 80,
-                                  decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: NetworkImage(listSurv[i].gambar),
-                                        fit: BoxFit.cover,
-                                      )
-                                  ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 2,
+                                  blurRadius: 4,
+                                  offset: Offset(1, 2), // changes position of shadow
                                 ),
-                              ),
+                              ],
+                            ),
+                            child: new Column(
+                              children: [
+                                new Expanded(
+                                  flex:5,
+                                  child: new Container(
+                                    alignment: Alignment.center,
+                                    child: new ListTile(
+                                      isThreeLine: true,
+                                      title: new Container(
+                                        child: new Text(listSurv[i].judul, style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 20,)),
+                                      ),
+                                      subtitle: new Container(
+                                        margin: EdgeInsets.only(top: 20),
+                                        child: new Text(listSurv[i].deskripsi, style: TextStyle(color: Colors.white)),
+                                      ),
+                                      trailing: new Container(
+                                        width: 100,
+                                        decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                              image: NetworkImage(listQna[i].gambar),
+                                              fit: BoxFit.scaleDown,
+                                            ),
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ),
+                                new Expanded(
+                                  flex:3,
+                                  child: new Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                                    ),
+                                    child: new ListTile(
+                                      title: new Text('Reward per tugas'),
+                                      subtitle: new Row(
+                                        children: [
+                                          new Icon(Icons.control_point_duplicate_sharp),
+                                          new Padding(padding: EdgeInsets.only(left: 10)),
+                                          new Text('100 poin'),
+                                        ],
+                                      ),
+                                      trailing: new InkWell(
+                                        onTap: (){
+                                          Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context) => SurveyView(judul: listSurv[i].judul, deskripsi: listSurv[i].deskripsi, id: listSurv[i].id, jenis: 'qt',)));
+                                        },
+                                        child: new Container(
+                                        alignment: Alignment.center,
+                                        height: 40,
+                                        width: 80,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                                          color: new HexColor("#F07B3F"),
+                                        ),
+                                        child: new Text('Mulai', style: TextStyle(color: Colors.white),),
+                                      ),
+                                    ),
+                                  ),
+                                ),),
+                              ],
                             )
-                        ),
                       );
                     }),
               ]
@@ -504,7 +602,7 @@ class _Home extends State<Home> {
                                         left: 10,
                                       ),
                                       child: new Text(
-                                        '$sqpoint Poin',
+                                        sqpoint == null ? '0 Poin' : sqpoint +' Poin',
                                         style: new TextStyle(
                                             fontFamily: "helvetica, bold",
                                             color: Colors.black,
