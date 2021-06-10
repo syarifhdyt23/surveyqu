@@ -10,6 +10,7 @@ import 'package:surveyqu/info.dart';
 import 'package:surveyqu/loading.dart';
 import 'package:surveyqu/model/home.dart';
 import 'package:surveyqu/survey/surveyview.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../hexacolor.dart';
 import '../network_utils/api.dart';
 
@@ -29,6 +30,14 @@ class _Home extends State<Home> {
   List<Question> listQna;
   List<QSurvey> listSurv;
   Timer timer;
+
+  Future<void> openURL(BuildContext context, String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      info.MessageInfo(context, 'Message', "Please install this apps");
+    }
+  }
 
   Future<List<Pengumuman>> getPengumuman() async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
@@ -54,7 +63,7 @@ class _Home extends State<Home> {
 
   Future<List<Advertising>> getAds() async {
     var body = {
-      "jenis": 'p'
+      "jenis": 'a'
     };
     var res = await Network().postDataToken(body, '/pengumuman');
     if (res.statusCode == 200) {
@@ -139,30 +148,34 @@ class _Home extends State<Home> {
           child: listNews == null ? new LoadingHome() : new SingleChildScrollView(
             child:  Column(
               children: <Widget>[
-                listAds == null ? new Container() :
                 new Container(
                     height: 160,
                     margin: EdgeInsets.only(top: 10),
                     child: new Swiper(
-                      itemCount: listAds == null ? 0 : listAds.length,
+                      itemCount: listNews == null ? 0 : listNews.length,
                       viewportFraction: 0.8,
                       scale: 0.9,
                       autoplay: true,
                       pagination: new SwiperPagination(),
                       itemBuilder: (BuildContext context, int i) {
-                        return new Container(
-                          alignment: Alignment.topCenter,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(10)),
-                              image: DecorationImage(
-                                image: NetworkImage(listAds[i].gambar),
-                                fit: BoxFit.cover,
-                              )
-                          ),
+                        return new InkWell(
+                          onTap: (){
+                            this.openURL(context, listNews[i].url);
+                          },
                           child: new Container(
-                            margin: EdgeInsets.only(top: 10),
-                            child: new Text(listAds[i].isi, style: TextStyle(fontWeight: FontWeight.w600),),
-                          ),
+                            alignment: Alignment.topCenter,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                                image: DecorationImage(
+                                  image: NetworkImage(listNews[i].gambar),
+                                  fit: BoxFit.cover,
+                                )
+                            ),
+                            child: new Container(
+                              margin: EdgeInsets.only(top: 10),
+                              child: new Text(listNews[i].isi, style: TextStyle(fontWeight: FontWeight.w600),),
+                            ),
+                          )
                         );
                       },
                     )
@@ -254,30 +267,35 @@ class _Home extends State<Home> {
                         )
                     );
                   }),
+                listAds == null ? new Container() :
                 new Container(
                     height: 160,
                     margin: EdgeInsets.only(top: 10),
                     child: new Swiper(
-                      itemCount: listNews == null ? 0 : listNews.length,
+                      itemCount: listAds == null ? 0 : listAds.length,
                       viewportFraction: 0.8,
                       scale: 0.9,
                       autoplay: true,
                       pagination: new SwiperPagination(),
                       itemBuilder: (BuildContext context, int i) {
-                        return new Container(
+                        return new InkWell(
+                            onTap: (){
+                          this.openURL(context, listAds[i].url);
+                        },
+                        child: new Container(
                           alignment: Alignment.topCenter,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.all(Radius.circular(10)),
                               image: DecorationImage(
-                                image: NetworkImage(listNews[i].gambar),
+                                image: NetworkImage(listAds[i].gambar),
                                 fit: BoxFit.cover,
                               )
                           ),
                           child: new Container(
                             margin: EdgeInsets.only(top: 10),
-                            child: new Text(listNews[i].isi, style: TextStyle(fontWeight: FontWeight.w600),),
+                            child: new Text(listAds[i].isi, style: TextStyle(fontWeight: FontWeight.w600),),
                           ),
-                        );
+                        ));
                       },
                     )
                 ),

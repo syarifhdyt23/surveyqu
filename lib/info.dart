@@ -157,26 +157,25 @@ class Info {
         child: new Stack(
           children: [
             new Align(
-                alignment: Alignment.center,
-                child: new Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    new Container(
-                      height: 60,
-                      width: 200,
-                      decoration: new BoxDecoration(
-                        image: new DecorationImage(image: new AssetImage('images/logo.png')),
-                      ),
+              alignment: Alignment.center,
+              child: new Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  new Container(
+                    height: 60,
+                    width: 200,
+                    decoration: new BoxDecoration(
+                      image: new DecorationImage(image: new AssetImage('images/logo.png')),
                     ),
-                    new Container(
-                      height: 20,
-                      width: 20,
-                      child: new CupertinoActivityIndicator(),
-                    )
-                  ],
-                )
+                  ),
+                  new Container(
+                    height: 20,
+                    width: 20,
+                    child: new CupertinoActivityIndicator(),
+                  )
+                ],
+              )
             ),
-
           ],
         ),
       ),

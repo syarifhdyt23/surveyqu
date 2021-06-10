@@ -2,13 +2,15 @@ class Pengumuman {
   String isi;
   String urutan;
   String gambar;
+  String url;
 
-  Pengumuman({this.isi, this.urutan, this.gambar});
+  Pengumuman({this.isi, this.urutan, this.gambar, this.url});
 
   Pengumuman.fromJson(Map<String, dynamic> json) {
     isi = json['isi'];
     urutan = json['urutan'];
     gambar = json['gambar'];
+    url = json['url'];
   }
 
   Map<String, dynamic> toJson() {
@@ -16,6 +18,7 @@ class Pengumuman {
     data['isi'] = this.isi;
     data['urutan'] = this.urutan;
     data['gambar'] = this.gambar;
+    data['url'] = this.url;
     return data;
   }
 }
@@ -52,13 +55,15 @@ class Advertising {
   String isi;
   String urutan;
   String gambar;
+  String url;
 
-  Advertising({this.isi, this.urutan, this.gambar});
+  Advertising({this.isi, this.urutan, this.gambar, this.url});
 
   Advertising.fromJson(Map<String, dynamic> json) {
     isi = json['isi'];
     urutan = json['urutan'];
     gambar = json['gambar'];
+    url = json['url'];
   }
 
   Map<String, dynamic> toJson() {
@@ -66,6 +71,7 @@ class Advertising {
     data['isi'] = this.isi;
     data['urutan'] = this.urutan;
     data['gambar'] = this.gambar;
+    data['url'] = this.url;
     return data;
   }
 }
