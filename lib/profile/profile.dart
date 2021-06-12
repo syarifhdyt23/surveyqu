@@ -67,9 +67,7 @@ class _Profile extends State<Profile> {
     var body = json.decode(res.body);
     if (body['status'] == 200) {
       SharedPreferences localStorage = await SharedPreferences.getInstance();
-      localStorage.remove('user');
-      localStorage.remove('token');
-      localStorage.remove('sqpoint');
+      localStorage.clear();
       Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
           new MaterialPageRoute(builder: (context) => Login()),
               (route) => false);

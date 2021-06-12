@@ -24,7 +24,7 @@ class _SliderInfo extends State<SliderInfo> {
   String message;
   var dataJson;
   Domain domain = new Domain();
-  int page = 0;
+  int page = 0, slideCount;
   LiquidController liquidController;
   UpdateType updateType;
 
@@ -40,6 +40,7 @@ class _SliderInfo extends State<SliderInfo> {
     if (200 == hasil.statusCode) {
       if(this.mounted) {
         dataJson = jsonDecode(hasil.body);
+        slideCount = dataJson == null ? 0 : dataJson['result'].length;
       }
       setState(() {
         message = dataJson['result'][0]['img'] == null ? '1' : dataJson['result'][0]['img'];
@@ -95,7 +96,7 @@ class _SliderInfo extends State<SliderInfo> {
         new Stack(
           children: <Widget>[
             LiquidSwipe.builder(
-              itemCount: 3,
+              itemCount: slideCount,
               itemBuilder: (context, i){
                 return new Container(
                   decoration: BoxDecoration(
@@ -178,12 +179,12 @@ class _SliderInfo extends State<SliderInfo> {
                   Expanded(child: SizedBox()),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: List<Widget>.generate(3, _buildDot),
+                    children: List<Widget>.generate(slideCount, _buildDot),
                   ),
                 ],
               ),
             ),
-            liquidController.currentPage == 2 ? new Container()
+            liquidController.currentPage == slideCount-1 ? new Container()
                 :
             new Align(
               alignment: Alignment.bottomLeft,
@@ -192,7 +193,7 @@ class _SliderInfo extends State<SliderInfo> {
                 child: FlatButton(
                   onPressed: () {
                     liquidController.animateToPage(
-                        page: 3 - 1, duration: 200);
+                        page: slideCount - 1, duration: 200);
                   },
                   child: Text("Lewati", style: TextStyle(color: Colors.white)),
                   color: Colors.white.withOpacity(0.01),
@@ -200,7 +201,7 @@ class _SliderInfo extends State<SliderInfo> {
               ),
             ),
 
-            liquidController.currentPage == 2 ? Align(
+            liquidController.currentPage == slideCount-1 ? Align(
               alignment: Alignment.bottomRight,
               child: Padding(
                 padding: const EdgeInsets.all(27.0),
@@ -220,7 +221,7 @@ class _SliderInfo extends State<SliderInfo> {
                   onPressed: () {
                     liquidController.jumpToPage(
                         page:
-                        liquidController.currentPage + 1 > 3 - 1
+                        liquidController.currentPage + 1 > slideCount - 1
                             ? 0
                             : liquidController.currentPage + 1);
                   },

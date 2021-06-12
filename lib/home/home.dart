@@ -8,6 +8,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:surveyqu/info.dart';
 import 'package:surveyqu/loading.dart';
+import 'package:surveyqu/login/login.dart';
 import 'package:surveyqu/model/home.dart';
 import 'package:surveyqu/survey/surveyview.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -56,7 +57,11 @@ class _Home extends State<Home> {
         listNews = dataJson.map<Pengumuman>((json) => Pengumuman.fromJson(json)).toList();
       });
     } else {
-      info.messagesNoButton(context, 'info','Gagal Masuk');
+      SharedPreferences localStorage = await SharedPreferences.getInstance();
+      localStorage.clear();
+      Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+          new MaterialPageRoute(builder: (context) => Login()),
+              (route) => false);
     }
     return listNews;
   }
@@ -72,8 +77,6 @@ class _Home extends State<Home> {
       setState(() {
         listAds = dataJson.map<Advertising>((json) => Advertising.fromJson(json)).toList();
       });
-    } else {
-      info.messagesNoButton(context, 'info','Gagal Masuk');
     }
     return listAds;
   }
@@ -89,8 +92,6 @@ class _Home extends State<Home> {
       setState(() {
         listQna = dataJson.map<Question>((json) => Question.fromJson(json)).toList();
       });
-    } else {
-      info.messagesNoButton(context, 'info','Gagal Masuk');
     }
     return listQna;
   }
@@ -106,8 +107,6 @@ class _Home extends State<Home> {
       setState(() {
         listSurv = dataJson.map<QSurvey>((json) => QSurvey.fromJson(json)).toList();
       });
-    } else {
-      info.messagesNoButton(context, 'info','Gagal Masuk');
     }
     return listSurv;
   }
@@ -117,6 +116,8 @@ class _Home extends State<Home> {
     timer = new Timer(new Duration(seconds: 2), () {
       this.getPengumuman();
       this.getQuestion();
+      this.getAds();
+      this.getSurvey();
       completer.complete();
     });
     return completer.future;

@@ -41,8 +41,6 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
       setState(() {
         listPrivacy = dataJson.map<Privacy>((json) => Privacy.fromJson(json)).toList();
       });
-    } else {
-      info.messagesNoButton(context, 'info','Gagal Masuk');
     }
     return listPrivacy;
   }
