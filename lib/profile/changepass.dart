@@ -93,10 +93,11 @@ class _ChangePass extends State<ChangePass> {
       };
       var res = await Network().postData(data, '/changePassForget');
       if (res.statusCode == 200) {
+        // info.messagesSuccess(context, true, 'info','Ganti kata sandi sukses');
         Navigator.of(context).pop();
         info.messagesAutoHide(context, 'info','Ganti password sukses');
       } else {
-        info.messagesNoButton(context, 'info','Password lama anda salah');
+        info.messagesNoButton(context, 'info','Kode verifikasi anda salah');
       }
     } else {
       var data = {
@@ -226,7 +227,7 @@ class _ChangePass extends State<ChangePass> {
                 children: [
                   new Container(
                     padding: EdgeInsets.only(top: 20),
-                    child: new Text(flag == 'forgotpass'? 'Kode verifikasi ganti kata sandi' : 'Kata sandi lama', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
+                    child: new Text(flag == 'forgotpass'? 'Kode verifikasi email' : 'Kata sandi lama', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
                     ),
                   ),
 
