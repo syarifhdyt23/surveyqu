@@ -3,6 +3,7 @@ import 'package:surveyqu/domain.dart';
 import 'package:surveyqu/hexacolor.dart';
 import 'package:surveyqu/info.dart';
 import 'package:surveyqu/network_utils/api.dart';
+import 'package:surveyqu/profile/changepass.dart';
 
 class ForgotPass extends StatefulWidget {
   @override
@@ -24,7 +25,7 @@ class _ForgotPassState extends State<ForgotPass> {
 
     var res = await Network().postDataAuth(data, '/forgotPass');
     if (res.statusCode == 200) {
-      Navigator.of(context).pop();
+      Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context) => new ChangePass(flag: 'forgotpass', email: textEmail.text,)));
       info.messagesAutoHide(context, 'info','Cek email untuk ubah password');
     } else if (res.statusCode == 204){
       info.messagesNoButton(context, 'info','Email tidak terdaftar');

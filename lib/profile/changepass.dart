@@ -13,20 +13,23 @@ import '../info.dart';
 
 
 class ChangePass extends StatefulWidget {
-
+  String flag, email;
+  ChangePass({this.flag, this.email});
   @override
-  _ChangePass createState() => _ChangePass();
+  _ChangePass createState() => _ChangePass(flag: flag, email:email);
 }
 
 class _ChangePass extends State<ChangePass> {
   Domain domain = new Domain();
   List passJson, pwdJson;
-  String message, email, passwordA, passwordB, passwordC;
+  String message, email, passwordA, passwordB, passwordC, flag;
   int wishlist;
   Size size;
   Timer timer;
   Info info = new Info();
   bool visibleNewPassword, visibleRePassword, visibleCurPassword;
+
+  _ChangePass({this.flag, this.email});
 
   TextEditingController textNewPassword = new TextEditingController();
   TextEditingController textRePassword = new TextEditingController();
@@ -82,24 +85,40 @@ class _ChangePass extends State<ChangePass> {
   }
 
   void changePass() async {
-    var data = {
-      'email': email,
-      'oldpass': textCurPassword.text,
-      'newpass' : textNewPassword.text
-    };
-
-    var res = await Network().postDataToken(data, '/changepass');
-    if (res.statusCode == 200) {
-      info.messagesSuccess(context, true, 'info','Ganti password sukses');
+    if(flag == 'forgotpass'){
+      var data = {
+        'email': email,
+        'oldpass': textCurPassword.text,
+        'newpass' : textNewPassword.text
+      };
+      var res = await Network().postData(data, '/changePassForget');
+      if (res.statusCode == 200) {
+        Navigator.of(context).pop();
+        info.messagesAutoHide(context, 'info','Ganti password sukses');
+      } else {
+        info.messagesNoButton(context, 'info','Password lama anda salah');
+      }
     } else {
-      info.messagesNoButton(context, 'info','Password lama anda salah');
+      var data = {
+        'email': email,
+        'oldpass': textCurPassword.text,
+        'newpass' : textNewPassword.text
+      };
+      var res = await Network().postDataToken(data, '/changepass');
+      if (res.statusCode == 200) {
+        info.messagesSuccess(context, true, 'info','Ganti password sukses');
+      } else {
+        info.messagesNoButton(context, 'info','Password lama anda salah');
+      }
     }
   }
 
   @override
   void initState() {
     super.initState();
-    this._loadUserData();
+    if(flag != 'forgotpass') {
+      this._loadUserData();
+    }
     visibleNewPassword = false;
     visibleRePassword = false;
     visibleCurPassword = false;
@@ -118,7 +137,7 @@ class _ChangePass extends State<ChangePass> {
             brightness: Brightness.dark,
             elevation: 0,
             centerTitle: true,
-            title: new Text("Change Password", style: TextStyle(color: Colors.white),),
+            title: new Text(flag == 'forgotpass'?'Kata sandi baru':"Ganti kata sandi", style: TextStyle(color: Colors.white),),
             // actions: [
             //   new Container(
             //     margin: EdgeInsets.only(right: 15, top: 17),
@@ -165,17 +184,17 @@ class _ChangePass extends State<ChangePass> {
                   String passwordC = textCurPassword.text;
 
                   if (textCurPassword.text == '' && textNewPassword.text == '' && textRePassword.text == '') {
-                    info.MessageInfo(context, 'Message', 'Please input data to change password');
+                    info.MessageInfo(context, 'Info', 'Data belum di input');
                   } else if(textNewPassword.text == '') {
-                    info.MessageInfo(context, 'Message', 'Please input new password');
+                    info.MessageInfo(context, 'Info', flag=='changepass'? 'Masukkan verifikasi kata sandi':'Masukkan kata sandi baru');
                   } else if(textRePassword.text == '') {
-                    info.MessageInfo(context, 'Message', 'Please input retype password');
+                    info.MessageInfo(context, 'Info', 'Masukkan kata sandi konfirmasi');
                   } else if(textCurPassword.text == '') {
-                    info.MessageInfo(context, 'Message', 'Please input current password');
+                    info.MessageInfo(context, 'Info', 'Masukkan kata sandi lama');
                   } else if(textNewPassword.text != textRePassword.text) {
-                    info.MessageInfo(context, 'Message', 'Retype Password not match');
+                    info.MessageInfo(context, 'Info', 'Konfirmasi kata sandi tidak sesuai');
                   } else if(passwordA.length < 6 || passwordB.length < 6 || passwordC.length < 6){
-                    info.MessageInfo(context, 'Message', 'Password min 6 character');
+                    info.MessageInfo(context, 'Info', 'Password min 6 karakter');
                   } else {
                     setState(() {
                       this._onLoading();
@@ -207,7 +226,7 @@ class _ChangePass extends State<ChangePass> {
                 children: [
                   new Container(
                     padding: EdgeInsets.only(top: 20),
-                    child: new Text('Current Password', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
+                    child: new Text(flag == 'forgotpass'? 'Kode verifikasi ganti kata sandi' : 'Kata sandi lama', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
                     ),
                   ),
 
@@ -240,7 +259,7 @@ class _ChangePass extends State<ChangePass> {
 
                   new Container(
                     margin: const EdgeInsets.only(top: 20),
-                    child: new Text('New Password', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),),
+                    child: new Text('Kata sandi baru', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),),
                   ),
 
                   new Container(
@@ -274,7 +293,7 @@ class _ChangePass extends State<ChangePass> {
 
                   new Container(
                     margin: const EdgeInsets.only(top: 20),
-                    child: new Text('Retype Password', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),),
+                    child: new Text('Konfirmasi kata sandi baru', style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),),
                   ),
 
                   new Container(

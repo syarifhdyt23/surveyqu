@@ -53,6 +53,18 @@ class Network{
     );
   }
 
+  postData(data, apiUrl) async {
+    var fullUrl = _urlauth + apiUrl;
+    return await http.post(
+      Uri.parse(fullUrl),
+      body: jsonEncode(data),
+      headers: {
+        'Client-Service' : 'surveyqu',
+        'Auth-Key' : 'svq1234',
+      },
+    );
+  }
+
   postDataToken(data, apiUrl) async {
     var fullUrl = _urlauth + apiUrl;
     await _getToken();
