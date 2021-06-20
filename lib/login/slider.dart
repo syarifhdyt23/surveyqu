@@ -41,10 +41,11 @@ class _SliderInfo extends State<SliderInfo> {
       if(this.mounted) {
         dataJson = jsonDecode(hasil.body);
         slideCount = dataJson == null ? 0 : dataJson['result'].length;
+      } else {
+        setState(() {
+          message = dataJson['result'][0]['img'] == null ? '1' : dataJson['result'][0]['img'];
+        });
       }
-      setState(() {
-        message = dataJson['result'][0]['img'] == null ? '1' : dataJson['result'][0]['img'];
-      });
     }
   }
 

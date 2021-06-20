@@ -15,21 +15,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      // statusBarColor: new HexColor('#256fa0'),
       statusBarBrightness: Brightness.light,
-      // systemNavigationBarColor: Colors.black// status bar color
     ));
     return MaterialApp(
       title: 'SurveyQu',
       theme: ThemeData(
-        // Define the default brightness and colors.
         primaryColor: new HexColor('#256fa0'),
-
-        // Define the default font family.
         fontFamily: 'Roboto',
-
-        // Define the default TextTheme. Use this to specify the default
-        // text styling for headlines, titles, bodies of text, and more.
         textTheme: TextTheme(
           headline1: TextStyle(fontSize: 72.0, fontWeight: FontWeight.bold),
           headline6: TextStyle(fontSize: 36.0, fontStyle: FontStyle.italic),
