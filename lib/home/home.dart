@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
@@ -24,8 +25,9 @@ class _Home extends State<Home> {
   Size size;
   Domain domain = new Domain();
   bool _visible = false;
-  var token, id, sqpoint, nama;
-  String message;
+  var token, id, sqpoint, nama, email;
+  String message, notif;
+  List notifJson;
   List<Pengumuman> listNews;
   List<Advertising> listAds;
   List<Question> listQna;
@@ -45,6 +47,7 @@ class _Home extends State<Home> {
     setState(() {
       sqpoint = jsonDecode(localStorage.getString('sqpoint'));
       nama = jsonDecode(localStorage.getString('nama'));
+      email = jsonDecode(localStorage.getString('email'));
     });
     var body = {
       "jenis": 'p'
@@ -64,6 +67,18 @@ class _Home extends State<Home> {
               (route) => false);
     }
     return listNews;
+  }
+
+  void getNotif() async {
+    var res = await Network().postDataTokenEmail('/notifBeranda');
+    // if(this.mounted) {
+      if (res.statusCode == 200) {
+        notifJson = jsonDecode(res.body);
+      }
+      setState(() {
+        notif = notifJson == null ? '1' : notifJson[0]['stat_notif'];
+      });
+    // }
   }
 
   Future<List<Advertising>> getAds() async {
@@ -127,6 +142,7 @@ class _Home extends State<Home> {
   void initState() {
     super.initState();
     this.getPengumuman();
+    this.getNotif();
     this.getQuestion();
     this.getAds();
     this.getSurvey();
@@ -159,11 +175,18 @@ class _Home extends State<Home> {
             },
             child: new Container(
               margin: const EdgeInsets.only(right: 15.0,),
-              child: new Icon(
-                Icons.notifications,
-                color: Colors.white,
-                size: kToolbarHeight - 30,
-              ),
+              child: notif == null || notif == '1' ?
+              new Icon(Icons.notifications,)
+                  :
+              new Badge(
+                elevation: 0,
+                position: BadgePosition.topEnd(top: -5, end: -7),
+                child: new Icon(
+                  Icons.notifications,
+                  color: Colors.white,
+                  size: kToolbarHeight - 30,
+                ),
+              )
             ),
           ),
         ],

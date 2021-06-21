@@ -37,8 +37,9 @@ class _SliderInfo extends State<SliderInfo> {
       'Auth-Key' : domain.getHeaderAuth()
     };
     http.Response hasil = await http.post(Uri.parse(url), headers: headers);
-    if (200 == hasil.statusCode) {
-      if(this.mounted) {
+
+    if(this.mounted) {
+      if (200 == hasil.statusCode) {
         dataJson = jsonDecode(hasil.body);
         slideCount = dataJson == null ? 0 : dataJson['result'].length;
       } else {
