@@ -5,6 +5,7 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:surveyqu/domain.dart';
 import 'package:surveyqu/home/advertisement_card.dart';
+import 'package:surveyqu/home/notif.dart';
 import 'package:surveyqu/home/survey_card.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -15,6 +16,7 @@ import 'package:surveyqu/model/home.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../hexacolor.dart';
 import '../network_utils/api.dart';
+import 'package:http/http.dart' as http;
 
 class Home extends StatefulWidget {
   _Home createState() => _Home();
@@ -25,13 +27,14 @@ class _Home extends State<Home> {
   Size size;
   Domain domain = new Domain();
   bool _visible = false;
-  var token, id, sqpoint, nama, email;
+  var token, sqpoint, nama, email;
   String message, notif;
   List notifJson;
   List<Pengumuman> listNews;
   List<Advertising> listAds;
   List<Question> listQna;
   List<QSurvey> listSurv;
+  List<NotifHome> listNotif;
   Timer timer;
 
   Future<void> openURL(BuildContext context, String url) async {
@@ -42,13 +45,16 @@ class _Home extends State<Home> {
     }
   }
 
-  Future<List<Pengumuman>> getPengumuman() async {
+  _getToken() async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
-    setState(() {
-      sqpoint = jsonDecode(localStorage.getString('sqpoint'));
-      nama = jsonDecode(localStorage.getString('nama'));
-      email = jsonDecode(localStorage.getString('email'));
-    });
+    token = jsonDecode(localStorage.getString('token'));
+    email = jsonDecode(localStorage.getString('email'));
+    nama = jsonDecode(localStorage.getString('nama'));
+    sqpoint = jsonDecode(localStorage.getString('sqpoint'));
+  }
+
+  Future<List<Pengumuman>> getPengumuman() async {
+    this._getToken();
     var body = {
       "jenis": 'p'
     };
@@ -69,16 +75,24 @@ class _Home extends State<Home> {
     return listNews;
   }
 
-  void getNotif() async {
-    var res = await Network().postDataTokenEmail('/notifBeranda');
-    // if(this.mounted) {
+  Future<void> getNotif() async {
+    await this._getToken();
+    var body = {
+      "email": email
+    };
+    http.Response res = await Network().postDataToken(body,'/notifBeranda');
+    if(this.mounted) {
       if (res.statusCode == 200) {
-        notifJson = jsonDecode(res.body);
+        setState(() {
+          var body = jsonDecode(res.body);
+          notif = body['stat_notif'] == null ? '1' : body['stat_notif'];
+        });
+      } else {
+        setState(() {
+          notif = "1";
+        });
       }
-      setState(() {
-        notif = notifJson == null ? '1' : notifJson[0]['stat_notif'];
-      });
-    // }
+    }
   }
 
   Future<List<Advertising>> getAds() async {
@@ -133,6 +147,7 @@ class _Home extends State<Home> {
       this.getQuestion();
       this.getAds();
       this.getSurvey();
+      this.getNotif();
       completer.complete();
     });
     return completer.future;
@@ -170,8 +185,10 @@ class _Home extends State<Home> {
             ),
           ),
           new InkWell(
+            highlightColor: Colors.transparent,
+            splashColor: Colors.transparent,
             onTap: (){
-
+              Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context) => new NotifPage()));
             },
             child: new Container(
               margin: const EdgeInsets.only(right: 15.0,),
@@ -180,7 +197,7 @@ class _Home extends State<Home> {
                   :
               new Badge(
                 elevation: 0,
-                position: BadgePosition.topEnd(top: -5, end: -7),
+                position: BadgePosition.topEnd(top: 15, end: 2),
                 child: new Icon(
                   Icons.notifications,
                   color: Colors.white,

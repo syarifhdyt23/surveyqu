@@ -42,10 +42,7 @@ class _SliderInfo extends State<SliderInfo> {
       if (200 == hasil.statusCode) {
         dataJson = jsonDecode(hasil.body);
         slideCount = dataJson == null ? 0 : dataJson['result'].length;
-      } else {
-        setState(() {
-          message = dataJson['result'][0]['img'] == null ? '1' : dataJson['result'][0]['img'];
-        });
+        message = dataJson == null ? '1' : dataJson['result'][0]['img'];
       }
     }
   }
@@ -95,6 +92,10 @@ class _SliderInfo extends State<SliderInfo> {
           alignment: Alignment.center,
           child: new LoadingLogo(),
         ) :
+            message == '1' ? new Container(
+              alignment: Alignment.center,
+              child: new LoadingLogoNoConnection(),
+            ) :
         new Stack(
           children: <Widget>[
             LiquidSwipe.builder(

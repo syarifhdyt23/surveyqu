@@ -103,3 +103,22 @@ class QSurvey {
     return data;
   }
 }
+
+class NotifHome {
+  int status;
+  String statNotif;
+
+  NotifHome({this.status, this.statNotif});
+
+  NotifHome.fromJson(Map<String, dynamic> json) {
+    status = json['status'];
+    statNotif = json['stat_notif'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['status'] = this.status;
+    data['stat_notif'] = this.statNotif;
+    return data;
+  }
+}
