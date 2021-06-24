@@ -222,7 +222,7 @@ class _Home extends State<Home> {
             child:  Column(
               children: <Widget>[
                 new Container(
-                  height: 160,
+                  height: 180,
                   margin: EdgeInsets.only(top: 10),
                   child: new Swiper(
                     itemCount: listNews == null ? 0 : listNews.length,
@@ -259,7 +259,7 @@ class _Home extends State<Home> {
                   }),
                 listAds == null ? new Container() :
                 new Container(
-                    height: 160,
+                    height: 180,
                     margin: EdgeInsets.only(top: 10),
                     child: new Swiper(
                       itemCount: listAds == null ? 0 : listAds.length,
