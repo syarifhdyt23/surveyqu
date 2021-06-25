@@ -133,3 +133,50 @@ class _LoadingHomeState extends State<LoadingHome> {
     );
   }
 }
+
+class LoadingCard extends StatefulWidget {
+
+  _LoadingCard createState() => new _LoadingCard();
+}
+
+class _LoadingCard extends State<LoadingCard> {
+
+  Size size;
+
+  @override
+  void setState(fn) {
+    // TODO: implement setState
+    super.setState(fn);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    size = MediaQuery.of(context).size;
+
+    return new Container(
+      margin: EdgeInsets.only(left: 10, right: 10, top: 10),
+      child: new ListView.builder(
+        physics: new NeverScrollableScrollPhysics(),
+        itemCount: 10,
+        itemBuilder: (context, i) {
+          return new SizedBox(
+            width: size.width,
+            height: 70,
+            child: Shimmer.fromColors(
+              baseColor: Colors.grey[300],
+              highlightColor: Colors.grey[200],
+              child: Card(
+                margin: EdgeInsets.only(top: 10),
+                elevation: 0.0,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5.0)),
+                color: Colors.black,
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}

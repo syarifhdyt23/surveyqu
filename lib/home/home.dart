@@ -29,7 +29,6 @@ class _Home extends State<Home> {
   bool _visible = false;
   var token, sqpoint, nama, email;
   String message, notif;
-  List notifJson;
   List<Pengumuman> listNews;
   List<Advertising> listAds;
   List<Question> listQna;

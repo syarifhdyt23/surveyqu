@@ -32,18 +32,18 @@ class _SliderInfo extends State<SliderInfo> {
 
     String url = domain.getDomain()+"auth/content";
     var headers = {
-      //'content-type': 'application/json',
+      'content-type': 'application/json',
       'Client-Service' : domain.getHeaderClient(),
       'Auth-Key' : domain.getHeaderAuth()
     };
     http.Response hasil = await http.post(Uri.parse(url), headers: headers);
 
-    if(this.mounted) {
-      if (200 == hasil.statusCode) {
-        dataJson = jsonDecode(hasil.body);
-        slideCount = dataJson == null ? 0 : dataJson['result'].length;
-        message = dataJson == null ? '1' : dataJson['result'][0]['img'];
-      }
+    if (200 == hasil.statusCode) {
+      dataJson = jsonDecode(hasil.body);
+      slideCount = dataJson == null ? 0 : dataJson['result'].length;
+      message = dataJson == null ? '1' : dataJson['result'][0]['img'];
+    } else {
+      message = '1';
     }
   }
 
