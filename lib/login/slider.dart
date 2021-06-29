@@ -38,14 +38,14 @@ class _SliderInfo extends State<SliderInfo> {
     };
     http.Response hasil = await http.post(Uri.parse(url), headers: headers);
 
-    if (hasil.statusCode == 200) {
+    if (200 == hasil.statusCode) {
       setState(() {
         dataJson = jsonDecode(hasil.body);
         slideCount = dataJson == null ? 0 : dataJson['result'].length;
       });
     }
     message = dataJson == null ? '1' : dataJson['result'][0]['img'];
-    // if (hasil.statusCode == 200) {
+    // if (200 == hasil.statusCode) {
     //   dataJson = jsonDecode(hasil.body);
     //   slideCount = dataJson == null ? 0 : dataJson['result'].length;
     //   message = dataJson == null ? '1' : dataJson['result'][0]['img'];

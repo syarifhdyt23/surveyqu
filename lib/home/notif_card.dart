@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:surveyqu/home/description_page.dart';
 
 import '../hexacolor.dart';
 
 class NotifCard extends StatelessWidget {
-  final String stsNotif, isi;
+  final String stsNotif, judul;
 
-  const NotifCard({Key key, this.stsNotif, this.isi}) : super(key: key);
+  const NotifCard({Key key, this.stsNotif, this.judul}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return new Container(
@@ -24,7 +25,7 @@ class NotifCard extends StatelessWidget {
       ),
       child: new ListTile(
         leading: new Icon(Icons.notification_important, size: 40, color: stsNotif == '0' ? Colors.white : new HexColor('#256fa0'),),
-        title: new Text(isi,style: TextStyle(color: stsNotif == '0' ? Colors.white : new HexColor('#256fa0')),),
+        title: new Text(judul,style: TextStyle(color: stsNotif == '0' ? Colors.white : new HexColor('#256fa0')),),
         // subtitle: new Text("Subtitle",style: TextStyle(color: Colors.white),),
       ),
     );

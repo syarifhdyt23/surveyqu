@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:surveyqu/hexacolor.dart';
+import 'package:surveyqu/home/description_page.dart';
 import 'package:surveyqu/home/notif_card.dart';
 import 'package:surveyqu/loading.dart';
 import 'package:surveyqu/model/notif.dart';
@@ -16,7 +17,7 @@ class NotifPage extends StatefulWidget {
 
 class _NotifPageState extends State<NotifPage> {
   Size size;
-  String email, nama;
+  String email, nama, content;
   List<NotifDetail> listNotifDetail;
   List<HistorySurvey> listHistorySurvey;
 
@@ -34,10 +35,14 @@ class _NotifPageState extends State<NotifPage> {
     var res = await Network().postDataToken(body, '/notifDetail');
     if (res.statusCode == 200) {
       var body = jsonDecode(res.body);
-      var dataJson = body['content'] as List;
-      setState(() {
-        listNotifDetail = dataJson.map<NotifDetail>((json) => NotifDetail.fromJson(json)).toList();
-      });
+      if(body['content'] == null){
+        content = '1';
+      } else {
+        var dataJson = body['content'] as List;
+        setState(() {
+          listNotifDetail = dataJson.map<NotifDetail>((json) => NotifDetail.fromJson(json)).toList();
+        });
+      }
     }
     return listNotifDetail;
   }
@@ -56,6 +61,47 @@ class _NotifPageState extends State<NotifPage> {
       });
     }
     return listHistorySurvey;
+  }
+
+  List<NotifHit> listNotifHit;
+  List<HistoryHit> listHistoryHit;
+
+  Future<void> getHistoryHit(String id) async {
+    var body = {
+      "email": email,
+      "id" : id
+    };
+    var res = await Network().postDataToken(body, '/historyHit');
+    if (res.statusCode == 200) {
+      var body = jsonDecode(res.body);
+      var dataJson = body['content'] as List;
+      setState(() {
+        listHistoryHit = dataJson.map<HistoryHit>((json) => HistoryHit.fromJson(json)).toList();
+        // Navigator.of(context).push(new MaterialPageRoute(builder: (context) => new DescriptionPage(judul: listHistoryHit[0].judul, isi: listHistoryHit[0].isi,)));
+      });
+      showDetail(context, listHistoryHit[0].judul, listHistoryHit[0].isi);
+      getHistory();
+    }
+    // return listHistoryHit;
+  }
+
+  Future<void> getNotifHit(String id) async {
+    var body = {
+      "email": email,
+      "id" : id
+    };
+    var res = await Network().postDataToken(body, '/notifHit');
+    if (res.statusCode == 200) {
+      var body = jsonDecode(res.body);
+      var dataJson = body['content'] as List;
+      setState(() {
+        listNotifHit = dataJson.map<NotifHit>((json) => NotifHit.fromJson(json)).toList();
+        // Navigator.of(context).push(new MaterialPageRoute(builder: (context) => new DescriptionPage(judul: listNotifHit[0].judul, isi: listNotifHit[0].isi,)));
+      });
+      showDetail(context, listNotifHit[0].judul, listNotifHit[0].isi);
+      getNotif();
+    }
+    // return listNotifHit;
   }
 
   @override
@@ -90,15 +136,15 @@ class _NotifPageState extends State<NotifPage> {
                 ),
                 new Container(
                   alignment: Alignment.center,
-                  child: Text("Histori",style: TextStyle(color: Colors.black),),
+                  child: Text("Aktivitas",style: TextStyle(color: Colors.black),),
                 ),
               ],
             ),
             body: new TabBarView(
               // physics: NeverScrollableScrollPhysics(),
               children: [
-                listNotifDetail == null ? new LoadingCard() :
-                listNotifDetail.length == 0 ?
+                content == null ? new LoadingCard() :
+                content == '1' ?
                 new Container(
                   alignment: Alignment.center,
                   child: new Column(
@@ -134,7 +180,12 @@ class _NotifPageState extends State<NotifPage> {
                   child: new ListView.builder(
                       itemCount: listNotifDetail == null ? 0 : listNotifDetail.length,
                       itemBuilder: (context, i){
-                        return NotifCard(stsNotif: listNotifDetail[i].stsNotif, isi: listNotifDetail[i].isi,);
+                        return new InkWell(
+                          onTap: (){
+                            getNotifHit(listNotifDetail[i].id);
+                          },
+                          child: NotifCard(stsNotif: listNotifDetail[i].stsNotif, judul: listNotifDetail[i].judul),
+                        );
                       }),
                 ),
                 listHistorySurvey == null ? new LoadingCard() :
@@ -174,7 +225,12 @@ class _NotifPageState extends State<NotifPage> {
                   child: new ListView.builder(
                       itemCount: listHistorySurvey == null ? 0 : listHistorySurvey.length,
                       itemBuilder: (context, i){
-                        return NotifCard(stsNotif: listHistorySurvey[i].stsNotif, isi: listHistorySurvey[i].isi,);
+                        return new InkWell(
+                          onTap: (){
+                            getHistoryHit(listHistorySurvey[i].id);
+                          },
+                          child: NotifCard(stsNotif: listHistorySurvey[i].stsNotif, judul: listHistorySurvey[i].judul),
+                        );
                       }),
                 ),
                 ],
@@ -182,6 +238,43 @@ class _NotifPageState extends State<NotifPage> {
           ),
         ),
       ),
+    );
+  }
+
+  void showDetail(BuildContext context, String judul, String isi) {
+    showModalBottomSheet<void>(
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        builder: (BuildContext context) {
+          return new StatefulBuilder(builder: (context, state) {
+            return new Container(
+                height: MediaQuery.of(context).size.height * 0.80,
+                decoration: new BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: new BorderRadius.only(
+                    topLeft: const Radius.circular(5.0),
+                    topRight: const Radius.circular(5.0),
+                  ),
+                ),
+                child: new Container(
+                  child: new ListView(
+                    children: [
+                      new Container(
+                        padding: EdgeInsets.all(10),
+                        child: new Text(judul, textAlign: TextAlign.justify, style: TextStyle(fontWeight: FontWeight.w600),),
+                      ),
+                      new Container(
+                        padding: EdgeInsets.all(10),
+                        child: new Text(isi, textAlign: TextAlign.justify,),
+                      )
+                    ],
+                  ),
+                )
+            );
+          }
+          );
+        }
     );
   }
 }

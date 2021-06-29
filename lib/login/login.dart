@@ -72,7 +72,7 @@ class _LoginState extends State<Login> {
     };
 
     var res = await Network().postDataAuth(data, '/login');
-    if (res.statusCode == 200) {
+    if (200 == res.statusCode) {
       var body = jsonDecode(res.body);
       SharedPreferences localStorage = await SharedPreferences.getInstance();
       localStorage.setString('token', json.encode(body['token']));
