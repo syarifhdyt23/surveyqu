@@ -1,12 +1,14 @@
 class NotifDetail {
   String judul;
+  String isi;
   String stsNotif;
   String id;
 
-  NotifDetail({this.judul, this.stsNotif, this.id});
+  NotifDetail({this.judul, this.isi, this.stsNotif, this.id});
 
   NotifDetail.fromJson(Map<String, dynamic> json) {
     judul = json['judul'];
+    isi = json['isi'];
     stsNotif = json['sts_notif'];
     id = json['id'];
   }
@@ -14,6 +16,7 @@ class NotifDetail {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['judul'] = this.judul;
+    data['isi'] = this.isi;
     data['sts_notif'] = this.stsNotif;
     data['id'] = this.id;
     return data;
@@ -22,13 +25,15 @@ class NotifDetail {
 
 class HistorySurvey {
   String judul;
+  String isi;
   String stsNotif;
   String id;
 
-  HistorySurvey({this.judul, this.stsNotif, this.id});
+  HistorySurvey({this.judul, this.isi, this.stsNotif, this.id});
 
   HistorySurvey.fromJson(Map<String, dynamic> json) {
     judul = json['judul'];
+    isi = json['isi'];
     stsNotif = json['sts_notif'];
     id = json['id'];
   }
@@ -36,52 +41,9 @@ class HistorySurvey {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['judul'] = this.judul;
+    data['isi'] = this.isi;
     data['sts_notif'] = this.stsNotif;
     data['id'] = this.id;
-    return data;
-  }
-}
-
-class NotifHit {
-  String judul;
-  String isi;
-  String stsNotif;
-
-  NotifHit({this.judul, this.isi, this.stsNotif});
-
-  NotifHit.fromJson(Map<String, dynamic> json) {
-    judul = json['judul'];
-    isi = json['isi'];
-    stsNotif = json['sts_notif'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['judul'] = this.judul;
-    data['isi'] = this.isi;
-    data['sts_notif'] = this.stsNotif;
-    return data;
-  }
-}
-
-class HistoryHit {
-  String judul;
-  String isi;
-  String stsNotif;
-
-  HistoryHit({this.judul, this.isi, this.stsNotif});
-
-  HistoryHit.fromJson(Map<String, dynamic> json) {
-    judul = json['judul'];
-    isi = json['isi'];
-    stsNotif = json['sts_notif'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['judul'] = this.judul;
-    data['isi'] = this.isi;
-    data['sts_notif'] = this.stsNotif;
     return data;
   }
 }

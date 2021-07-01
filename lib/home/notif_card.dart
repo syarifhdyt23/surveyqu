@@ -4,9 +4,9 @@ import 'package:surveyqu/home/description_page.dart';
 import '../hexacolor.dart';
 
 class NotifCard extends StatelessWidget {
-  final String stsNotif, judul;
+  final String stsNotif, judul, flag;
 
-  const NotifCard({Key key, this.stsNotif, this.judul}) : super(key: key);
+  const NotifCard({Key key, this.stsNotif, this.judul, this.flag}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return new Container(
@@ -24,7 +24,14 @@ class NotifCard extends StatelessWidget {
         ],
       ),
       child: new ListTile(
-        leading: new Icon(Icons.notification_important, size: 40, color: stsNotif == '0' ? Colors.white : new HexColor('#256fa0'),),
+        leading: new Container(
+          decoration: BoxDecoration(
+            color: stsNotif == '0' ? Colors.white : new HexColor('#256fa0'),
+            borderRadius: BorderRadius.all(Radius.circular(20))
+          ),
+          padding: EdgeInsets.all(5),
+          child: new Icon(flag == 'notif' ? Icons.notifications : Icons.list, size: 25, color: stsNotif == '0' ? new HexColor('#256fa0') : Colors.white,),
+        ),
         title: new Text(judul,style: TextStyle(color: stsNotif == '0' ? Colors.white : new HexColor('#256fa0')),),
         // subtitle: new Text("Subtitle",style: TextStyle(color: Colors.white),),
       ),

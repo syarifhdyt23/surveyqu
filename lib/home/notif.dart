@@ -1,10 +1,9 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:surveyqu/hexacolor.dart';
-import 'package:surveyqu/home/description_page.dart';
+import 'package:surveyqu/home/mainhome.dart';
 import 'package:surveyqu/home/notif_card.dart';
 import 'package:surveyqu/loading.dart';
 import 'package:surveyqu/model/notif.dart';
@@ -17,7 +16,7 @@ class NotifPage extends StatefulWidget {
 
 class _NotifPageState extends State<NotifPage> {
   Size size;
-  String email, nama, content;
+  String email, nama, contHist, contNotif;
   List<NotifDetail> listNotifDetail;
   List<HistorySurvey> listHistorySurvey;
 
@@ -35,9 +34,14 @@ class _NotifPageState extends State<NotifPage> {
     var res = await Network().postDataToken(body, '/notifDetail');
     if (res.statusCode == 200) {
       var body = jsonDecode(res.body);
-      if(body['content'] == null){
-        content = '1';
+      if(body['content'] == "0"){
+        setState(() {
+          contNotif = '0';
+        });
       } else {
+        setState(() {
+          contNotif = '1';
+        });
         var dataJson = body['content'] as List;
         setState(() {
           listNotifDetail = dataJson.map<NotifDetail>((json) => NotifDetail.fromJson(json)).toList();
@@ -54,17 +58,25 @@ class _NotifPageState extends State<NotifPage> {
     };
     var res = await Network().postDataToken(body, '/historySurvey');
     if (res.statusCode == 200) {
-      var body = jsonDecode(res.body);
-      var dataJson = body['content'] as List;
-      setState(() {
-        listHistorySurvey = dataJson.map<HistorySurvey>((json) => HistorySurvey.fromJson(json)).toList();
-      });
+      if(body['content'] == "0"){
+        setState(() {
+          contHist = '0';
+        });
+      } else {
+        setState(() {
+          contHist = '1';
+        });
+        var body = jsonDecode(res.body);
+        var dataJson = body['content'] as List;
+        setState(() {
+          listHistorySurvey = dataJson.map<HistorySurvey>((json) =>
+              HistorySurvey.fromJson(json)).toList();
+          listHistorySurvey.sort((a,b) => a.stsNotif.compareTo(b.stsNotif));
+        });
+      }
     }
     return listHistorySurvey;
   }
-
-  List<NotifHit> listNotifHit;
-  List<HistoryHit> listHistoryHit;
 
   Future<void> getHistoryHit(String id) async {
     var body = {
@@ -72,15 +84,15 @@ class _NotifPageState extends State<NotifPage> {
       "id" : id
     };
     var res = await Network().postDataToken(body, '/historyHit');
+    // return res;
     if (res.statusCode == 200) {
-      var body = jsonDecode(res.body);
-      var dataJson = body['content'] as List;
-      setState(() {
-        listHistoryHit = dataJson.map<HistoryHit>((json) => HistoryHit.fromJson(json)).toList();
-        // Navigator.of(context).push(new MaterialPageRoute(builder: (context) => new DescriptionPage(judul: listHistoryHit[0].judul, isi: listHistoryHit[0].isi,)));
-      });
-      showDetail(context, listHistoryHit[0].judul, listHistoryHit[0].isi);
-      getHistory();
+      this.getHistory();
+    //   var body = jsonDecode(res.body);
+    //   var dataJson = body['content'] as List;
+    //   setState(() {
+    //     listHistoryHit = dataJson.map<HistoryHit>((json) => HistoryHit.fromJson(json)).toList();
+    //     // Navigator.of(context).push(new MaterialPageRoute(builder: (context) => new DescriptionPage(judul: listHistoryHit[0].judul, isi: listHistoryHit[0].isi,)));
+    //   });
     }
     // return listHistoryHit;
   }
@@ -91,15 +103,15 @@ class _NotifPageState extends State<NotifPage> {
       "id" : id
     };
     var res = await Network().postDataToken(body, '/notifHit');
+    // return res;
     if (res.statusCode == 200) {
-      var body = jsonDecode(res.body);
-      var dataJson = body['content'] as List;
-      setState(() {
-        listNotifHit = dataJson.map<NotifHit>((json) => NotifHit.fromJson(json)).toList();
-        // Navigator.of(context).push(new MaterialPageRoute(builder: (context) => new DescriptionPage(judul: listNotifHit[0].judul, isi: listNotifHit[0].isi,)));
-      });
-      showDetail(context, listNotifHit[0].judul, listNotifHit[0].isi);
-      getNotif();
+      this.getNotif();
+    //   var body = jsonDecode(res.body);
+    //   var dataJson = body['content'] as List;
+    //   setState(() {
+    //     listNotifHit = dataJson.map<NotifHit>((json) => NotifHit.fromJson(json)).toList();
+    //     // Navigator.of(context).push(new MaterialPageRoute(builder: (context) => new DescriptionPage(judul: listNotifHit[0].judul, isi: listNotifHit[0].isi,)));
+    //   });
     }
     // return listNotifHit;
   }
@@ -116,6 +128,11 @@ class _NotifPageState extends State<NotifPage> {
     size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (context) => new MainHome()), (route) => false);
+            }),
         elevation: 1.0,
         title: new Text("Notifikasi"),
       ),
@@ -143,8 +160,8 @@ class _NotifPageState extends State<NotifPage> {
             body: new TabBarView(
               // physics: NeverScrollableScrollPhysics(),
               children: [
-                content == null ? new LoadingCard() :
-                content == '1' ?
+                contNotif == null ? new LoadingCard() :
+                contNotif == '0' ?
                 new Container(
                   alignment: Alignment.center,
                   child: new Column(
@@ -183,13 +200,14 @@ class _NotifPageState extends State<NotifPage> {
                         return new InkWell(
                           onTap: (){
                             getNotifHit(listNotifDetail[i].id);
+                            showDetail(context, listNotifDetail[i].judul, listNotifDetail[i].isi);
                           },
-                          child: NotifCard(stsNotif: listNotifDetail[i].stsNotif, judul: listNotifDetail[i].judul),
+                          child: NotifCard(stsNotif: listNotifDetail[i].stsNotif, judul: listNotifDetail[i].judul, flag: 'notif',),
                         );
                       }),
                 ),
-                listHistorySurvey == null ? new LoadingCard() :
-                listHistorySurvey.length == 0 ?
+                contHist == null ? new LoadingCard() :
+                contHist == "0" ?
                 new Container(
                   alignment: Alignment.center,
                   child: new Column(
@@ -228,6 +246,7 @@ class _NotifPageState extends State<NotifPage> {
                         return new InkWell(
                           onTap: (){
                             getHistoryHit(listHistorySurvey[i].id);
+                            showDetail(context, listHistorySurvey[i].judul, listHistorySurvey[i].isi);
                           },
                           child: NotifCard(stsNotif: listHistorySurvey[i].stsNotif, judul: listHistorySurvey[i].judul),
                         );
@@ -249,7 +268,7 @@ class _NotifPageState extends State<NotifPage> {
         builder: (BuildContext context) {
           return new StatefulBuilder(builder: (context, state) {
             return new Container(
-                height: MediaQuery.of(context).size.height * 0.80,
+                height: MediaQuery.of(context).size.height * 0.50,
                 decoration: new BoxDecoration(
                   color: Colors.white,
                   borderRadius: new BorderRadius.only(
@@ -258,15 +277,34 @@ class _NotifPageState extends State<NotifPage> {
                   ),
                 ),
                 child: new Container(
-                  child: new ListView(
+                  child: new Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       new Container(
-                        padding: EdgeInsets.all(10),
-                        child: new Text(judul, textAlign: TextAlign.justify, style: TextStyle(fontWeight: FontWeight.w600),),
+                        padding: EdgeInsets.only(top: 10, bottom: 15),
+                        alignment: Alignment.topCenter,
+                        child: Container(
+                          height: 7,
+                          width: 100,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[700],
+                            borderRadius: BorderRadius.all(Radius.circular(10))
+                          ),
+                        ),
                       ),
-                      new Container(
-                        padding: EdgeInsets.all(10),
-                        child: new Text(isi, textAlign: TextAlign.justify,),
+                      new ListView(
+                        physics: BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        children: [
+                          new Container(
+                            padding: EdgeInsets.only(left: 15, right: 15),
+                            child: new Text(judul, textAlign: TextAlign.justify, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 17),),
+                          ),
+                          new Container(
+                            padding: EdgeInsets.only(left: 15, right: 15, top: 15),
+                            child: new Text(isi, textAlign: TextAlign.justify, style: TextStyle(fontSize: 15),),
+                          )
+                        ],
                       )
                     ],
                   ),
