@@ -168,7 +168,7 @@ class _Home extends State<Home> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
-        title: new Text('SurveQu'),
+        title: new Text('SurveyQu'),
         actions: [
           new InkWell(
             onTap: (){
@@ -191,7 +191,7 @@ class _Home extends State<Home> {
             child: new Container(
               margin: const EdgeInsets.only(right: 15.0,),
               child: notif == null || notif == '1' ?
-              new Icon(Icons.notifications,)
+              new Icon(Icons.notifications  ,)
                   :
               new Badge(
                 elevation: 0,
@@ -292,6 +292,58 @@ class _Home extends State<Home> {
                         jenis: 'qt',
                       );
                     }),
+                InkWell(
+                    child: Container(
+                      height: 180,
+                      alignment: Alignment.topCenter,
+                      margin: EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        image: DecorationImage(
+                          image: AssetImage('images/bannerlandscape.png'),
+                          fit: BoxFit.cover,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 2,
+                            blurRadius: 4,
+                            offset: Offset(1, 2), // changes position of shadow
+                          ),
+                        ],
+                      ),
+                      child: Container(
+                        margin: EdgeInsets.only(top: 10),
+                        child: Text('dummy banner', style: TextStyle(fontWeight: FontWeight.w600),),
+                      ),
+                    )
+                ),
+                InkWell(
+                    child: Container(
+                      height: 180,
+                      alignment: Alignment.topCenter,
+                      margin: EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        image: DecorationImage(
+                          image: AssetImage('images/bannerlandscape.png'),
+                          fit: BoxFit.cover,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 2,
+                            blurRadius: 4,
+                            offset: Offset(1, 2), // changes position of shadow
+                          ),
+                        ],
+                      ),
+                      child: Container(
+                        margin: EdgeInsets.only(top: 10),
+                        child: Text('dummy banner', style: TextStyle(fontWeight: FontWeight.w600),),
+                      ),
+                    )
+                ),
               ]
             )
           )

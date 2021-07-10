@@ -8,32 +8,20 @@ import 'package:surveyqu/network_utils/api.dart';
 import 'package:surveyqu/profile/profile.dart';
 
 class PrivacyPolicy extends StatefulWidget {
+  String link, title;
+  PrivacyPolicy({this.link, this.title});
   @override
-  _PrivacyPolicyState createState() => _PrivacyPolicyState();
+  _PrivacyPolicyState createState() => _PrivacyPolicyState(link: link, title: title);
 }
 
 class _PrivacyPolicyState extends State<PrivacyPolicy> {
-  // http://surveyqu.com/sqws/sqmid/index.php/auth/kebijakan
-  // param : -
-  // header : token
-  String token, result;
   Info info = new Info();
+  String link, title;
   List<Privacy> listPrivacy;
-
-  _loadUserData() async {
-    SharedPreferences localStorage = await SharedPreferences.getInstance();
-    var id = jsonDecode(localStorage.getString('id'));
-
-    if (id != null) {
-      setState(() {
-        id = id;
-        token = jsonDecode(localStorage.getString('token'));
-      });
-    }
-  }
+  _PrivacyPolicyState({this.link, this.title});
 
   Future<void> getContent() async {
-    var res = await Network().postToken('/kebijakan');
+    var res = await Network().postToken(link);
     if (res.statusCode == 200) {
       var body = jsonDecode(res.body);
       var dataJson = body['result'];
@@ -47,7 +35,6 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
   @override
   void initState() {
     super.initState();
-    this._loadUserData();
     this.getContent();
   }
 
@@ -55,7 +42,7 @@ class _PrivacyPolicyState extends State<PrivacyPolicy> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: new Text('Kebijakan Privasi'),
+        title: new Text(title),
       ),
       body: listPrivacy == null ? new Loading() : new ListView(
         children: [
