@@ -23,13 +23,6 @@ class _SurveyDetailState extends State<SurveyDetail> {
   Info info = new Info();
   String type, soal, idSoal, urutanSoal, nextId, nextUrutan, message, prevId, prevUrutan, jenis;
   TextEditingController _textanswer = new TextEditingController();
-  List<List<String>> choices = [
-    ['a','b','c','d']
-  ];
-  Map<String, bool> values = {
-    'foo': true,
-    'bar': false,
-  };
   List<Result> listSoal;
   List<dynamic> opsi;
   var opsiStatus = List<bool>();

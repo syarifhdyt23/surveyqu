@@ -16,6 +16,7 @@ import 'package:surveyqu/network_utils/api.dart';
 import 'package:surveyqu/profile/changepass.dart';
 import 'package:surveyqu/profile/changeprofile.dart';
 import 'package:surveyqu/profile/privacypolicy.dart';
+import 'package:surveyqu/profile/rekeningpage.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Profile extends StatefulWidget {
@@ -163,6 +164,7 @@ class _Profile extends State<Profile> {
                           color: Colors.white,
                           child: new InkWell(
                               onTap: () {
+                                Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context,) => new RekeningPage(email: email,)));
                               },
                               child: new ListTile(
                                 title: new Text(
