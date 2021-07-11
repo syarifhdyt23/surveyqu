@@ -8,24 +8,23 @@ import 'package:surveyqu/model/profile.dart';
 import 'package:surveyqu/model/survey.dart';
 import 'package:surveyqu/network_utils/api.dart';
 
-class RekeningAdd extends StatefulWidget {
-  String email;
-  RekeningAdd({this.email});
+class RekeningEdit extends StatefulWidget {
+  String email, nama, norek, bank;
+  RekeningEdit({this.email, this.norek, this.nama, this.bank});
   @override
-  _RekeningAddState createState() => _RekeningAddState(email: email);
+  _RekeningEditState createState() => _RekeningEditState(email: email, nama: nama, norek: norek, selectedBank: bank);
 }
 
-class _RekeningAddState extends State<RekeningAdd> {
+class _RekeningEditState extends State<RekeningEdit> {
   Size size;
-  String selectedBank;
   TextEditingController textNorek = new TextEditingController();
   TextEditingController textUsername = new TextEditingController();
   List<ListBank> listBank;
   List bank = List();
-  String email;
+  String email, nama, norek, selectedBank;
   Info info = new Info();
 
-  _RekeningAddState({this.email});
+  _RekeningEditState({this.email, this.nama, this.norek, this.selectedBank});
 
   Future<void> getBank() async {
     var res = await Network().postToken('/loadBank');
@@ -50,7 +49,7 @@ class _RekeningAddState extends State<RekeningAdd> {
       'bank' : bank
     };
 
-    var res = await Network().postDataToken(data, '/tambahRek');
+    var res = await Network().postDataToken(data, '/changeRek');
     if (res.statusCode == 200) {
       // var body = jsonDecode(res.body);
       // print(json.encode(body['message']));
@@ -96,6 +95,10 @@ class _RekeningAddState extends State<RekeningAdd> {
   void initState() {
     super.initState();
     this.getBank();
+    setState(() {
+      textUsername.text = nama;
+      textNorek.text = norek;
+    });
   }
 
   @override
@@ -138,7 +141,7 @@ class _RekeningAddState extends State<RekeningAdd> {
       body: new GestureDetector(
         behavior: HitTestBehavior.opaque,
         onPanDown: (_) {
-        FocusScope.of(context).unfocus();
+          FocusScope.of(context).unfocus();
         },
         child: new ListView(
           padding: const EdgeInsets.only(left: 15, right: 15),
@@ -148,40 +151,40 @@ class _RekeningAddState extends State<RekeningAdd> {
               child: new Text('Nama Bank'),
             ),
             new Container(
-              width: size.width,
-              height: 45,
-              margin: const EdgeInsets.only(top: 10),
-              padding: const EdgeInsets.only(left: 15, right: 15),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                border: Border.all(color: Colors.grey.withOpacity(.2), width: 2,),
-              ),
-              child: new DropdownButtonHideUnderline(
-                child: DropdownButton<String>(
-                  isExpanded: true,
-                  value: selectedBank,
-                  //elevation: 5,
-                  style: TextStyle(color: Colors.black),
-                  items: bank.map((item) {
-                    return new DropdownMenuItem(
-                      child: new Text(item),
-                      value: item.toString(),
-                    );
-                  }).toList(),
-                  hint: Text(
-                    "Pilih Bank",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600),
-                  ),
-                  onChanged: (String value) {
-                    setState(() {
-                      selectedBank = value;
-                    });
-                  },
+                width: size.width,
+                height: 45,
+                margin: const EdgeInsets.only(top: 10),
+                padding: const EdgeInsets.only(left: 15, right: 15),
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  border: Border.all(color: Colors.grey.withOpacity(.2), width: 2,),
                 ),
-              )
+                child: new DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    isExpanded: true,
+                    value: selectedBank,
+                    //elevation: 5,
+                    style: TextStyle(color: Colors.black),
+                    items: bank.map((item) {
+                      return new DropdownMenuItem(
+                        child: new Text(item),
+                        value: item.toString(),
+                      );
+                    }).toList(),
+                    hint: Text(
+                      "Pilih Bank",
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    onChanged: (String value) {
+                      setState(() {
+                        selectedBank = value;
+                      });
+                    },
+                  ),
+                )
             ),
             new Container(
               margin: const EdgeInsets.only(top: 20),

@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:surveyqu/info.dart';
+import 'package:surveyqu/loading.dart';
 import 'package:surveyqu/model/profile.dart';
 import 'package:surveyqu/network_utils/api.dart';
 import 'package:surveyqu/profile/rekeningadd.dart';
+import 'package:surveyqu/profile/rekeningedit.dart';
 
 import '../hexacolor.dart';
 
@@ -17,7 +19,7 @@ class RekeningPage extends StatefulWidget {
 class _RekeningPageState extends State<RekeningPage> {
   Info info = new Info();
   Size size;
-  String email;
+  String email, countRek;
   List<Rekening> listRekening;
 
   _RekeningPageState({this.email});
@@ -29,9 +31,22 @@ class _RekeningPageState extends State<RekeningPage> {
     var res = await Network().postDataToken(body,'/loadRek');
     if (res.statusCode == 200) {
       var body = jsonDecode(res.body);
-      var dataJson = body['result'];
+      if(body['result'] == 'null'){
+        setState(() {
+          countRek = '0';
+        });
+      } else {
+        setState(() {
+          countRek = '1';
+        });
+        var dataJson = body['result'] as List;
+        setState(() {
+          listRekening = dataJson.map<Rekening>((json) => Rekening.fromJson(json)).toList();
+        });
+      }
+    } else {
       setState(() {
-        listRekening = dataJson.map<Rekening>((json) => Rekening.fromJson(json)).toList();
+        countRek = '0';
       });
     }
     return listRekening;
@@ -44,6 +59,9 @@ class _RekeningPageState extends State<RekeningPage> {
     var res = await Network().postDataToken(body, '/delRek');
     if (res.statusCode == 200) {
       // this.getNotif();
+      this.getRek();
+    } else {
+      info.messagesError(context, "Error", "Gagal menghapus item");
     }
   }
 
@@ -60,12 +78,12 @@ class _RekeningPageState extends State<RekeningPage> {
       appBar: AppBar(
         title: new Text('Rekening Bank'),
       ),
-      bottomNavigationBar: new Container(
+      bottomNavigationBar: countRek == '0' ? new Container(
         height: 45,
         margin: const EdgeInsets.only(top: 20, bottom: 30, left: 10, right: 10),
         child: new FlatButton(
             onPressed: () {
-              Navigator.of(context).push(new MaterialPageRoute(builder: (context)=> new RekeningAdd()));
+              Navigator.of(context).push(new MaterialPageRoute(builder: (context)=> new RekeningAdd(email: email,)));
             },
             color: new HexColor("#EA5455"),
             shape: new RoundedRectangleBorder(
@@ -78,9 +96,39 @@ class _RekeningPageState extends State<RekeningPage> {
                   color: Colors.white,
                   fontWeight: FontWeight.w600),
             )),
-      ),
+      ) : null,
       body:
-      // listPrivacy == null ? new Loading() :
+      countRek == null ? new Loading() :
+      countRek == '0' ? new Container(
+        alignment: Alignment.center,
+        child: new Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            new Container(
+              child: new CircleAvatar(
+                radius: 58.0,
+                backgroundColor: Colors.grey[500],
+                child: new CircleAvatar(
+                  radius: 56.5,
+                  backgroundColor: Colors.white,
+                  child: new Icon(Icons.credit_card, size: 70, color: Colors.grey[700],),
+                ),
+              ),
+            ),
+
+            new Container(
+              margin: const EdgeInsets.only(top: 10),
+              child: new Text('Rekening belum ditambahkan', style: new TextStyle(fontSize: 20),),
+            ),
+
+            new Container(
+              alignment: Alignment.center,
+              margin: const EdgeInsets.only(top: 3, left: 15, right: 15),
+              child: new Text('Silahkan tambah rekening anda', style: new TextStyle(fontSize: 15, color: Colors.grey[500]),),
+            ),
+          ],
+        ),
+      ) :
       new ListView(
         shrinkWrap: true,
         children: [
@@ -138,6 +186,9 @@ class _RekeningPageState extends State<RekeningPage> {
     switch (value) {
       case 'Hapus':
         this.deleteRek();
+      break;
+      case 'Ubah':
+        Navigator.of(context).push(new MaterialPageRoute(builder: (context)=> new RekeningEdit(email: email, bank: listRekening[0].bank, nama: listRekening[0].nama, norek: listRekening[0].norek,)));
       break;
     }
   }
