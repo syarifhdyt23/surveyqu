@@ -195,6 +195,10 @@ class _ChangeProfileState extends State<ChangeProfile> {
                 setState(() {
                   // Navigator.push(context, new MaterialPageRoute(builder: (context) => Verification(email: textEmail.text,)));
                   this._onLoading(textEmail.text, textPass.text, textName.text, textRef.text, textHp.text);
+
+                  // pict = false;
+                  // _image == null ? info.MessageInfo(context, "Info", "Pilih gambar profil pada lingkar gambar") :
+                  // startUpload(context);
                 });
               }
             },
@@ -395,62 +399,22 @@ class _ChangeProfileState extends State<ChangeProfile> {
                 margin: const EdgeInsets.only(top: 10),
                 child: new Text('Foto KTP'),
               ),
-              new Container(
-                  padding: EdgeInsets.only(top: 50),
-                  child: new Stack(
-                    children: [
-                      new Center(
-                        child: new CircleAvatar(
-                          radius: 50.0,
-                          backgroundColor: Colors.blue,
-                          child: new InkWell(
-                            onTap: () {
-                              // _ShowChoiceDialog(context);
-                              selectUpload(context);
-                            },
-                            child: new CircleAvatar(
-                              radius: 63.0,
-                              backgroundColor: Colors.white,
-                              child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(53.0),
-                                  child: showImages2()
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      new Container(
-                        padding: EdgeInsets.only(top: 70, left: 60),
-                        child: new Center(
-                          child: new CircleAvatar(
-                            backgroundColor: Colors.white,
-                            radius: 20,
-                            child: new FlatButton(
-                              padding: EdgeInsets.all(5),
-                              onPressed: (){
-                                pict = false;
-                                _image == null ? info.MessageInfo(context, "Info", "Pilih gambar profil pada lingkar gambar") :
-                                startUpload(context);
-                              },
-                              child: new Icon(
-                                pict != true ? Icons.edit :
-                                Icons.save, color: Colors.blue, size: 25,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
-              ),
-              new Container(
-                width: size.width,
-                height: 200,
-                decoration: BoxDecoration(
-                  color: Colors.grey,
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
+              new Center(
+                child: new Container(
+                  margin: const EdgeInsets.only(top: 5),
+                  decoration: BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                  ),
+                  height: 200,
+                  child: new InkWell(
+                    onTap: () {
+                      // _ShowChoiceDialog(context);
+                      selectUpload(context);
+                    },
+                    child: showImages2(),
+                  ),
                 ),
-                margin: const EdgeInsets.only(top: 5),
               ),
             ],
           ),
@@ -467,7 +431,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
         // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         title: new Text('Pilih media pengambilan gambar', style: TextStyle(fontSize: 17),),
         content: new Container(
-          height: MediaQuery.of(context).size.height / 7,
+          height: MediaQuery.of(context).size.height / 6,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[

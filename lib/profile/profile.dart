@@ -488,7 +488,7 @@ class _Profile extends State<Profile> {
             // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             title: new Text('Pilih media pengambilan gambar', style: TextStyle(fontSize: 17),),
             content: new Container(
-              height: MediaQuery.of(context).size.height / 7,
+              height: MediaQuery.of(context).size.height / 6,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
