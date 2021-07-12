@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:surveyqu/domain.dart';
@@ -30,6 +33,85 @@ class _Profile extends State<Profile> {
   bool _visible = false;
   String id, email, nama;
   List<Privacy> listPrivacy;
+  bool pict;
+  String status = '';
+  String base64Image, fileName, imgProfile;
+  String errMessage = 'Error Uploading Image';
+  File _image;
+  final picker = ImagePicker();
+
+  startUpload(BuildContext context) {
+    fileName = _image.path.split('/').last;
+    upload(context, fileName);
+  }
+
+  upload(BuildContext context, String fileName) {
+    final String url = "http://"+domain.getDomain()+"/profile/upload_image.php";
+    http.post(Uri.parse(url), body: {
+      "email": email,
+      "image": base64Image,
+      "path": fileName,
+    }).then((result) {
+      info.LoadingToast(context, 'Uploading Image...');
+      if (result.statusCode == 200){
+        // this.updateimg(fileName);
+        info.LoadingToast(context, 'Gambar profil sudah terupdate');
+        // this.getImage();
+        // _image = null;
+      } else {
+        info.LoadingToast(context, errMessage);
+      }
+
+    }).catchError((error) {
+      info.LoadingToast(context, error);
+    });
+  }
+
+  Future chooseImage2() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+        base64Image = base64Encode(_image.readAsBytesSync());
+        pict = true;
+      } else {
+        print('Gambar belum dipilih.');
+      }
+    });
+  }
+
+  Future snapImage() async{
+    final pickedFile = await picker.getImage(source: ImageSource.camera);
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+        base64Image = base64Encode(_image.readAsBytesSync());
+        pict = true;
+      } else {
+        print('Gambar belum dipilih.');
+      }
+    });
+  }
+
+  Widget showImages2() {
+    return _image == null
+        ? imgProfile == null ? new Container(alignment: Alignment.center,child: new CupertinoActivityIndicator()) :
+    imgProfile == '1' ? new Icon(
+      Icons.person,
+      size: 60,
+      color: Colors.lightBlue,
+    ) :
+    new NetworkImage(imgProfile)
+        : Image.file(_image,
+      height: 110, width: 110,
+      fit: BoxFit.cover,);
+  }
+
+  // Future<void> updateimg(String fileName) async {
+  //   http.get(Uri.parse("http://"+ domain.getDomain() +"/update.php?action=setImageProfile&memberid="+memberId+"&image="+fileName),
+  //       headers: {"Accept": "application.json"});
+  // }
 
   @override
   void initState() {
@@ -128,7 +210,7 @@ class _Profile extends State<Profile> {
                           child: new InkWell(
                               onTap: () {
                                 // this.messagesLogout(context, 'keluar', 'anda yakin ingin keluar?');
-                                // Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context,) => new ChangeProfile()));
+                                Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context,) => new ChangeProfile(email: email,)));
                               },
                               child: new ListTile(
                                 title: new Text(
@@ -302,37 +384,54 @@ class _Profile extends State<Profile> {
                 children: [
                   new Container(
                     padding: EdgeInsets.only(top: 50),
-                    child: new Center(
-                      child: new CircleAvatar(
-                        radius: 50.0,
-                        backgroundColor: Colors.blue,
-                        child: new InkWell(
-                          onTap: () {
-                            // _ShowChoiceDialog(context);
-                            // chooseImage();
-                          },
-                          child: new CircleAvatar(
-                            radius: 63.0,
-                            backgroundColor: Colors.white,
-                            child: ClipRRect(
-                                borderRadius: BorderRadius.circular(53.0),
-                                child: new Icon(
-                                  Icons.person,
-                                  size: 60,
-                                  color: Colors.lightBlue,
-                                )),
-                            // ClipRRect(
-                            //   borderRadius: BorderRadius.circular(53.0),
-                            //   child:
-                            //   showImage(),
-                            // ),
+                    child: new Stack(
+                    children: [
+                      new Center(
+                        child: new CircleAvatar(
+                          radius: 50.0,
+                          backgroundColor: Colors.blue,
+                          child: new InkWell(
+                            onTap: () {
+                              // _ShowChoiceDialog(context);
+                              selectUpload(context);
+                            },
+                            child: new CircleAvatar(
+                              radius: 63.0,
+                              backgroundColor: Colors.white,
+                              child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(53.0),
+                                  child: showImages2()
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
+                        new Container(
+                        padding: EdgeInsets.only(top: 70, left: 60),
+                          child: new Center(
+                            child: new CircleAvatar(
+                              backgroundColor: Colors.white,
+                              radius: 20,
+                              child: new FlatButton(
+                                padding: EdgeInsets.all(5),
+                                onPressed: (){
+                                  pict = false;
+                                  _image == null ? info.MessageInfo(context, "Info", "Pilih gambar profil pada lingkar gambar") :
+                                  startUpload(context);
+                                },
+                                child: new Icon(
+                                  pict != true ? Icons.edit :
+                                  Icons.save, color: Colors.blue, size: 25,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                    )
                   ),
                   new Container(
-                    padding: EdgeInsets.only(top: 30),
+                    padding: EdgeInsets.only(top: 20),
                     alignment: Alignment.center,
                     child: new Text(
                       '$nama',
@@ -379,5 +478,58 @@ class _Profile extends State<Profile> {
         ],
       ),
     );
+  }
+
+  void selectUpload(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            title: new Text('Pilih media pengambilan gambar', style: TextStyle(fontSize: 17),),
+            content: new Container(
+              height: MediaQuery.of(context).size.height / 7,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  new Container(
+                    margin: EdgeInsets.only(bottom: 5),
+                    child: new FlatButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        chooseImage2();
+                      },
+                      child: new Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          new Icon(Icons.image, size: 20,),
+                          new Padding(padding: EdgeInsets.only(left: 10)),
+                          new Text('Dari Galeri', style: TextStyle(fontSize: 15),),
+                        ],
+                      ),
+                    ),
+                  ),
+                  new Container(
+                    margin: EdgeInsets.only(top: 5),
+                    child: new FlatButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        snapImage();
+                      },
+                      child: new Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          new Icon(Icons.camera, size: 20,),
+                          new Padding(padding: EdgeInsets.only(left: 10)),
+                          new Text('Dari Kamera', style: TextStyle(fontSize: 15),),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
   }
 }

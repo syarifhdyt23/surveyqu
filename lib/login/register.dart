@@ -101,8 +101,8 @@ class _RegisterState extends State<Register> {
         child: new Stack(
           children: <Widget>[
             new Container(
-              height: 250,
-              margin: const EdgeInsets.only(left: 30.0, right: 30.0),
+              height: 150,
+              margin: const EdgeInsets.only(left: 30.0, right: 30.0, top: 50),
               decoration: new BoxDecoration(
                 image: new DecorationImage(
                   image: new AssetImage('images/logo.png'),
@@ -134,14 +134,19 @@ class _RegisterState extends State<Register> {
                   fit: BoxFit.cover,
                 ),
               ),
-              margin: const EdgeInsets.only(top: 250),
+              margin: const EdgeInsets.only(top: 220),
+              padding: EdgeInsets.only(top: 10),
               child: new ListView(
                   padding: const EdgeInsets.only(left: 15, right: 15),
                   children: <Widget>[
                     new Container(
+                      margin: const EdgeInsets.only(top: 10),
+                      child: new Text('Nama', style: TextStyle(color: Colors.white),),
+                    ),
+                    new Container(
                       width: size.width,
                       height: 45,
-                      margin: const EdgeInsets.only(top: 20),
+                      margin: const EdgeInsets.only(top: 5),
                       child: new TextField(
                         controller: textName,
                         decoration: InputDecoration(
@@ -156,9 +161,9 @@ class _RegisterState extends State<Register> {
                           contentPadding: const EdgeInsets.only(
                               left: 10.0, bottom: 0.0, top: 7.0),
                           //border: InputBorder.none,
-                          hintText: "Nama",
-                          hintStyle: TextStyle(
-                              color: Colors.grey, fontFamily: 'helvetica'),
+                          // hintText: "Nama",
+                          // hintStyle: TextStyle(
+                          //     color: Colors.grey, fontFamily: 'helvetica'),
                           labelStyle: TextStyle(
                             color: Colors.black,
                           ),
@@ -172,9 +177,13 @@ class _RegisterState extends State<Register> {
                       ),
                     ),
                     new Container(
+                      margin: const EdgeInsets.only(top: 10),
+                      child: new Text('Nomor HP (08XXX)', style: TextStyle(color: Colors.white),),
+                    ),
+                    new Container(
                       width: size.width,
                       height: 45,
-                      margin: const EdgeInsets.only(top: 10),
+                      margin: const EdgeInsets.only(top: 5),
                       child: new TextField(
                         controller: textHp,
                         decoration: InputDecoration(
@@ -189,9 +198,9 @@ class _RegisterState extends State<Register> {
                           contentPadding: const EdgeInsets.only(
                               left: 10.0, bottom: 0.0, top: 7.0),
                           //border: InputBorder.none,
-                          hintText: "Nomor Handphone (08xx)",
-                          hintStyle: TextStyle(
-                              color: Colors.grey, fontFamily: 'helvetica'),
+                          // hintText: "Nomor Handphone (08xx)",
+                          // hintStyle: TextStyle(
+                          //     color: Colors.grey, fontFamily: 'helvetica'),
                           labelStyle: TextStyle(
                             color: Colors.black,
                           ),
@@ -205,10 +214,15 @@ class _RegisterState extends State<Register> {
                         keyboardType: TextInputType.number,
                       ),
                     ),
+
+                    new Container(
+                      margin: const EdgeInsets.only(top: 10),
+                      child: new Text('Email', style: TextStyle(color: Colors.white),),
+                    ),
                     new Container(
                       width: size.width,
                       height: 45,
-                      margin: const EdgeInsets.only(top: 10),
+                      margin: const EdgeInsets.only(top: 5),
                       child: new TextField(
                         controller: textEmail,
                         decoration: InputDecoration(
@@ -223,9 +237,9 @@ class _RegisterState extends State<Register> {
                           contentPadding: const EdgeInsets.only(
                               left: 10.0, bottom: 0.0, top: 7.0),
                           //border: InputBorder.none,
-                          hintText: "Email",
-                          hintStyle: TextStyle(
-                              color: Colors.grey, fontFamily: 'helvetica'),
+                          // hintText: "Email",
+                          // hintStyle: TextStyle(
+                          //     color: Colors.grey, fontFamily: 'helvetica'),
                           labelStyle: TextStyle(
                             color: Colors.black,
                           ),
@@ -239,10 +253,15 @@ class _RegisterState extends State<Register> {
                         keyboardType: TextInputType.emailAddress,
                       ),
                     ),
+
+                    new Container(
+                      margin: const EdgeInsets.only(top: 10),
+                      child: new Text('Password', style: TextStyle(color: Colors.white),),
+                    ),
                     new Container(
                       width: size.width,
                       height: 45,
-                      margin: const EdgeInsets.only(top: 10),
+                      margin: const EdgeInsets.only(top: 5),
                       child: new TextField(
                         controller: textPass,
                         obscureText: !visiblePassword,
@@ -258,9 +277,9 @@ class _RegisterState extends State<Register> {
                           contentPadding: const EdgeInsets.only(
                               left: 10.0, bottom: 0.0, top: 7.0),
                           //border: InputBorder.none,
-                          hintText: "Password",
-                          hintStyle: TextStyle(
-                              color: Colors.grey, fontFamily: 'helvetica'),
+                          // hintText: "Password",
+                          // hintStyle: TextStyle(
+                          //     color: Colors.grey, fontFamily: 'helvetica'),
                           labelStyle: TextStyle(
                             color: Colors.black,
                           ),
@@ -287,10 +306,15 @@ class _RegisterState extends State<Register> {
                         textInputAction: TextInputAction.done,
                       ),
                     ),
+
+                    new Container(
+                      margin: const EdgeInsets.only(top: 10),
+                      child: new Text('Konfirmasi Password', style: TextStyle(color: Colors.white),),
+                    ),
                     new Container(
                       width: size.width,
                       height: 45,
-                      margin: const EdgeInsets.only(top: 10),
+                      margin: const EdgeInsets.only(top: 5),
                       child: new TextField(
                         controller: textConfPass,
                         obscureText: !visibleConfPassword,
@@ -306,9 +330,9 @@ class _RegisterState extends State<Register> {
                           contentPadding: const EdgeInsets.only(
                               left: 10.0, bottom: 0.0, top: 7.0),
                           //border: InputBorder.none,
-                          hintText: "Konfirmasi Password",
-                          hintStyle: TextStyle(
-                              color: Colors.grey, fontFamily: 'helvetica'),
+                          // hintText: "Konfirmasi Password",
+                          // hintStyle: TextStyle(
+                          //     color: Colors.grey, fontFamily: 'helvetica'),
                           labelStyle: TextStyle(
                             color: Colors.black,
                           ),
@@ -334,10 +358,15 @@ class _RegisterState extends State<Register> {
                         textInputAction: TextInputAction.done,
                       ),
                     ),
+
+                    new Container(
+                      margin: const EdgeInsets.only(top: 10),
+                      child: new Text('Kode Referral', style: TextStyle(color: Colors.white),),
+                    ),
                     new Container(
                       width: size.width,
                       height: 45,
-                      margin: const EdgeInsets.only(top: 10),
+                      margin: const EdgeInsets.only(top: 5),
                       child: new TextField(
                         controller: textRef,
                         decoration: InputDecoration(
@@ -352,9 +381,9 @@ class _RegisterState extends State<Register> {
                           contentPadding: const EdgeInsets.only(
                               left: 10.0, bottom: 0.0, top: 7.0),
                           //border: InputBorder.none,
-                          hintText: "Kode Referral",
-                          hintStyle: TextStyle(
-                              color: Colors.grey, fontFamily: 'helvetica'),
+                          // hintText: "Kode Referral",
+                          // hintStyle: TextStyle(
+                          //     color: Colors.grey, fontFamily: 'helvetica'),
                           labelStyle: TextStyle(
                             color: Colors.black,
                           ),
