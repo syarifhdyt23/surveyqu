@@ -79,4 +79,20 @@ class Network{
       },
     );
   }
+
+  postEmailToken(apiUrl) async {
+    var fullUrl = _urlauth + apiUrl;
+    await _getToken();
+    return await http.post(
+      Uri.parse(fullUrl),
+      body: {
+        'email': email,
+      },
+      headers: {
+        'Client-Service' : 'surveyqu',
+        'Auth-Key' : 'svq1234',
+        'token' : token,
+      },
+    );
+  }
 }

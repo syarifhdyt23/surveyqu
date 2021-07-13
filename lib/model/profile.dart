@@ -68,3 +68,48 @@ class ListBank {
     return data;
   }
 }
+
+class User {
+  String firstname;
+  String lastname;
+  String address;
+  String ktp;
+  String ktpVerify;
+  String hp;
+  String ishpVerify;
+  String foto;
+
+  User(
+      {this.firstname,
+        this.lastname,
+        this.address,
+        this.ktp,
+        this.ktpVerify,
+        this.hp,
+        this.ishpVerify,
+        this.foto});
+
+  User.fromJson(Map<String, dynamic> json) {
+    firstname = json['firstname'];
+    lastname = json['lastname'];
+    address = json['address'];
+    ktp = json['ktp'];
+    ktpVerify = json['ktp_verify'];
+    hp = json['hp'];
+    ishpVerify = json['ishp_verify'];
+    foto = json['foto'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['firstname'] = this.firstname;
+    data['lastname'] = this.lastname;
+    data['address'] = this.address;
+    data['ktp'] = this.ktp;
+    data['ktp_verify'] = this.ktpVerify;
+    data['hp'] = this.hp;
+    data['ishp_verify'] = this.ishpVerify;
+    data['foto'] = this.foto;
+    return data;
+  }
+}

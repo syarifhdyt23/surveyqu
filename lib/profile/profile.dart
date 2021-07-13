@@ -1,17 +1,14 @@
 import 'dart:io';
-
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:surveyqu/domain.dart';
-import 'package:surveyqu/hexacolor.dart';
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:surveyqu/info.dart';
 import 'package:surveyqu/login/login.dart';
 import 'package:surveyqu/model/profile.dart';
@@ -33,6 +30,7 @@ class _Profile extends State<Profile> {
   bool _visible = false;
   String id, email, nama;
   List<Privacy> listPrivacy;
+  List<User> listUser;
   bool pict;
   String status = '';
   String base64Image, fileName, imgProfile;
@@ -45,26 +43,39 @@ class _Profile extends State<Profile> {
     upload(context, fileName);
   }
 
-  upload(BuildContext context, String fileName) {
-    final String url = "http://"+domain.getDomain()+"/profile/upload_image.php";
-    http.post(Uri.parse(url), body: {
+  upload(BuildContext context, String fileName) async{
+    var data = {
       "email": email,
-      "image": base64Image,
-      "path": fileName,
-    }).then((result) {
-      info.LoadingToast(context, 'Uploading Image...');
-      if (result.statusCode == 200){
-        // this.updateimg(fileName);
-        info.LoadingToast(context, 'Gambar profil sudah terupdate');
-        // this.getImage();
-        // _image = null;
-      } else {
-        info.LoadingToast(context, errMessage);
-      }
-
-    }).catchError((error) {
-      info.LoadingToast(context, error);
-    });
+      "foto": base64Image,
+      "namaFile": fileName,
+    };
+    var res = await Network().postDataToken(data, '/changeFoto');
+    if (res.statusCode == 200) {
+      info.MessageInfo(context, "info", "sukses ganti foto");
+      this.getUser();
+      // info.LoadingToast(context, 'Gambar profil sudah terupdate');
+    } else {
+      info.MessageInfo(context, "info", "tidak sukses ganti foto");
+    }
+    // final String url = "http://"+domain.getDomain()+"/changeProfile";
+    // http.post(Uri.parse(url), body: {
+    //   "email": email,
+    //   "foto": base64Image,
+    //   "namaFile": fileName,
+    // }).then((result) {
+    //   info.LoadingToast(context, 'Uploading Image...');
+    //   if (result.statusCode == 200){
+    //     // this.updateimg(fileName);
+    //     info.LoadingToast(context, 'Gambar profil sudah terupdate');
+    //     // this.getImage();
+    //     // _image = null;
+    //   } else {
+    //     info.LoadingToast(context, errMessage);
+    //   }
+    //
+    // }).catchError((error) {
+    //   info.LoadingToast(context, error.toString());
+    // });
   }
 
   Future chooseImage2() async {
@@ -97,12 +108,8 @@ class _Profile extends State<Profile> {
   Widget showImages2() {
     return _image == null
         ? imgProfile == null ? new Container(alignment: Alignment.center,child: new CupertinoActivityIndicator()) :
-    imgProfile == '1' ? new Icon(
-      Icons.person,
-      size: 60,
-      color: Colors.lightBlue,
-    ) :
-    new NetworkImage(imgProfile)
+    imgProfile == '1' ? new CachedNetworkImage(imageUrl:"http://www.surveyqu.com/sq/assets/gantella/images/users.jpg" , height: 110, width: 110, fit: BoxFit.cover,) :
+    new CachedNetworkImage(imageUrl: imgProfile , height: 110, width: 110, fit: BoxFit.cover,)
         : Image.file(_image,
       height: 110, width: 110,
       fit: BoxFit.cover,);
@@ -115,8 +122,9 @@ class _Profile extends State<Profile> {
 
   @override
   void initState() {
-    _loadUserData();
     super.initState();
+    this._loadUserData();
+    this.getUser();
   }
 
   _loadUserData() async {
@@ -130,6 +138,24 @@ class _Profile extends State<Profile> {
         nama = jsonDecode(localStorage.getString('nama'));
       });
     }
+  }
+
+  Future<void> getUser() async {
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    nama = jsonDecode(localStorage.getString('nama'));
+    var data = {
+      'email': email,
+    };
+    var res = await Network().postDataToken(data, '/loadProfile');
+    if (res.statusCode == 200) {
+      var body = jsonDecode(res.body);
+      var dataJson = body['result'];
+      setState(() {
+        listUser = dataJson.map<User>((json) => User.fromJson(json)).toList();
+        imgProfile = listUser[0].foto;
+      });
+    }
+    return listUser;
   }
 
   Future<void> getContent(String link) async {
@@ -210,7 +236,7 @@ class _Profile extends State<Profile> {
                           child: new InkWell(
                               onTap: () {
                                 // this.messagesLogout(context, 'keluar', 'anda yakin ingin keluar?');
-                                Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context,) => new ChangeProfile(email: email,)));
+                                Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context,) => new ChangeProfile(email: email,address: listUser[0].address, firstname: listUser[0].firstname, hp: listUser[0].hp, lastname: listUser[0].lastname, hpVerif: listUser[0].ishpVerify, ktpVerif: listUser[0].ktpVerify, ktp: listUser[0].ktp,)));
                               },
                               child: new ListTile(
                                 title: new Text(
@@ -406,7 +432,7 @@ class _Profile extends State<Profile> {
                           ),
                         ),
                       ),
-                        new Container(
+                      pict != true ? new Container() : new Container(
                         padding: EdgeInsets.only(top: 70, left: 60),
                           child: new Center(
                             child: new CircleAvatar(
@@ -420,7 +446,6 @@ class _Profile extends State<Profile> {
                                   startUpload(context);
                                 },
                                 child: new Icon(
-                                  pict != true ? Icons.edit :
                                   Icons.save, color: Colors.blue, size: 25,
                                 ),
                               ),

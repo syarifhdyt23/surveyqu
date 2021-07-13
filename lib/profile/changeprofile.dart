@@ -1,30 +1,33 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:surveyqu/domain.dart';
 import 'package:surveyqu/hexacolor.dart';
+import 'package:surveyqu/home/mainhome.dart';
 import 'package:surveyqu/info.dart';
 import 'package:surveyqu/network_utils/api.dart';
 
 class ChangeProfile extends StatefulWidget {
-  String email;
-  ChangeProfile({this.email});
+  String email, firstname, lastname, address, ktp, ktpVerif, hp, hpVerif;
+  ChangeProfile({this.email, this.address,this.firstname,this.hp,this.hpVerif,this.ktp,this.ktpVerif,this.lastname});
   @override
-  _ChangeProfileState createState() => _ChangeProfileState(email: email);
+  _ChangeProfileState createState() => _ChangeProfileState(email: email, address: address, firstname: firstname, hp: hp, hpVerif: hpVerif, ktp:ktp, ktpVerif: ktpVerif, lastname: lastname);
 }
 
 class _ChangeProfileState extends State<ChangeProfile> {
   Size size;
-  String email;
+  String email, firstname, lastname, address, ktp, ktpVerif, hp, hpVerif;
   Domain domain = new Domain();
   Info info = new Info();
+  bool enableHp;
   var dataJson;
 
-  _ChangeProfileState({this.email});
+  _ChangeProfileState({this.email, this.address,this.firstname,this.hp,this.hpVerif,this.ktp,this.ktpVerif,this.lastname});
 
   bool pict;
   String status = '';
@@ -33,31 +36,29 @@ class _ChangeProfileState extends State<ChangeProfile> {
   File _image;
   final picker = ImagePicker();
 
-  startUpload(BuildContext context) {
-    fileName = _image.path.split('/').last;
-    upload(context, fileName);
+  startUpload(BuildContext context, String firstname, String lastname, String address, String hp) {
+    fileName = _image == null ? ktp.split('/').last : _image.path.split('/').last;
+    upload(context, firstname, lastname, address, hp, fileName);
   }
 
-  upload(BuildContext context, String fileName) {
-    final String url = "http://"+domain.getDomain()+"/profile/upload_image.php";
-    http.post(Uri.parse(url), body: {
+  upload(BuildContext context,String firstname, String lastname, String address, String hp, String fileName) async{
+    var data = {
       "email": email,
-      "image": base64Image,
-      "path": fileName,
-    }).then((result) {
-      info.LoadingToast(context, 'Uploading Image...');
-      if (result.statusCode == 200){
-        // this.updateimg(fileName);
-        info.LoadingToast(context, 'Gambar profil sudah terupdate');
-        // this.getImage();
-        // _image = null;
-      } else {
-        info.LoadingToast(context, errMessage);
-      }
-
-    }).catchError((error) {
-      info.LoadingToast(context, error);
-    });
+      "firstname": firstname,
+      "lastname": lastname,
+      "address" : address,
+      "hp": hp,
+      "fotoKTP": base64Image,
+      "namaFile": fileName,
+    };
+    var res = await Network().postDataToken(data, '/changeProfile');
+    if (res.statusCode == 200) {
+      Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (context) => new MainHome()), (route) => false);
+      info.messagesAutoHide(context, "info", "sukses update profil");
+      // info.LoadingToast(context, 'Gambar profil sudah terupdate');
+    } else {
+      info.messagesAutoHide(context, "info", "Update profil gagal");
+    }
   }
 
   Future chooseImage2() async {
@@ -90,49 +91,20 @@ class _ChangeProfileState extends State<ChangeProfile> {
   Widget showImages2() {
     return _image == null
         ? imgProfile == null ? new Container(alignment: Alignment.center,child: new CupertinoActivityIndicator()) :
-    imgProfile == '1' ? new Icon(
-      Icons.person,
-      size: 60,
-      color: Colors.lightBlue,
-    ) :
-    new NetworkImage(imgProfile)
+    imgProfile == '1' ? new CachedNetworkImage(imageUrl:"http://www.surveyqu.com/sq/assets/gantella/images/users.jpg" ,fit: BoxFit.cover,) :
+    new CachedNetworkImage(imageUrl: imgProfile ,fit: BoxFit.cover,)
         : Image.file(_image,
-      height: 110, width: 110,
       fit: BoxFit.cover,);
   }
 
   // http://surveyqu.com/sqws/sqmid/index.php/auth/register
   // {"name" : "test", "password" : "12345","hp" : "0812345789","email":"ahmadsyarifhidayat23@gmail.com","ref":"123456"}
-  TextEditingController textName = new TextEditingController();
+  TextEditingController textFname = new TextEditingController();
+  TextEditingController textLname = new TextEditingController();
+  TextEditingController textAddress = new TextEditingController();
   TextEditingController textHp = new TextEditingController();
-  TextEditingController textEmail = new TextEditingController();
-  TextEditingController textPass = new TextEditingController();
-  TextEditingController textRef = new TextEditingController();
 
-  void register(String email, String password, String name, String referral, String hp) async {
-    var data = {
-      'name': name,
-      'password': password,
-      'hp': hp,
-      'email': email,
-      'ref': referral,
-    };
-
-    var res = await Network().postDataAuth(data, '/register');
-    if (res.statusCode == 200) {
-      // var body = jsonDecode(res.body);
-      // print(json.encode(body['message']));
-      // Navigator.push(
-      //   context, new MaterialPageRoute(builder: (context) => Verification(email: textEmail.text,)),
-      // );
-    } else if (res.statusCode == 204){
-      info.messagesNoButton(context, 'info','Email Sudah terdaftar');
-    } else {
-      info.messagesNoButton(context, 'info','Pendaftaran gagal');
-    }
-  }
-
-  void _onLoading(email, password, name, referral, hp) {
+  void _onLoading(firstname, lastname, address, hp) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -158,7 +130,30 @@ class _ChangeProfileState extends State<ChangeProfile> {
     );
     new Future.delayed(new Duration(seconds: 3), () {
       Navigator.pop(context); //pop dialog
-      register(email, password, name, referral, hp);
+      startUpload(context, firstname, lastname, address, hp);
+    });
+  }
+  
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if(hpVerif == '1'){
+      setState(() {
+        enableHp = true;
+      });
+    } else {
+      setState(() {
+        enableHp = false;
+      });
+    }
+    // firstname, lastname, address, ktp, ktpVerif, hp, hpVerif
+    setState(() {
+      textFname.text = firstname;
+      textLname.text = lastname;
+      textAddress.text = address;
+      textHp.text = hp;
+      imgProfile = ktp;
     });
   }
 
@@ -177,37 +172,37 @@ class _ChangeProfileState extends State<ChangeProfile> {
         margin: const EdgeInsets.only(top: 20, bottom: 30, left: 15, right: 15),
         child: new FlatButton(
             onPressed: () {
-              if (textName.text == '') {
-                info.messagesNoButton(context, "Info", "Input nama anda");
-              } else if (textHp.text == ''){
-                info.messagesNoButton(context, "Info", "Input nomor handphone anda");
-              } else if (textHp.text.contains('08') == false){
-                info.messagesNoButton(context, "Info", "Nomor handphone harus diawali dengan 08");
-              } else if (textEmail.text == ''){
-                info.messagesNoButton(context, "Info", "Input email anda");
-              } else if (textEmail.text.contains('@') == false || textEmail.text.contains('.') == false ){
-                info.messagesNoButton(context, "Info", "Email anda tidak valid");
-              } else if (textPass.text == ''){
-                info.messagesNoButton(context, "Info", "Input password anda");
-              } else if (textPass.text.length < 6){
-                info.messagesNoButton(context, "Info", "Password minimal 6 karakter");
-              } else {
+              // if (textName.text == '') {
+              //   info.messagesNoButton(context, "Info", "Input nama anda");
+              // } else if (textHp.text == ''){
+              //   info.messagesNoButton(context, "Info", "Input nomor handphone anda");
+              // } else if (textHp.text.contains('08') == false){
+              //   info.messagesNoButton(context, "Info", "Nomor handphone harus diawali dengan 08");
+              // } else if (textEmail.text == ''){
+              //   info.messagesNoButton(context, "Info", "Input email anda");
+              // } else if (textEmail.text.contains('@') == false || textEmail.text.contains('.') == false ){
+              //   info.messagesNoButton(context, "Info", "Email anda tidak valid");
+              // } else if (textPass.text == ''){
+              //   info.messagesNoButton(context, "Info", "Input password anda");
+              // } else if (textPass.text.length < 6){
+              //   info.messagesNoButton(context, "Info", "Password minimal 6 karakter");
+              // } else {
                 setState(() {
                   // Navigator.push(context, new MaterialPageRoute(builder: (context) => Verification(email: textEmail.text,)));
-                  this._onLoading(textEmail.text, textPass.text, textName.text, textRef.text, textHp.text);
+                  this._onLoading(textFname.text, textLname.text, textAddress.text, textHp.text);
 
                   // pict = false;
                   // _image == null ? info.MessageInfo(context, "Info", "Pilih gambar profil pada lingkar gambar") :
                   // startUpload(context);
                 });
-              }
+              // }
             },
             color: new HexColor("#EA5455"),
             shape: new RoundedRectangleBorder(
               borderRadius: new BorderRadius.circular(7.0),
             ),
             child: new Text(
-              'Daftar',
+              'Simpan',
               style: new TextStyle(
                   fontSize: 17,
                   color: Colors.white,
@@ -240,7 +235,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
                             height: 45,
                             margin: const EdgeInsets.only(top: 5, right: 10),
                             child: new TextField(
-                              controller: textName,
+                              controller: textFname,
                               decoration: InputDecoration(
                                 focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
@@ -285,7 +280,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
                             height: 45,
                             margin: const EdgeInsets.only(top: 5, left: 10),
                             child: new TextField(
-                              controller: textHp,
+                              controller: textLname,
                               decoration: InputDecoration(
                                 focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
@@ -328,7 +323,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
                 height: 45,
                 margin: const EdgeInsets.only(top: 5),
                 child: new TextField(
-                  controller: textEmail,
+                  controller: textAddress,
                   decoration: InputDecoration(
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
@@ -359,15 +354,28 @@ class _ChangeProfileState extends State<ChangeProfile> {
               ),
               new Container(
                 margin: const EdgeInsets.only(top: 10),
-                child: new Text('No Hp'),
+                child: new Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    new Text('No Hp'),
+                    hpVerif == '1' ? new Row(
+                      children: [
+                        new Icon(Icons.verified, color: Colors.green,),
+                        new Padding(padding: EdgeInsets.only(left: 5)),
+                        new Text('Terverifikasi'),
+                      ],
+                    ): new Container(),
+                  ],
+                )
               ),
               new Container(
                 width: size.width,
                 height: 45,
                 margin: const EdgeInsets.only(top: 5),
                 child: new TextField(
-                  controller: textPass,
-                  obscureText: true,
+                  readOnly: enableHp,
+                  controller: textHp,
+                  keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(
@@ -388,6 +396,20 @@ class _ChangeProfileState extends State<ChangeProfile> {
                     ),
                     fillColor: Colors.grey[200],
                     filled: true,
+                    suffixIcon: hpVerif != '1' ? null : new InkWell(
+                      onTap: (){
+                        setState(() {
+                          if(hpVerif == '1'){
+                            info.messagesAutoHide(context, "info", "Silahkan hubungi admin untuk perubahan nomor Hp");
+                          }
+                        });
+                      },
+                      child: Padding(
+                      padding: const EdgeInsets.fromLTRB(0.0, 15.0, 1.0, 15.0),
+                      child: new Text('Ubah', style: TextStyle(color: Colors.red, fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                    ),
                     // prefixIcon: Padding(padding: const EdgeInsets.fromLTRB(0.0, 0.0, 1.0, 1.0),
                     //   child: Icon(Icons.lock,),
                     // ),
@@ -396,11 +418,23 @@ class _ChangeProfileState extends State<ChangeProfile> {
                 ),
               ),
               new Container(
-                margin: const EdgeInsets.only(top: 10),
-                child: new Text('Foto KTP'),
+                  margin: const EdgeInsets.only(top: 10),
+                  child: new Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      new Text('Foto KTP'),
+                      ktpVerif == '1' ? new Row(
+                        children: [
+                          new Icon(Icons.verified, color: Colors.green,),
+                          new Padding(padding: EdgeInsets.only(left: 5)),
+                          new Text('Terverifikasi'),
+                        ],
+                      ): new Container(),
+                    ],
+                  )
               ),
               new Center(
-                child: new Container(
+                child: ktpVerif == '1' ? new Container() : new Container(
                   margin: const EdgeInsets.only(top: 5),
                   decoration: BoxDecoration(
                     color: Colors.grey,

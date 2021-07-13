@@ -204,7 +204,7 @@ class Info {
       animType: AnimType.BOTTOMSLIDE,
       title: title,
       desc: desc,
-      autoHide: Duration(seconds: 1),
+      autoHide: Duration(seconds: 3),
     )..show();
   }
 
