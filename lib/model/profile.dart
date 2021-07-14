@@ -1,11 +1,13 @@
 class Privacy {
+  String no;
   String isi;
   String urutan;
   String gambar;
 
-  Privacy({this.isi, this.urutan, this.gambar});
+  Privacy({this.isi, this.urutan, this.gambar, this.no});
 
   Privacy.fromJson(Map<String, dynamic> json) {
+    no = json['no'];
     isi = json['isi'];
     urutan = json['urutan'];
     gambar = json['gambar'];
@@ -13,6 +15,7 @@ class Privacy {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['no'] = this.no;
     data['isi'] = this.isi;
     data['urutan'] = this.urutan;
     data['gambar'] = this.gambar;

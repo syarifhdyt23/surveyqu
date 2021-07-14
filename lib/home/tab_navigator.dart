@@ -22,11 +22,11 @@ class TabNavigator extends StatelessWidget {
   Widget build(BuildContext context) {
 
     Widget child ;
-    if(tabItem == "Home")
+    if(tabItem == "Beranda")
       child = Home();
-    else if(tabItem == "Reward")
+    else if(tabItem == "Hadiah")
       child = Reward();
-    else if(tabItem == "Profile")
+    else if(tabItem == "Profil")
       child = Profile();
     
     return Navigator(

@@ -54,10 +54,10 @@ class _ChangeProfileState extends State<ChangeProfile> {
     var res = await Network().postDataToken(data, '/changeProfile');
     if (res.statusCode == 200) {
       Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (context) => new MainHome()), (route) => false);
-      info.messagesAutoHide(context, "info", "sukses update profil");
+      info.messagesNoButton(context, "info", "Sukses update profil\nProses verifikasi 1X24 jam");
       // info.LoadingToast(context, 'Gambar profil sudah terupdate');
     } else {
-      info.messagesAutoHide(context, "info", "Update profil gagal");
+      info.messagesNoButton(context, "info", "Update profil gagal");
     }
   }
 
@@ -91,7 +91,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
   Widget showImages2() {
     return _image == null
         ? imgProfile == null ? new Container(alignment: Alignment.center,child: new CupertinoActivityIndicator()) :
-    imgProfile == '1' ? new CachedNetworkImage(imageUrl:"http://www.surveyqu.com/sq/assets/gantella/images/users.jpg" ,fit: BoxFit.cover,) :
+    imgProfile == '1' ? new Icon(Icons.image_outlined, size: 100, color: Colors.grey,) :
     new CachedNetworkImage(imageUrl: imgProfile ,fit: BoxFit.cover,)
         : Image.file(_image,
       fit: BoxFit.cover,);
@@ -149,11 +149,11 @@ class _ChangeProfileState extends State<ChangeProfile> {
     }
     // firstname, lastname, address, ktp, ktpVerif, hp, hpVerif
     setState(() {
-      textFname.text = firstname;
-      textLname.text = lastname;
-      textAddress.text = address;
-      textHp.text = hp;
-      imgProfile = ktp;
+      textFname.text = firstname == null ? "" : firstname;
+      textLname.text = lastname == null ? "" : lastname;
+      textAddress.text = address == null ? "" : address;
+      textHp.text = hp == null ? "" : hp;
+      imgProfile = ktp  == null || ktp == "" ? "1" : ktp;
     });
   }
 
@@ -172,21 +172,15 @@ class _ChangeProfileState extends State<ChangeProfile> {
         margin: const EdgeInsets.only(top: 20, bottom: 30, left: 15, right: 15),
         child: new FlatButton(
             onPressed: () {
-              // if (textName.text == '') {
-              //   info.messagesNoButton(context, "Info", "Input nama anda");
-              // } else if (textHp.text == ''){
-              //   info.messagesNoButton(context, "Info", "Input nomor handphone anda");
-              // } else if (textHp.text.contains('08') == false){
-              //   info.messagesNoButton(context, "Info", "Nomor handphone harus diawali dengan 08");
-              // } else if (textEmail.text == ''){
-              //   info.messagesNoButton(context, "Info", "Input email anda");
-              // } else if (textEmail.text.contains('@') == false || textEmail.text.contains('.') == false ){
-              //   info.messagesNoButton(context, "Info", "Email anda tidak valid");
-              // } else if (textPass.text == ''){
-              //   info.messagesNoButton(context, "Info", "Input password anda");
-              // } else if (textPass.text.length < 6){
-              //   info.messagesNoButton(context, "Info", "Password minimal 6 karakter");
-              // } else {
+              if (textFname.text == '') {
+                info.messagesNoButton(context, "Info", "Nama depan harus diisi");
+              } else if (textHp.text == ''){
+                info.messagesNoButton(context, "Info", "Nomor Hp harus diisi");
+              } else if (textHp.text.contains('08') == false){
+                info.messagesNoButton(context, "Info", "Nomor Hp harus diawali dengan 08");
+              } else if (textLname.text == ''){
+                info.messagesNoButton(context, "Info", "Nama belakang harus diisi");
+              } else {
                 setState(() {
                   // Navigator.push(context, new MaterialPageRoute(builder: (context) => Verification(email: textEmail.text,)));
                   this._onLoading(textFname.text, textLname.text, textAddress.text, textHp.text);
@@ -195,7 +189,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
                   // _image == null ? info.MessageInfo(context, "Info", "Pilih gambar profil pada lingkar gambar") :
                   // startUpload(context);
                 });
-              // }
+              }
             },
             color: new HexColor("#EA5455"),
             shape: new RoundedRectangleBorder(
@@ -214,9 +208,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
         onPanDown: (_) {
           FocusScope.of(context).requestFocus(FocusNode());
         },
-        child: new Container(
-          color: Colors.white,
-          child: new ListView(
+        child: new ListView(
             padding: const EdgeInsets.only(left: 15, right: 15),
             children: <Widget>[
               new Row(
@@ -400,7 +392,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
                       onTap: (){
                         setState(() {
                           if(hpVerif == '1'){
-                            info.messagesAutoHide(context, "info", "Silahkan hubungi admin untuk perubahan nomor Hp");
+                            info.messagesNoButton(context, "info", "Silahkan hubungi admin untuk perubahan nomor Hp");
                           }
                         });
                       },
@@ -437,10 +429,11 @@ class _ChangeProfileState extends State<ChangeProfile> {
                 child: ktpVerif == '1' ? new Container() : new Container(
                   margin: const EdgeInsets.only(top: 5),
                   decoration: BoxDecoration(
-                    color: Colors.grey,
+                    color: Colors.grey[200],
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                   ),
                   height: 200,
+                  width: size.width,
                   child: new InkWell(
                     onTap: () {
                       // _ShowChoiceDialog(context);
@@ -453,7 +446,6 @@ class _ChangeProfileState extends State<ChangeProfile> {
             ],
           ),
         ),
-      ),
     );
   }
 

@@ -10,6 +10,7 @@ import 'package:surveyqu/domain.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:surveyqu/info.dart';
+import 'package:surveyqu/loading.dart';
 import 'package:surveyqu/login/login.dart';
 import 'package:surveyqu/model/profile.dart';
 import 'package:surveyqu/network_utils/api.dart';
@@ -33,7 +34,7 @@ class _Profile extends State<Profile> {
   List<User> listUser;
   bool pict;
   String status = '';
-  String base64Image, fileName, imgProfile;
+  String base64Image, fileName, imgProfile, ktpVerify, hpVerify;
   String errMessage = 'Error Uploading Image';
   File _image;
   final picker = ImagePicker();
@@ -51,11 +52,11 @@ class _Profile extends State<Profile> {
     };
     var res = await Network().postDataToken(data, '/changeFoto');
     if (res.statusCode == 200) {
-      info.MessageInfo(context, "info", "sukses ganti foto");
       this.getUser();
+      info.messagesNoButton(context, "info", "Sukses ganti foto profil");
       // info.LoadingToast(context, 'Gambar profil sudah terupdate');
     } else {
-      info.MessageInfo(context, "info", "tidak sukses ganti foto");
+      info.messagesNoButton(context, "info", "tidak sukses ganti foto");
     }
     // final String url = "http://"+domain.getDomain()+"/changeProfile";
     // http.post(Uri.parse(url), body: {
@@ -89,6 +90,8 @@ class _Profile extends State<Profile> {
       } else {
         print('Gambar belum dipilih.');
       }
+      pict = false;
+      startUpload(context);
     });
   }
 
@@ -102,13 +105,15 @@ class _Profile extends State<Profile> {
       } else {
         print('Gambar belum dipilih.');
       }
+      pict = false;
+      startUpload(context);
     });
   }
 
   Widget showImages2() {
     return _image == null
         ? imgProfile == null ? new Container(alignment: Alignment.center,child: new CupertinoActivityIndicator()) :
-    imgProfile == '1' ? new CachedNetworkImage(imageUrl:"http://www.surveyqu.com/sq/assets/gantella/images/users.jpg" , height: 110, width: 110, fit: BoxFit.cover,) :
+    imgProfile == '' ? new Icon(Icons.person, size: 90,) :
     new CachedNetworkImage(imageUrl: imgProfile , height: 110, width: 110, fit: BoxFit.cover,)
         : Image.file(_image,
       height: 110, width: 110,
@@ -151,8 +156,16 @@ class _Profile extends State<Profile> {
       var body = jsonDecode(res.body);
       var dataJson = body['result'];
       setState(() {
-        listUser = dataJson.map<User>((json) => User.fromJson(json)).toList();
-        imgProfile = listUser[0].foto;
+        // if(dataJson == 'null'){
+        //   imgProfile = '';
+        //   ktpVerify = '0';
+        //   hpVerify = '0';
+        // } else {
+          listUser = dataJson.map<User>((json) => User.fromJson(json)).toList();
+          imgProfile = listUser[0].foto == null ? "" : listUser[0].foto;
+          ktpVerify = listUser[0].ktpVerify == null ? "0" : listUser[0].ktpVerify;
+          hpVerify = listUser[0].ishpVerify == null ? "0" : listUser[0].ishpVerify;
+        // }
       });
     }
     return listUser;
@@ -176,6 +189,25 @@ class _Profile extends State<Profile> {
     } else {
       info.MessageInfo(context, 'Message', "Please install this apps");
     }
+  }
+
+  Future<void> openWa(BuildContext context, String isi, String no) async {
+    String url() {
+      if (Platform.isAndroid) {
+        // add the [https]
+        return "https://wa.me/$no/?text=${Uri.parse(isi)}"; // new line
+      } else {
+        // add the [https]
+        return "https://api.whatsapp.com/send?phone=$no=${Uri.parse(isi)}"; // new line
+      }
+    }
+    if (await canLaunch(url())) {
+      await launch(url(),
+          universalLinksOnly: true, forceSafariVC: Platform.isIOS == false ? true : false , forceWebView: false);
+    } else {
+      info.messagesNoButton(context, 'Message', "Please install this apps");
+    }
+
   }
 
   void messagesLogout(BuildContext context, String title, String desc) async {
@@ -358,7 +390,7 @@ class _Profile extends State<Profile> {
                           child: new InkWell(
                               onTap: () async {
                                 await this.getContent('/hc');
-                                this.openURL(context, listPrivacy[0].isi);
+                                this.openWa(context, listPrivacy[0].isi, listPrivacy[0].no);
                               },
                               child: new ListTile(
                                 title: new Text(
@@ -409,17 +441,16 @@ class _Profile extends State<Profile> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   new Container(
-                    padding: EdgeInsets.only(top: 50),
+                    padding: EdgeInsets.only(top: 20),
                     child: new Stack(
                     children: [
                       new Center(
                         child: new CircleAvatar(
-                          radius: 50.0,
+                          radius: 58.0,
                           backgroundColor: Colors.blue,
                           child: new InkWell(
                             onTap: () {
                               // _ShowChoiceDialog(context);
-                              selectUpload(context);
                             },
                             child: new CircleAvatar(
                               radius: 63.0,
@@ -432,31 +463,49 @@ class _Profile extends State<Profile> {
                           ),
                         ),
                       ),
-                      pict != true ? new Container() : new Container(
-                        padding: EdgeInsets.only(top: 70, left: 60),
-                          child: new Center(
-                            child: new CircleAvatar(
-                              backgroundColor: Colors.white,
-                              radius: 20,
-                              child: new FlatButton(
-                                padding: EdgeInsets.all(5),
-                                onPressed: (){
-                                  pict = false;
-                                  _image == null ? info.MessageInfo(context, "Info", "Pilih gambar profil pada lingkar gambar") :
-                                  startUpload(context);
-                                },
-                                child: new Icon(
-                                  Icons.save, color: Colors.blue, size: 25,
-                                ),
+                      new Container(
+                        padding: EdgeInsets.only(top: 90, left: 60),
+                        child: new Center(
+                          child: new CircleAvatar(
+                            backgroundColor: Colors.white,
+                            radius: 15,
+                            child: new FlatButton(
+                              padding: EdgeInsets.all(5),
+                              onPressed: (){
+                                selectUpload(context);
+                              },
+                              child: new Icon(
+                                Icons.camera_alt_outlined, color: Colors.blue, size: 20,
                               ),
                             ),
                           ),
                         ),
+                      ),
+                      // pict != true ? new Container() : new Container(
+                      //   padding: EdgeInsets.only(top: 70, left: 60),
+                      //     child: new Center(
+                      //       child: new CircleAvatar(
+                      //         backgroundColor: Colors.white,
+                      //         radius: 20,
+                      //         child: new FlatButton(
+                      //           padding: EdgeInsets.all(5),
+                      //           onPressed: (){
+                      //             pict = false;
+                      //             _image == null ? info.MessageInfo(context, "Info", "Pilih gambar profil pada lingkar gambar") :
+                      //             startUpload(context);
+                      //           },
+                      //           child: new Icon(
+                      //             Icons.save, color: Colors.blue, size: 25,
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ),
                     ],
                     )
                   ),
                   new Container(
-                    padding: EdgeInsets.only(top: 20),
+                    padding: EdgeInsets.only(top: 10),
                     alignment: Alignment.center,
                     child: new Text(
                       '$nama',
@@ -478,6 +527,34 @@ class _Profile extends State<Profile> {
                       ),
                     ),
                   ),
+
+                  ktpVerify == null ? new Loading() : ktpVerify == '0' || hpVerify == '0' ?
+                  new InkWell(
+                    highlightColor: Colors.transparent,
+                    splashColor: Colors.transparent,
+                    onTap: (){
+                      info.messagesNoButton(context, "Info", "Silahkan ubah data diri atau \nhubungi help center untuk verifikasi");
+                    },
+                    child: new Container(
+                        alignment: Alignment.center,
+                        margin: EdgeInsets.only(top: 10, bottom: 10),
+                        child: new Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            new Icon(Icons.cancel, color: Colors.yellow[700], size: 20,),
+                            new Container(
+                              padding: EdgeInsets.only(left: 5),
+                              child: new Text('Akun belum di verifikasi',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                          ],
+                        )
+                    ),
+                  ) :
                   new Container(
                       alignment: Alignment.center,
                       margin: EdgeInsets.only(top: 10, bottom: 10),

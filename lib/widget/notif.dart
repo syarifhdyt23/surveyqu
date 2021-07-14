@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:surveyqu/hexacolor.dart';
 import 'package:surveyqu/home/mainhome.dart';
-import 'package:surveyqu/home/notif_card.dart';
+import 'package:surveyqu/widget/notif_card.dart';
 import 'package:surveyqu/loading.dart';
 import 'package:surveyqu/model/notif.dart';
 import 'package:surveyqu/network_utils/api.dart';
