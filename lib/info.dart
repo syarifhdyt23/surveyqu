@@ -7,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:async';
 
 import 'package:surveyqu/domain.dart';
+import 'package:surveyqu/home/mainhome.dart';
 
 class Info {
   Size size;
@@ -219,7 +220,8 @@ class Info {
         desc: desc,
         btnOkOnPress: () {
           // debugPrint('OnClick');
-          Navigator.of(context, rootNavigator: true).pop();
+          // Navigator.of(context, rootNavigator: true).pop();
+          Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (context) => MainHome()), (route) => false);
         },
         btnOkIcon: Icons.check_circle,
         onDissmissCallback: () {

@@ -6,6 +6,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:surveyqu/domain.dart';
 import 'package:surveyqu/hexacolor.dart';
 import 'package:surveyqu/model/reward.dart';
+import 'package:surveyqu/reward/claim_reward.dart';
 import 'package:surveyqu/widget/notif_card.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -29,6 +30,7 @@ class _Reward extends State<Reward> {
   // List<Total> saldoSurvey;
   String total;
   final currencyFormat = new NumberFormat.currency(locale: 'en', symbol: "Rp", decimalDigits: 0);
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   _getToken() async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
@@ -44,19 +46,16 @@ class _Reward extends State<Reward> {
     var res = await Network().postDataToken(body, '/riwayatSaldo');
     if (res.statusCode == 200) {
       var body = jsonDecode(res.body);
-      if(body['content'] == "0"){
+      var dataJson = body['content'] as List;
+      if(body['content'][0]['judul'] == ""){
         setState(() {
           contNotif = '0';
+          total = body['total'] == null ? '0' : body['total']['sqpoint'];
         });
       } else {
         setState(() {
           contNotif = '1';
-        });
-        var dataJson = body['content'] as List;
-        // var saldoJson = body['total'] as List;
-        setState(() {
-          total = body['total'][0] == null ? '0' : body['total'][0]['nominal'];
-          // saldoSurvey = saldoJson.map<Total>((json) => Total.fromJson(json)).toList();
+          total = body['total'] == null ? '0' : body['total']['sqpoint'];
           listNotifDetail = dataJson.map<HistoryReward>((json) => HistoryReward.fromJson(json)).toList();
         });
       }
@@ -69,21 +68,19 @@ class _Reward extends State<Reward> {
     var body = {
       "email": email
     };
-    var res = await Network().postDataToken(body, '/riwayatPenarikan');
+    var res = await Network().postDataToken(body, '/riwayatTarik');
     if (res.statusCode == 200) {
-      if(body['content'] == "0"){
+      var body = jsonDecode(res.body);
+      var dataJson = body['content'] as List;
+      if(body['content'][0]['judul'] == ""){
         setState(() {
           contHist = '0';
         });
       } else {
         setState(() {
           contHist = '1';
-        });
-        var body = jsonDecode(res.body);
-        var dataJson = body['content'] as List;
-        setState(() {
           listHistorySurvey = dataJson.map<HistoryTarik>((json) => HistoryTarik.fromJson(json)).toList();
-          listHistorySurvey.sort((a,b) => a.stsNotif.compareTo(b.stsNotif));
+          // listHistorySurvey.sort((a,b) => a.surveyDate.compareTo(b.surveyDate));
         });
       }
     }
@@ -104,6 +101,7 @@ class _Reward extends State<Reward> {
     size = MediaQuery.of(context).size;
 
     return new Scaffold(
+      key: _scaffoldKey,
       body: new Container(
         color: Colors.white,
         child: new Stack(
@@ -145,7 +143,7 @@ class _Reward extends State<Reward> {
                           alignment: Alignment.centerLeft,
                           margin: const EdgeInsets.only(top: 5),
                           child: new Text(
-                            total == '0' ? "Rp.$total" : currencyFormat.format(total),
+                            total == '0' ? "Rp.$total" : currencyFormat.format(int.parse(total)),
                             style: new TextStyle(
                               fontFamily: "helvetica",
                               fontWeight: FontWeight.w600,
@@ -156,22 +154,27 @@ class _Reward extends State<Reward> {
                         ),
                       ],
                     ),
-                    new Container(
-                      // width: 120,
-                      height: 50,
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.only(top: 5,bottom: 5, left: 10,right: 10),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.all(Radius.circular(5.0))
-                      ),
-                      child: new Text(
-                        'Tarik Dana',
-                        style: new TextStyle(
-                          fontFamily: "helvetica",
-                          fontWeight: FontWeight.w600,
-                          fontSize: 20,
-                          color: Colors.blue,
+                    new InkWell(
+                      onTap: (){
+                        Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context) => ClaimReward(saldo: total, email: email,)));
+                      },
+                      child: new Container(
+                        // width: 120,
+                        height: 40,
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.only(left: 10,right: 10),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.all(Radius.circular(5.0))
+                        ),
+                        child: new Text(
+                          'Tarik Dana',
+                          style: new TextStyle(
+                            fontFamily: "helvetica",
+                            fontWeight: FontWeight.w600,
+                            fontSize: 20,
+                            color: new HexColor('#256fa0'),
+                          ),
                         ),
                       ),
                     ),
@@ -201,10 +204,12 @@ class _Reward extends State<Reward> {
                     indicatorColor: new HexColor('#256fa0'),
                     tabs: [
                       new Container(
+                        height: 50,
                         alignment: Alignment.center,
                         child: Text("Pemasukan", style: TextStyle(color: Colors.black),),
                       ),
                       new Container(
+                        height: 50,
                         alignment: Alignment.center,
                         child: Text("Penarikan",style: TextStyle(color: Colors.black),),
                       ),
@@ -227,20 +232,20 @@ class _Reward extends State<Reward> {
                                 child: new CircleAvatar(
                                   radius: 56.5,
                                   backgroundColor: Colors.white,
-                                  child: new Icon(Icons.notifications_none, size: 70, color: Colors.grey[700],),
+                                  child: new Icon(Icons.arrow_downward_outlined, size: 70, color: Colors.grey[700],),
                                 ),
                               ),
                             ),
 
                             new Container(
                               margin: const EdgeInsets.only(top: 10),
-                              child: new Text('Notifikasi kosong', style: new TextStyle(fontSize: 20),),
+                              child: new Text('Riwayat pemasukan kosong', style: new TextStyle(fontSize: 20),),
                             ),
 
                             new Container(
                               alignment: Alignment.center,
                               margin: const EdgeInsets.only(top: 3, left: 15, right: 15),
-                              child: new Text('Tidak ada Notifikasi', style: new TextStyle(fontSize: 15, color: Colors.grey[500]),),
+                              child: new Text('Tidak ada riwayat pemasukan', style: new TextStyle(fontSize: 15, color: Colors.grey[500]),),
                             ),
                           ],
                         ),
@@ -258,7 +263,7 @@ class _Reward extends State<Reward> {
                                   // getNotifHit(listNotifDetail[i].id);
                                   // showDetail(context, listNotifDetail[i].judul, listNotifDetail[i].isi);
                                 },
-                                child: SurveyAmount(stsNotif: listNotifDetail[i].stsNotif, judul: listNotifDetail[i].judul, flag: 'notif',),
+                                child: SurveyAmount(date: listNotifDetail[i].surveyDate, judul: listNotifDetail[i].judul, flag: 'notif', amount: listNotifDetail[i].nominal, isi: listNotifDetail[i].isi,),
                               );
                             }),
                       ),
@@ -276,20 +281,20 @@ class _Reward extends State<Reward> {
                                 child: new CircleAvatar(
                                   radius: 56.5,
                                   backgroundColor: Colors.white,
-                                  child: new Icon(Icons.notifications_none, size: 70, color: Colors.grey[700],),
+                                  child: new Icon(Icons.arrow_upward_outlined, size: 70, color: Colors.grey[700],),
                                 ),
                               ),
                             ),
 
                             new Container(
                               margin: const EdgeInsets.only(top: 10),
-                              child: new Text('Histori kosong', style: new TextStyle(fontSize: 20),),
+                              child: new Text('Riwayat penarikan kosong', style: new TextStyle(fontSize: 20),),
                             ),
 
                             new Container(
                               alignment: Alignment.center,
                               margin: const EdgeInsets.only(top: 3, left: 15, right: 15),
-                              child: new Text('Tidak ada Histori', style: new TextStyle(fontSize: 15, color: Colors.grey[500]),),
+                              child: new Text('Tidak ada riwayat penarikan', style: new TextStyle(fontSize: 15, color: Colors.grey[500]),),
                             ),
                           ],
                         ),
@@ -307,7 +312,7 @@ class _Reward extends State<Reward> {
                                   // getHistoryHit(listHistorySurvey[i].id);
                                   // showDetail(context, listHistorySurvey[i].judul, listHistorySurvey[i].isi);
                                 },
-                                child: SurveyAmount(stsNotif: listHistorySurvey[i].stsNotif, judul: listHistorySurvey[i].judul),
+                                child: SurveyAmount(date: listHistorySurvey[i].surveyDate, judul: listHistorySurvey[i].judul, amount: listHistorySurvey[i].nominal, isi: listHistorySurvey[i].isi,),
                               );
                             }),
                       ),

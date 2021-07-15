@@ -5,7 +5,7 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:surveyqu/domain.dart';
 import 'package:surveyqu/widget/advertisement_card.dart';
-import 'package:surveyqu/widget/notif.dart';
+import 'package:surveyqu/home/notif.dart';
 import 'package:surveyqu/widget/survey_card.dart';
 import 'dart:async';
 import 'dart:convert';

@@ -34,16 +34,14 @@ class _NotifPageState extends State<NotifPage> {
     var res = await Network().postDataToken(body, '/notifDetail');
     if (res.statusCode == 200) {
       var body = jsonDecode(res.body);
-      if(body['content'] == "0"){
+      var dataJson = body['content'] as List;
+      if(body['content'][0]['judul'] == ""){
         setState(() {
           contNotif = '0';
         });
       } else {
         setState(() {
           contNotif = '1';
-        });
-        var dataJson = body['content'] as List;
-        setState(() {
           listNotifDetail = dataJson.map<NotifDetail>((json) => NotifDetail.fromJson(json)).toList();
         });
       }
@@ -58,17 +56,15 @@ class _NotifPageState extends State<NotifPage> {
     };
     var res = await Network().postDataToken(body, '/historySurvey');
     if (res.statusCode == 200) {
-      if(body['content'] == "0"){
+      var body = jsonDecode(res.body);
+      var dataJson = body['content'] as List;
+      if(body['content'][0]['judul'] == ""){
         setState(() {
           contHist = '0';
         });
       } else {
         setState(() {
           contHist = '1';
-        });
-        var body = jsonDecode(res.body);
-        var dataJson = body['content'] as List;
-        setState(() {
           listHistorySurvey = dataJson.map<HistorySurvey>((json) =>
               HistorySurvey.fromJson(json)).toList();
           listHistorySurvey.sort((a,b) => a.stsNotif.compareTo(b.stsNotif));
