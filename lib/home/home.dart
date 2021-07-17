@@ -162,7 +162,7 @@ class _Home extends State<Home> {
       this.getPengumuman();
       this.getSqpoint();
       this.getQuestion();
-      this.getAds();
+      // this.getAds();
       this.getSurvey();
       this.getNotif();
       completer.complete();
@@ -177,7 +177,7 @@ class _Home extends State<Home> {
     this.getSqpoint();
     this.getNotif();
     this.getQuestion();
-    this.getAds();
+    // this.getAds();
     this.getSurvey();
 
   }
@@ -275,27 +275,27 @@ class _Home extends State<Home> {
                       jenis: 'qc',
                     );
                   }),
-                listAds == null ? new Container() :
-                new Container(
-                    height: 180,
-                    margin: EdgeInsets.only(top: 10),
-                    child: new Swiper(
-                      itemCount: listAds == null ? 0 : listAds.length,
-                      viewportFraction: 0.8,
-                      scale: 0.9,
-                      autoplay: true,
-                      pagination: new SwiperPagination(),
-                      itemBuilder: (BuildContext context, int i) {
-                        return AdvertisementCard(
-                          gambar: listAds[i].gambar,
-                          isi: listAds[i].isi,
-                          onTap: (){
-                            openURL(context, listAds[i].url);
-                          },
-                        );
-                      },
-                    )
-                ),
+                // listAds == null ? new Container() :
+                // new Container(
+                //     height: 180,
+                //     margin: EdgeInsets.only(top: 10),
+                //     child: new Swiper(
+                //       itemCount: listAds == null ? 0 : listAds.length,
+                //       viewportFraction: 0.8,
+                //       scale: 0.9,
+                //       autoplay: true,
+                //       pagination: new SwiperPagination(),
+                //       itemBuilder: (BuildContext context, int i) {
+                //         return AdvertisementCard(
+                //           gambar: listAds[i].gambar,
+                //           isi: listAds[i].isi,
+                //           onTap: (){
+                //             openURL(context, listAds[i].url);
+                //           },
+                //         );
+                //       },
+                //     )
+                // ),
                 listSurv == null ? new Container() : new ListView.builder(
                     physics: BouncingScrollPhysics(),
                     padding: EdgeInsets.only(top: 10,bottom: 10),
