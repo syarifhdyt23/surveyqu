@@ -55,9 +55,9 @@ class _RekeningEditState extends State<RekeningEdit> {
       // print(json.encode(body['message']));
       Navigator.of(context).pop();
       Navigator.of(context).pop();
-      info.messagesAutoHide(context, 'info','Rekening berhasil ditambahkan');
+      info.messagesAutoHide(context, 'info','Rekening berhasil diubah');
     } else {
-      info.messagesNoButton(context, 'info','Rekening gagal ditambahkan');
+      info.messagesNoButton(context, 'info','Rekening gagal diubah');
     }
   }
 

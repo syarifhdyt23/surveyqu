@@ -23,10 +23,9 @@ class _ClaimRewardState extends State<ClaimReward> {
   String _formatNumber(String s) => NumberFormat.decimalPattern(_locale).format(int.parse(s));
   String get _currency => NumberFormat.compactSimpleCurrency(locale: _locale).currencySymbol;
 
-
   _ClaimRewardState({this.saldo, this.email});
 
-  Future<void> TarikDana(String email, String nominal) async {
+  Future<void> TarikDana(String email, nominal) async {
     var data = {
       'email': email,
       'nominal': nominal,
@@ -38,7 +37,8 @@ class _ClaimRewardState extends State<ClaimReward> {
       // print(json.encode(body['message']));
       info.messagesSuccess(context, true, 'Sukses','Saldo berhasil ditarik, segera diproses oleh admin');
     } else {
-      info.messagesNoButton(context, 'info','Saldo tidak mencukupi');
+      info.messagesNoButton(context, 'info','Minimum Penarikan Rp50,000\natau\nSaldo tidak mencukupi');
+      textSaldo.clear();
     }
   }
 
@@ -57,8 +57,10 @@ class _ClaimRewardState extends State<ClaimReward> {
         margin: const EdgeInsets.only(top: 20, bottom: 30, left: 15, right: 15),
         child: new FlatButton(
             onPressed: () {
-              textSaldo.text = _formatNumber(textSaldo.text.replaceAll('', ','));
-              TarikDana(email, textSaldo.text);
+              // textSaldo.text = _formatNumber(textSaldo.text.replaceAll('', ','));
+              String saldo = textSaldo.text.replaceAll(',', '');
+              // print(textSaldo.text);
+              TarikDana(email, saldo);
             },
             color: new HexColor("#EA5455"),
             shape: new RoundedRectangleBorder(
@@ -125,8 +127,8 @@ class _ClaimRewardState extends State<ClaimReward> {
                   controller: textSaldo,
                   // inputFormatters: [
                   //   WhitelistingTextInputFormatter.digitsOnly,
-                  //   // Fit the validating format.
-                  //   //fazer o formater para dinheiro
+                  //   Fit the validating format.
+                  //   fazer o formater para dinheiro
                   //   CurrencyInputFormatter()
                   // ],
                   decoration: InputDecoration(
@@ -140,10 +142,10 @@ class _ClaimRewardState extends State<ClaimReward> {
                     ),
                     contentPadding: const EdgeInsets.only(
                         left: 10.0, bottom: 0.0, top: 7.0),
-                    //border: InputBorder.none,
+                    // border: InputBorder.none,
                     // hintText: "Nomor Handphone (08xx)",
                     // hintStyle: TextStyle(
-                    //     color: Colors.grey, fontFamily: 'helvetica'),
+                    //  color: Colors.grey, fontFamily: 'helvetica'),
                     prefixIcon: Padding(padding: const EdgeInsets.fromLTRB(15.0, 10.0, 0.0, 0.0),
                       child: new Text("Rp", style: TextStyle(fontSize: 17),)
                     ),

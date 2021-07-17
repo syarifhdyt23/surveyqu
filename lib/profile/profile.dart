@@ -140,14 +140,14 @@ class _Profile extends State<Profile> {
       setState(() {
         id = id;
         email = jsonDecode(localStorage.getString('email'));
-        nama = jsonDecode(localStorage.getString('nama'));
+        nama = jsonDecode(localStorage.getString('firstname'));
       });
     }
   }
 
   Future<void> getUser() async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
-    nama = jsonDecode(localStorage.getString('nama'));
+    email = jsonDecode(localStorage.getString('email'));
     var data = {
       'email': email,
     };

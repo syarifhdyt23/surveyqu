@@ -215,6 +215,7 @@ class Info {
         animType: AnimType.LEFTSLIDE,
         headerAnimationLoop: false,
         useRootNavigator: root,
+        dismissOnTouchOutside: false,
         dialogType: DialogType.SUCCES,
         title: title,
         desc: desc,

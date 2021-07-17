@@ -58,7 +58,7 @@ class _MainHomeState extends State<MainHome> {
         !await _navigatorKeys[_currentPage].currentState.maybePop();
         if (isFirstRouteInCurrentTab) {
           if (_currentPage == "Beranda") {
-            _selectTab("Beranda", 1);
+            _selectTab("Beranda", 0);
 
             return false;
           }

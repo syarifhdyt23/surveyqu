@@ -2,8 +2,10 @@ import 'package:badges/badges.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:surveyqu/domain.dart';
+import 'package:surveyqu/model/profile.dart';
 import 'package:surveyqu/widget/advertisement_card.dart';
 import 'package:surveyqu/home/notif.dart';
 import 'package:surveyqu/widget/survey_card.dart';
@@ -27,14 +29,16 @@ class _Home extends State<Home> {
   Size size;
   Domain domain = new Domain();
   bool _visible = false;
-  var token, sqpoint, nama, email;
+  var token, sqpoint, sqreward, nama, email;
   String message, notif;
   List<Pengumuman> listNews;
   List<Advertising> listAds;
   List<Question> listQna;
   List<QSurvey> listSurv;
   List<NotifHome> listNotif;
+  List<User> listUser;
   Timer timer;
+  final currencyFormat = new NumberFormat.currency(locale: 'en', symbol: "Rp", decimalDigits: 0);
 
   Future<void> openURL(BuildContext context, String url) async {
     if (await canLaunch(url)) {
@@ -48,8 +52,21 @@ class _Home extends State<Home> {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
     token = jsonDecode(localStorage.getString('token'));
     email = jsonDecode(localStorage.getString('email'));
-    nama = jsonDecode(localStorage.getString('nama'));
-    sqpoint = jsonDecode(localStorage.getString('sqpoint'));
+    nama = jsonDecode(localStorage.getString('firstname'));
+  }
+
+  Future<void> getSqpoint() async {
+    await _getToken();
+    var body = {
+      "email": email
+    };
+    var res = await Network().postDataToken(body, '/riwayatSaldo');
+    if (res.statusCode == 200) {
+      var body = jsonDecode(res.body);
+      sqpoint = body['total'] == null ? '0' : body['total']['sqpoint'];
+      sqreward = body['reward'] == null ? '0' : body['reward']['sqrewards'];
+    }
+    return sqpoint;
   }
 
   Future<List<Pengumuman>> getPengumuman() async {
@@ -143,6 +160,7 @@ class _Home extends State<Home> {
     Completer<void> completer = new Completer<void>();
     timer = new Timer(new Duration(seconds: 2), () {
       this.getPengumuman();
+      this.getSqpoint();
       this.getQuestion();
       this.getAds();
       this.getSurvey();
@@ -156,10 +174,12 @@ class _Home extends State<Home> {
   void initState() {
     super.initState();
     this.getPengumuman();
+    this.getSqpoint();
     this.getNotif();
     this.getQuestion();
     this.getAds();
     this.getSurvey();
+
   }
 
   @override
@@ -533,7 +553,7 @@ class _Home extends State<Home> {
                                         left: 10,
                                       ),
                                       child: new Text(
-                                        'Rp, 0',
+                                        sqreward == '0' || sqreward == null ? "Rp.0" : currencyFormat.format(int.parse(sqreward)),
                                         style: new TextStyle(
                                             fontFamily: "helvetica, bold",
                                             color: Colors.black,
@@ -595,7 +615,7 @@ class _Home extends State<Home> {
                       ],
                     ),
                   ),
-                )
+                ),
               ],
             )
           ),

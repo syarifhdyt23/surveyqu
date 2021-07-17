@@ -16,14 +16,13 @@ class NotifPage extends StatefulWidget {
 
 class _NotifPageState extends State<NotifPage> {
   Size size;
-  String email, nama, contHist, contNotif;
+  String email, contHist, contNotif;
   List<NotifDetail> listNotifDetail;
   List<HistorySurvey> listHistorySurvey;
 
   _getToken() async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
     email = jsonDecode(localStorage.getString('email'));
-    nama = jsonDecode(localStorage.getString('nama'));
   }
 
   Future<List<NotifDetail>> getNotif() async {

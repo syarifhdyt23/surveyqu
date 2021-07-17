@@ -25,16 +25,18 @@ class _RegisterState extends State<Register> {
 
   // http://surveyqu.com/sqws/sqmid/index.php/auth/register
   // {"name" : "test", "password" : "12345","hp" : "0812345789","email":"ahmadsyarifhidayat23@gmail.com","ref":"123456"}
-  TextEditingController textName = new TextEditingController();
+  TextEditingController textFName = new TextEditingController();
+  TextEditingController textLName = new TextEditingController();
   TextEditingController textHp = new TextEditingController();
   TextEditingController textEmail = new TextEditingController();
   TextEditingController textPass = new TextEditingController();
   TextEditingController textConfPass = new TextEditingController();
   TextEditingController textRef = new TextEditingController();
 
-  void register(String email, String password, String name, String referral, String hp) async {
+  void register(String email, String password, String namaDepan, String namaBelakang, String referral, String hp) async {
     var data = {
-      'name': name,
+      'firstname': namaDepan,
+      'lastname': namaBelakang,
       'password': password,
       'hp': hp,
       'email': email,
@@ -55,7 +57,7 @@ class _RegisterState extends State<Register> {
     }
   }
 
-  void _onLoading(email, password, name, referral, hp) {
+  void _onLoading(email, password, namaDepan, namaBelakang, referral, hp) {
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -81,7 +83,7 @@ class _RegisterState extends State<Register> {
     );
     new Future.delayed(new Duration(seconds: 3), () {
       Navigator.pop(context); //pop dialog
-      register(email, password, name, referral, hp);
+      register(email, password, namaDepan, namaBelakang, referral, hp);
     });
   }
 
@@ -141,14 +143,51 @@ class _RegisterState extends State<Register> {
                   children: <Widget>[
                     new Container(
                       margin: const EdgeInsets.only(top: 10),
-                      child: new Text('Nama', style: TextStyle(color: Colors.white),),
+                      child: new Text('Nama Depan', style: TextStyle(color: Colors.white),),
                     ),
                     new Container(
                       width: size.width,
                       height: 45,
                       margin: const EdgeInsets.only(top: 5),
                       child: new TextField(
-                        controller: textName,
+                        controller: textFName,
+                        decoration: InputDecoration(
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Colors.grey.withOpacity(.2), width: 1.0),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Colors.grey.withOpacity(.2), width: 1.0),
+                          ),
+                          contentPadding: const EdgeInsets.only(
+                              left: 10.0, bottom: 0.0, top: 7.0),
+                          //border: InputBorder.none,
+                          // hintText: "Nama",
+                          // hintStyle: TextStyle(
+                          //     color: Colors.grey, fontFamily: 'helvetica'),
+                          labelStyle: TextStyle(
+                            color: Colors.black,
+                          ),
+                          fillColor: Colors.grey[200],
+                          filled: true,
+                          // prefixIcon: Padding(padding: const EdgeInsets.fromLTRB(0.0, 0.0, 1.0, 1.0),
+                          //   child: Icon(Icons.person,),
+                          // ),
+                        ),
+                        textInputAction: TextInputAction.done,
+                      ),
+                    ),
+                    new Container(
+                      margin: const EdgeInsets.only(top: 10),
+                      child: new Text('Nama Belakang', style: TextStyle(color: Colors.white),),
+                    ),
+                    new Container(
+                      width: size.width,
+                      height: 45,
+                      margin: const EdgeInsets.only(top: 5),
+                      child: new TextField(
+                        controller: textLName,
                         decoration: InputDecoration(
                           focusedBorder: OutlineInputBorder(
                             borderSide: BorderSide(
@@ -401,8 +440,10 @@ class _RegisterState extends State<Register> {
                       margin: const EdgeInsets.only(top: 20, bottom: 30),
                       child: new FlatButton(
                           onPressed: () {
-                            if (textName.text == '') {
-                              info.messagesNoButton(context, "Info", "Input nama anda");
+                            if (textFName.text == '') {
+                              info.messagesNoButton(context, "Info", "Input nama depan anda");
+                            } else if (textLName.text == '') {
+                              info.messagesNoButton(context, "Info", "Input nama belakang anda");
                             } else if (textHp.text == ''){
                               info.messagesNoButton(context, "Info", "Input nomor handphone anda");
                             } else if (textHp.text.contains('08') == false){
@@ -420,7 +461,7 @@ class _RegisterState extends State<Register> {
                             } else {
                               setState(() {
                                 // Navigator.push(context, new MaterialPageRoute(builder: (context) => Verification(email: textEmail.text,)));
-                                this._onLoading(textEmail.text, textPass.text, textName.text, textRef.text, textHp.text);
+                                this._onLoading(textEmail.text, textPass.text, textFName.text, textLName.text, textRef.text, textHp.text);
                               });
                             }
                           },

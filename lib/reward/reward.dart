@@ -24,7 +24,8 @@ class Reward extends StatefulWidget {
 
 class _Reward extends State<Reward> {
   Size size;
-  String email, nama, contHist, contNotif;
+  Timer timer;
+  String email, contHist, contNotif;
   List<HistoryReward> listNotifDetail;
   List<HistoryTarik> listHistorySurvey;
   // List<Total> saldoSurvey;
@@ -35,7 +36,6 @@ class _Reward extends State<Reward> {
   _getToken() async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
     email = jsonDecode(localStorage.getString('email'));
-    nama = jsonDecode(localStorage.getString('nama'));
   }
 
   Future<List<HistoryReward>> getNotif() async {
@@ -50,12 +50,12 @@ class _Reward extends State<Reward> {
       if(body['content'][0]['judul'] == ""){
         setState(() {
           contNotif = '0';
-          total = body['total'] == null ? '0' : body['total']['sqpoint'];
+          total = body['reward'] == null ? '0' : body['reward']['sqrewards'];
         });
       } else {
         setState(() {
           contNotif = '1';
-          total = body['total'] == null ? '0' : body['total']['sqpoint'];
+          total = body['reward'] == null ? '0' : body['reward']['sqrewards'];
           listNotifDetail = dataJson.map<HistoryReward>((json) => HistoryReward.fromJson(json)).toList();
         });
       }
@@ -85,6 +85,24 @@ class _Reward extends State<Reward> {
       }
     }
     return listHistorySurvey;
+  }
+
+  Future<void> refreshHist() {
+    Completer<void> completer = new Completer<void>();
+    timer = new Timer(new Duration(seconds: 2), () {
+      getNotif();
+      completer.complete();
+    });
+    return completer.future;
+  }
+
+  Future<void> refreshTarik() {
+    Completer<void> completer = new Completer<void>();
+    timer = new Timer(new Duration(seconds: 2), () {
+      getHistory();
+      completer.complete();
+    });
+    return completer.future;
   }
 
   @override
@@ -181,16 +199,6 @@ class _Reward extends State<Reward> {
                   ],
                 )
             ),
-            // new Container(
-            //   margin: const EdgeInsets.only(
-            //       top: 200, left: 15, right: 15
-            //   ),
-            //   decoration: new BoxDecoration(
-            //     image: new DecorationImage(
-            //       image: new AssetImage('images/logo.png'),
-            //     ),
-            //   ),
-            // ),
             new Container(
               padding: EdgeInsets.only(top: 200),
               child: DefaultTabController(
@@ -216,9 +224,11 @@ class _Reward extends State<Reward> {
                     ],
                   ),
                   body: new TabBarView(
-                    // physics: NeverScrollableScrollPhysics(),
+                    physics: NeverScrollableScrollPhysics(),
                     children: [
-                      contNotif == null ? new LoadingCard() :
+                    new RefreshIndicator(
+                      onRefresh: refreshHist,
+                      child: contNotif == null ? new LoadingCard() :
                       contNotif == '0' ?
                       new Container(
                         alignment: Alignment.center,
@@ -267,55 +277,59 @@ class _Reward extends State<Reward> {
                               );
                             }),
                       ),
-                      contHist == null ? new LoadingCard() :
-                      contHist == "0" ?
-                      new Container(
-                        alignment: Alignment.center,
-                        child: new Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            new Container(
-                              child: new CircleAvatar(
-                                radius: 58.0,
-                                backgroundColor: Colors.grey[500],
+                    ),
+                    new RefreshIndicator(
+                      onRefresh: refreshTarik,
+                      child: contHist == null ? new LoadingCard() :
+                        contHist == "0" ?
+                        new Container(
+                          alignment: Alignment.center,
+                          child: new Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              new Container(
                                 child: new CircleAvatar(
-                                  radius: 56.5,
-                                  backgroundColor: Colors.white,
-                                  child: new Icon(Icons.arrow_upward_outlined, size: 70, color: Colors.grey[700],),
+                                  radius: 58.0,
+                                  backgroundColor: Colors.grey[500],
+                                  child: new CircleAvatar(
+                                    radius: 56.5,
+                                    backgroundColor: Colors.white,
+                                    child: new Icon(Icons.arrow_upward_outlined, size: 70, color: Colors.grey[700],),
+                                  ),
                                 ),
                               ),
-                            ),
 
-                            new Container(
-                              margin: const EdgeInsets.only(top: 10),
-                              child: new Text('Riwayat penarikan kosong', style: new TextStyle(fontSize: 20),),
-                            ),
+                              new Container(
+                                margin: const EdgeInsets.only(top: 10),
+                                child: new Text('Riwayat penarikan kosong', style: new TextStyle(fontSize: 20),),
+                              ),
 
-                            new Container(
-                              alignment: Alignment.center,
-                              margin: const EdgeInsets.only(top: 3, left: 15, right: 15),
-                              child: new Text('Tidak ada riwayat penarikan', style: new TextStyle(fontSize: 15, color: Colors.grey[500]),),
-                            ),
-                          ],
+                              new Container(
+                                alignment: Alignment.center,
+                                margin: const EdgeInsets.only(top: 3, left: 15, right: 15),
+                                child: new Text('Tidak ada riwayat penarikan', style: new TextStyle(fontSize: 15, color: Colors.grey[500]),),
+                              ),
+                            ],
+                          ),
+                        ) :
+                        new Container(
+                          margin: EdgeInsets.only(top: 10),
+                          child: new ListView.separated(
+                              separatorBuilder: (context, index) => Divider(
+                                color: Colors.grey[400], thickness: 1,
+                              ),
+                              itemCount: listHistorySurvey == null ? 0 : listHistorySurvey.length,
+                              itemBuilder: (context, i){
+                                return new InkWell(
+                                  onTap: (){
+                                    // getHistoryHit(listHistorySurvey[i].id);
+                                    // showDetail(context, listHistorySurvey[i].judul, listHistorySurvey[i].isi);
+                                  },
+                                  child: SurveyAmount(date: listHistorySurvey[i].surveyDate, judul: listHistorySurvey[i].judul, amount: listHistorySurvey[i].nominal, isi: listHistorySurvey[i].isi,),
+                                );
+                              }),
                         ),
-                      ) :
-                      new Container(
-                        margin: EdgeInsets.only(top: 10),
-                        child: new ListView.separated(
-                            separatorBuilder: (context, index) => Divider(
-                              color: Colors.grey[400], thickness: 1,
-                            ),
-                            itemCount: listHistorySurvey == null ? 0 : listHistorySurvey.length,
-                            itemBuilder: (context, i){
-                              return new InkWell(
-                                onTap: (){
-                                  // getHistoryHit(listHistorySurvey[i].id);
-                                  // showDetail(context, listHistorySurvey[i].judul, listHistorySurvey[i].isi);
-                                },
-                                child: SurveyAmount(date: listHistorySurvey[i].surveyDate, judul: listHistorySurvey[i].judul, amount: listHistorySurvey[i].nominal, isi: listHistorySurvey[i].isi,),
-                              );
-                            }),
-                      ),
+                    ),
                     ],
                   ),
                 ),
