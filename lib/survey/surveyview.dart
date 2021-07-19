@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:surveyqu/hexacolor.dart';
 import 'package:surveyqu/info.dart';
 import 'package:surveyqu/loading.dart';
@@ -20,17 +21,31 @@ class SurveyView extends StatefulWidget {
 }
 
 class _SurveyViewState extends State<SurveyView> {
-  String judul, deskripsi, id, jenis;
+  String judul, deskripsi, id, jenis, email;
   Size size;
   Info info = new Info();
   List<HeaderSurvey> listSurvey;
 
   _SurveyViewState({this.deskripsi, this.judul, this.id, this.jenis});
 
+  _loadUserData() async {
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    var id = jsonDecode(localStorage.getString('id'));
+
+    if (id != null) {
+      setState(() {
+        id = id;
+        email = jsonDecode(localStorage.getString('email'));
+      });
+    }
+  }
+
   Future<List<HeaderSurvey>> getSurvey() async {
+    await _loadUserData();
     var data = {
       'id': id,
       'jenis': jenis,
+      'email': email
     };
     var res = await Network().postDataToken(data, '/detailS');
     if (res.statusCode == 200) {
@@ -66,6 +81,14 @@ class _SurveyViewState extends State<SurveyView> {
                 image: new AssetImage('images/bannerlandscape.png'),
                 fit: BoxFit.cover,
               ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 1,
+                  blurRadius: 2,
+                  offset: Offset(1, 2), // changes position of shadow
+                ),
+              ],
             ),
             child: new Stack(
               children: [
@@ -108,53 +131,74 @@ class _SurveyViewState extends State<SurveyView> {
             )
         ),
       ),
-      body: new ListView(
-        children: [
-          listSurvey == null
-              ? new Container(
-                  margin: EdgeInsets.only(top: 30),
-                  child: new Loading(),
-                )
-              : new Container(
-                  height: size.height - 310,
-                  child: new ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: listSurvey == null ? 0 : listSurvey.length,
-                      itemBuilder: (context, i) {
-                        return new InkWell(
-                          onTap: () {
-                            Navigator.of(context).push(new MaterialPageRoute(
-                                builder: (context) => SurveyDetail(
-                                      id: listSurvey[i].id,
-                                      urutanSoal: '1',
-                                      jenis: jenis,
-                                    )));
-                          },
-                          child: new Container(
-                              decoration: BoxDecoration(
-                                  color: new HexColor('#256fa0'),
-                                  borderRadius: BorderRadius.circular(10)),
-                              margin: EdgeInsets.only(
-                                  top: 10, left: 10, right: 10, bottom: 10),
-                              child: new ListTile(
-                                title: new Text(
-                                  listSurvey[i].subJudul,
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                subtitle: new Text(
-                                  listSurvey[i].deskripsi,
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                trailing: new Icon(
-                                  Icons.arrow_forward_ios,
-                                  color: Colors.white,
-                                ),
-                              )),
-                        );
-                      }),
-                )
-        ],
-      ),
+      body: listSurvey == null
+          ? new Container(
+        margin: EdgeInsets.only(top: 30),
+        child: new Loading(),
+      )
+          : new ListView.builder(
+          shrinkWrap: true,
+          itemCount: listSurvey == null ? 0 : listSurvey.length,
+          itemBuilder: (context, i) {
+            return new InkWell(
+              onTap: () {
+                if(listSurvey[i].status == '0'){
+                  Navigator.of(context).push(new MaterialPageRoute(
+                      builder: (context) => SurveyDetail(
+                        id: listSurvey[i].id,
+                        urutanSoal: '1',
+                        jenis: jenis,
+                        email: email,
+                      ))
+                  );
+                }
+              },
+              child: new Container(
+                  decoration: BoxDecoration(
+                    color: listSurvey[i].status == '0' ? new HexColor('#256fa0') : Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 1,
+                        blurRadius: 2,
+                        offset: Offset(1, 2), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                  margin: EdgeInsets.only(
+                      top: 10, left: 10, right: 10, bottom: 10),
+                  child: new ListTile(
+                    title: new Text(
+                      listSurvey[i].subJudul,
+                      style: TextStyle(color: listSurvey[i].status == '0' ? Colors.white : new HexColor('#256fa0')),
+                    ),
+                    subtitle: new Text(
+                      listSurvey[i].deskripsi,
+                      style: TextStyle(color: listSurvey[i].status == '0' ? Colors.white : new HexColor('#256fa0')),
+                    ),
+                    trailing: new Container(
+                      width: 100,
+                      child: new Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          new Container(
+                            padding: EdgeInsets.only(right: 10),
+                            child: new Text(
+                              listSurvey[i].rewards,
+                              style: TextStyle(color: listSurvey[i].status == '0' ? Colors.white : new HexColor('#256fa0')),
+                            ),
+                          ),
+                          new Icon(
+                            listSurvey[i].status == '0' ? Icons.arrow_forward_ios : Icons.done_all,
+                            color: listSurvey[i].status == '0' ? Colors.white : new HexColor('#256fa0'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )),
+            );
+          }),
     );
   }
 }

@@ -114,13 +114,17 @@ class HeaderSurvey {
   String id;
   String subJudul;
   String deskripsi;
+  String status;
+  String rewards;
 
-  HeaderSurvey({this.id, this.subJudul, this.deskripsi});
+  HeaderSurvey({this.id, this.subJudul, this.deskripsi, this.status, this.rewards});
 
   HeaderSurvey.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     subJudul = json['sub_judul'];
     deskripsi = json['deskripsi'];
+    status = json['status'];
+    rewards = json['rewards'];
   }
 
   Map<String, dynamic> toJson() {
@@ -128,6 +132,8 @@ class HeaderSurvey {
     data['id'] = this.id;
     data['sub_judul'] = this.subJudul;
     data['deskripsi'] = this.deskripsi;
+    data['status'] = this.status;
+    data['rewards'] = this.rewards;
     return data;
   }
 }

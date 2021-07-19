@@ -10,16 +10,16 @@ import 'package:surveyqu/model/survey.dart';
 import 'package:surveyqu/network_utils/api.dart';
 
 class SurveyDetail extends StatefulWidget {
-  String id, urutanSoal, message, jenis;
-  SurveyDetail({this.id, this.urutanSoal, this.message, this.jenis});
+  String id, urutanSoal, message, jenis, email;
+  SurveyDetail({this.id, this.urutanSoal, this.message, this.jenis, this.email});
   @override
-  _SurveyDetailState createState() => _SurveyDetailState(id: id, urutanSoal: urutanSoal, message: message, jenis:jenis);
+  _SurveyDetailState createState() => _SurveyDetailState(id: id, urutanSoal: urutanSoal, message: message, jenis:jenis, email: email);
 }
 
 class _SurveyDetailState extends State<SurveyDetail> {
   Size size;
   String radioValue = '';
-  String id;
+  String id, email;
   Info info = new Info();
   String type, soal, idSoal, urutanSoal, nextId, nextUrutan, message, prevId, prevUrutan, jenis;
   TextEditingController _textanswer = new TextEditingController();
@@ -28,13 +28,14 @@ class _SurveyDetailState extends State<SurveyDetail> {
   var opsiStatus = List<bool>();
   var opsiValue = List<String>();
 
-  _SurveyDetailState({this.id, this.urutanSoal, this.message, this.jenis});
+  _SurveyDetailState({this.id, this.urutanSoal, this.message, this.jenis, this.email});
 
   Future<List<Result>> getQuestion() async {
     var data = {
       'id': id,
       'urutan' : urutanSoal,
-      'jenis' : jenis
+      'jenis' : jenis,
+      'email' : email
     };
     var res = await Network().postDataToken(data, '/detailQ');
     if (res.statusCode == 200) {
@@ -62,7 +63,8 @@ class _SurveyDetailState extends State<SurveyDetail> {
       'id': id,
       'urutan': urutan,
       'jawaban' : jawaban,
-      'jenis' : jenis
+      'jenis' : jenis,
+      'email' : email
     };
     var res = await Network().postDataToken(data, '/nextQ');
     if (res.statusCode == 200) {
@@ -84,7 +86,8 @@ class _SurveyDetailState extends State<SurveyDetail> {
       'id': id,
       'urutan': urutan,
       'jawaban' : jawaban,
-      'jenis' : jenis
+      'jenis' : jenis,
+      'email' : email
     };
     var res = await Network().postDataToken(data, '/prevQ');
     if (res.statusCode == 200) {
