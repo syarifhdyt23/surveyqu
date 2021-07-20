@@ -25,6 +25,7 @@ class _SurveyDetailState extends State<SurveyDetail> {
   TextEditingController _textanswer = new TextEditingController();
   List<Result> listSoal;
   List<dynamic> opsi;
+  // bool qDone = false;
   var opsiStatus = List<bool>();
   var opsiValue = List<String>();
 
@@ -41,16 +42,23 @@ class _SurveyDetailState extends State<SurveyDetail> {
     if (res.statusCode == 200) {
       var body = jsonDecode(res.body);
       var dataJson = body['result'];
-      setState(() {
-        listSoal = dataJson.map<Result>((json) => Result.fromJson(json)).toList();
-      });
-      idSoal = listSoal[0].id;
-      soal = listSoal[0].question;
-      type = listSoal[0].type;
-      urutanSoal = listSoal[0].urutan;
-      opsi = listSoal[0].opsi;
-      for (var i = 0; i < 5; i++) {
-        opsiStatus.add(false);
+      if(dataJson[0]['id'] == ''){
+        setState(() {
+          message = 'done';
+        });
+      } else {
+        setState(() {
+          listSoal =
+              dataJson.map<Result>((json) => Result.fromJson(json)).toList();
+        });
+        idSoal = listSoal[0].id;
+        soal = listSoal[0].question;
+        type = listSoal[0].type;
+        urutanSoal = listSoal[0].urutan;
+        opsi = listSoal[0].opsi;
+        for (var i = 0; i < 5; i++) {
+          opsiStatus.add(false);
+        }
       }
     } else {
       info.messagesNoButton(context, 'info','Survey Error');
