@@ -111,15 +111,15 @@ class _LoginState extends State<Login> {
           child: new Stack(
             children: <Widget>[
               new Container(
-                height: 250,
-                margin: const EdgeInsets.only(left: 30.0, right: 30.0, top: 30),
+                height: 300,
+                margin: const EdgeInsets.only(left: 80.0, right: 80.0),
                 decoration: new BoxDecoration(
                   image: new DecorationImage(
                     image: new AssetImage('images/logo.png'),
                     fit: BoxFit.scaleDown,
                   ),
                 ),
-                alignment: Alignment.center,
+                alignment: Alignment.topCenter,
               ),
               new Container(
                 decoration: BoxDecoration(
@@ -133,7 +133,7 @@ class _LoginState extends State<Login> {
                     fit: BoxFit.cover,
                   ),
                 ),
-                margin: const EdgeInsets.only(top: 300),
+                margin: const EdgeInsets.only(top: 250),
                 child: new ListView(
                   children: <Widget>[
                     new Container(
@@ -227,7 +227,7 @@ class _LoginState extends State<Login> {
                       },
                       child: new Container(
                         alignment: Alignment.centerRight,
-                        margin: const EdgeInsets.only(top: 5.0, right: 20),
+                        margin: const EdgeInsets.only(top: 10.0, right: 20),
                         child: new Text(
                           "Lupa Password",
                           style: new TextStyle(
@@ -320,7 +320,7 @@ class _LoginState extends State<Login> {
                                       builder: (context) => Register()));
                             },
                             child: new Container(
-                                margin: const EdgeInsets.only(top: 5.0),
+                                margin: const EdgeInsets.only(top: 15.0),
                                 child: new Row(
                                   children: <Widget>[
                                     new Text(

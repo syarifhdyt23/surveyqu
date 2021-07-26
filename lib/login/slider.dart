@@ -126,14 +126,13 @@ class _SliderInfo extends State<SliderInfo> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisSize: MainAxisSize.max,
-                      // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
                         new Container(
-                          padding: EdgeInsets.only(top: 20, bottom: 20),
-                          height: 150,
+                          margin: EdgeInsets.only(left: 80,right: 80),
+                          height: 200,
                           child: Image.asset(
                             'images/logo.png',
-                            fit: BoxFit.fitHeight,
+                            fit: BoxFit.scaleDown,
                           ),
                         ),
                         new Container(

@@ -199,6 +199,18 @@ class _Reward extends State<Reward> {
                   ],
                 )
             ),
+            contNotif == '0' && contHist == "0" ?
+            new Container(
+              alignment: Alignment.center,
+              margin: const EdgeInsets.only(
+                  top: 150, left: 80, right: 80
+              ),
+              decoration: new BoxDecoration(
+                image: new DecorationImage(
+                  image: new AssetImage('images/logo.png')
+                ),
+              )
+            ) :
             new Container(
               padding: EdgeInsets.only(top: 200),
               child: DefaultTabController(
