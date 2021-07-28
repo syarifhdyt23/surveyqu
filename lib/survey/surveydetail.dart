@@ -1,7 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:surveyqu/hexacolor.dart';
 import 'package:surveyqu/home/home.dart';
 import 'package:surveyqu/info.dart';
@@ -82,7 +86,7 @@ class _SurveyDetailState extends State<SurveyDetail> {
         nextId = nextQuest.id;
         nextUrutan = nextQuest.urutan;
         message = nextQuest.message;
-        Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context) => SurveyDetail(id: nextId, urutanSoal: nextUrutan, message: message,)));
+        Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context) => SurveyDetail(id: nextId, urutanSoal: nextUrutan, message: message, email: email, jenis: jenis,)));
       });
     } else {
       info.messagesNoButton(context, 'info','Survey Error');
@@ -105,12 +109,85 @@ class _SurveyDetailState extends State<SurveyDetail> {
         prevId = nextQuest.id;
         prevUrutan = nextQuest.urutan;
         message = nextQuest.message;
-        Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context) => SurveyDetail(id: prevId, urutanSoal: prevUrutan, message: message,)));
+        Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context) => SurveyDetail(id: prevId, urutanSoal: prevUrutan, message: message, email: email, jenis: jenis,)));
       });
     } else {
       info.messagesNoButton(context, 'info','Survey Error');
     }
   }
+
+  /// upload Image ///
+  bool pict;
+  String status = '';
+  String base64Image, fileName, imgProfile, image;
+  String errMessage = 'Error Uploading Image';
+  File _image;
+  final picker = ImagePicker();
+
+  startUpload(BuildContext context, id, urutan) {
+    fileName = _image == null ? image.split('/').last : _image.path.split('/').last;
+    upload(context, id, urutan);
+  }
+
+  upload(BuildContext context, id, urutan) async{
+    var data = {
+      'id': id,
+      'urutan': urutan,
+      'jawaban' : base64Image,
+      'jenis' : jenis,
+      'email' : email
+    };
+    var res = await Network().postDataToken(data, '/changeProfile');
+    if (res.statusCode == 200) {
+      final jsonData = json.decode(res.body);
+      nextQ nextQuest = nextQ.fromJson(jsonData);
+      setState(() {
+        prevId = nextQuest.id;
+        prevUrutan = nextQuest.urutan;
+        message = nextQuest.message;
+        Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context) => SurveyDetail(id: prevId, urutanSoal: prevUrutan, message: message, email: email, jenis: jenis,)));
+      });
+    } else {
+      info.messagesNoButton(context, 'info','Survey Error');
+    }
+  }
+
+  Future chooseImage2() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+        base64Image = base64Encode(_image.readAsBytesSync());
+        pict = true;
+      } else {
+        print('Gambar belum dipilih.');
+      }
+    });
+  }
+
+  Future snapImage() async{
+    final pickedFile = await picker.getImage(source: ImageSource.camera);
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+        base64Image = base64Encode(_image.readAsBytesSync());
+        pict = true;
+      } else {
+        print('Gambar belum dipilih.');
+      }
+    });
+  }
+
+  Widget showImages2() {
+    return _image == null
+        ? imgProfile == null ? new Container(alignment: Alignment.center,child: new CupertinoActivityIndicator()) :
+    imgProfile == '1' ? new Icon(Icons.image_outlined, size: 100, color: Colors.grey,) :
+    new CachedNetworkImage(imageUrl: imgProfile ,fit: BoxFit.cover,)
+        : Image.file(_image,
+      fit: BoxFit.cover,);
+  }
+  /// upload image ///
 
   @override
   void initState() {
@@ -142,7 +219,7 @@ class _SurveyDetailState extends State<SurveyDetail> {
                   child: message == 'done' ? finish() : type == null ? new Loading() : type == '' ? new Container(child: new Text('no data'),) :
                   new Container(
                     margin: EdgeInsets.only(left: 10, right: 10),
-                    child: type == "check_opt" ? checkBoxWidget() :  type == "radio_opt" ? radioWidget() : answerWidget()
+                    child: type == "check_opt" ? checkBoxWidget() :  type == "radio_opt" ? radioWidget() : type == "texfield_s" ? answerWidget(): answerWidget()
                     // i == 0 ? answerWidget() : i == 1 ? radioWidget() : i == 2 ? checkBoxWidget() : finish(),
                   ),
                 ),
@@ -192,6 +269,12 @@ class _SurveyDetailState extends State<SurveyDetail> {
                                     info.messagesNoButton(context, "info", "Pilih salah satu jawaban anda");
                                   } else {
                                     this.nextQuestion(idSoal, urutanSoal, radioValue);
+                                  }
+                                } else if (type == "textfield_s"){
+                                  if(_textanswer.text == ''){
+                                    info.messagesNoButton(context, "info", "Jawaban anda masih kosong");
+                                  } else {
+                                    this.nextQuestion(idSoal, urutanSoal, _textanswer.text);
                                   }
                                 } else {
                                   if(_textanswer.text == ''){
@@ -304,6 +387,95 @@ class _SurveyDetailState extends State<SurveyDetail> {
           )
         ]
     );
+  }
+
+  Widget uploadWidget(){
+    return new ListView(
+        children: <Widget>[
+          new Text(
+            soal,
+            style: new TextStyle(
+                fontSize: 20.0, fontWeight: FontWeight.bold),
+          ),
+          new Padding(
+            padding: new EdgeInsets.all(8.0),
+          ),
+          new Text(
+            'Upload :',
+            style: new TextStyle(
+                fontSize: 20.0, fontWeight: FontWeight.bold),
+          ),
+          new Container(
+            margin: const EdgeInsets.only(top: 5),
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              borderRadius: BorderRadius.all(Radius.circular(5)),
+            ),
+            height: 200,
+            width: size.width,
+            child: new InkWell(
+              onTap: () {
+                // _ShowChoiceDialog(context);
+                selectUpload(context);
+              },
+              child: showImages2(),
+            ),
+          ),
+        ]
+    );
+  }
+
+  void selectUpload(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            title: new Text('Pilih media pengambilan gambar', style: TextStyle(fontSize: 17),),
+            content: new Container(
+              height: MediaQuery.of(context).size.height / 6,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  new Container(
+                    margin: EdgeInsets.only(bottom: 5),
+                    child: new FlatButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        chooseImage2();
+                      },
+                      child: new Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          new Icon(Icons.image, size: 20,),
+                          new Padding(padding: EdgeInsets.only(left: 10)),
+                          new Text('Dari Galeri', style: TextStyle(fontSize: 15),),
+                        ],
+                      ),
+                    ),
+                  ),
+                  new Container(
+                    margin: EdgeInsets.only(top: 5),
+                    child: new FlatButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        snapImage();
+                      },
+                      child: new Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          new Icon(Icons.camera, size: 20,),
+                          new Padding(padding: EdgeInsets.only(left: 10)),
+                          new Text('Dari Kamera', style: TextStyle(fontSize: 15),),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
   }
 
   Widget checkBoxWidget(){
