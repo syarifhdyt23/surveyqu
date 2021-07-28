@@ -124,20 +124,19 @@ class _SurveyDetailState extends State<SurveyDetail> {
   File _image;
   final picker = ImagePicker();
 
-  startUpload(BuildContext context, id, urutan) {
+  startUpload(BuildContext context) {
     fileName = _image == null ? image.split('/').last : _image.path.split('/').last;
-    upload(context, id, urutan);
   }
 
-  upload(BuildContext context, id, urutan) async{
+  upload(BuildContext context, id, urutan, jawaban) async{
     var data = {
       'id': id,
       'urutan': urutan,
-      'jawaban' : base64Image,
+      'jawaban' : jawaban,
       'jenis' : jenis,
       'email' : email
     };
-    var res = await Network().postDataToken(data, '/changeProfile');
+    var res = await Network().postDataToken(data, '/nextQ');
     if (res.statusCode == 200) {
       final jsonData = json.decode(res.body);
       nextQ nextQuest = nextQ.fromJson(jsonData);
@@ -181,8 +180,7 @@ class _SurveyDetailState extends State<SurveyDetail> {
 
   Widget showImages2() {
     return _image == null
-        ? imgProfile == null ? new Container(alignment: Alignment.center,child: new CupertinoActivityIndicator()) :
-    imgProfile == '1' ? new Icon(Icons.image_outlined, size: 100, color: Colors.grey,) :
+        ? imgProfile == null ? new Icon(Icons.image_outlined, size: 100, color: Colors.grey,) :
     new CachedNetworkImage(imageUrl: imgProfile ,fit: BoxFit.cover,)
         : Image.file(_image,
       fit: BoxFit.cover,);
@@ -219,7 +217,7 @@ class _SurveyDetailState extends State<SurveyDetail> {
                   child: message == 'done' ? finish() : type == null ? new Loading() : type == '' ? new Container(child: new Text('no data'),) :
                   new Container(
                     margin: EdgeInsets.only(left: 10, right: 10),
-                    child: type == "check_opt" ? checkBoxWidget() :  type == "radio_opt" ? radioWidget() : type == "texfield_s" ? answerWidget(): answerWidget()
+                    child: type == "check_opt" ? checkBoxWidget() :  type == "radio_opt" ? radioWidget() : type == "textfield_s" ? answerWidget(): type == "upload_image" ? uploadWidget() : type == "check_opt_img" ? checkimgWidget() : radioimgWidget()
                     // i == 0 ? answerWidget() : i == 1 ? radioWidget() : i == 2 ? checkBoxWidget() : finish(),
                   ),
                 ),
@@ -264,6 +262,12 @@ class _SurveyDetailState extends State<SurveyDetail> {
                                   } else {
                                     this.nextQuestion(idSoal, urutanSoal, opsiValue);
                                   }
+                                } else if (type == "check_opt_img"){
+                                  if(opsiValue == null || opsiValue.length == 0){
+                                    info.messagesNoButton(context, "info", "Pilih jawaban anda");
+                                  } else {
+                                    this.nextQuestion(idSoal, urutanSoal, opsiValue);
+                                  }
                                 } else if (type == "radio_opt"){
                                   if(radioValue == ''){
                                     info.messagesNoButton(context, "info", "Pilih salah satu jawaban anda");
@@ -276,8 +280,14 @@ class _SurveyDetailState extends State<SurveyDetail> {
                                   } else {
                                     this.nextQuestion(idSoal, urutanSoal, _textanswer.text);
                                   }
+                                } else if (type == "upload_image"){
+                                  if(base64Image == null){
+                                    info.messagesNoButton(context, "info", "Jawaban anda masih kosong");
+                                  } else {
+                                    upload(context, idSoal, urutanSoal, base64Image);
+                                  }
                                 } else {
-                                  if(_textanswer.text == ''){
+                                  if(radioValue == ''){
                                     info.messagesNoButton(context, "info", "Jawaban anda masih kosong");
                                   } else {
                                     this.nextQuestion(idSoal, urutanSoal, _textanswer.text);
@@ -389,6 +399,48 @@ class _SurveyDetailState extends State<SurveyDetail> {
     );
   }
 
+  Widget checkBoxWidget(){
+    return new ListView(
+        children: <Widget>[
+          new Text(
+            soal,
+            style: new TextStyle(
+                fontSize: 20.0, fontWeight: FontWeight.bold),
+          ),
+          new Padding(
+            padding: new EdgeInsets.all(8.0),
+          ),
+          new Container(
+            height: size.height,
+            child: ListView.builder(
+              itemCount: opsi.length,
+              itemBuilder: (BuildContext context, int index) {
+                return ListTile(
+                  title: Text(opsi[index]),
+                  subtitle: Text(opsi[index]),
+                  leading: Checkbox(
+                      value: opsiStatus[index],
+                      onChanged: (bool val) {
+                        setState(() {
+                          if(opsiStatus[index] == false){
+                            opsiStatus[index] = !opsiStatus[index];
+                            opsiValue.remove(opsi);
+                            opsiValue.add(opsi[index]);
+                          } else {
+                            opsiStatus[index] = !opsiStatus[index];
+                            opsiValue.remove(opsi[index]);
+                          }
+                          print(opsiValue);
+                        });
+                      }),
+                );
+              },
+            ),
+          ),
+        ]
+    );
+  }
+
   Widget uploadWidget(){
     return new ListView(
         children: <Widget>[
@@ -478,7 +530,7 @@ class _SurveyDetailState extends State<SurveyDetail> {
         });
   }
 
-  Widget checkBoxWidget(){
+  Widget checkimgWidget(){
     return new ListView(
       children: <Widget>[
         new Text(
@@ -495,8 +547,11 @@ class _SurveyDetailState extends State<SurveyDetail> {
             itemCount: opsi.length,
             itemBuilder: (BuildContext context, int index) {
               return ListTile(
-                title: Text(opsi[index]),
-                subtitle: Text(opsi[index]),
+                title: Container(
+                  alignment: Alignment.centerLeft,
+                  height: size.height/7,
+                  child: Image.network(opsi[index]),
+                ),
                 leading: Checkbox(
                     value: opsiStatus[index],
                     onChanged: (bool val) {
@@ -549,6 +604,44 @@ class _SurveyDetailState extends State<SurveyDetail> {
               return RadioListTile(
                 groupValue: radioValue,
                 title: Text(item),
+                value: item,
+                activeColor: Colors.blue,
+                onChanged: (val) {
+                  setState(() {
+                    radioValue = val;
+                    print(radioValue);
+                  });
+                },
+              );
+            }).toList(),
+          ),
+          new Padding(
+            padding: new EdgeInsets.all(8.0),
+          ),
+        ]
+    );
+  }
+
+  Widget radioimgWidget(){
+    return new ListView(
+        children: <Widget>[
+          new Text(
+            soal,
+            style: new TextStyle(
+                fontSize: 20.0, fontWeight: FontWeight.bold),
+          ),
+          new Padding(
+            padding: new EdgeInsets.all(8.0),
+          ),
+          new Column(
+            children: opsi.map((item) { //change index of choices array as you need
+              return RadioListTile(
+                groupValue: radioValue,
+                title: Container(
+                  alignment: Alignment.centerLeft,
+                  height: size.height/7,
+                  child: Image.network(item),
+                ),
                 value: item,
                 activeColor: Colors.blue,
                 onChanged: (val) {
