@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:surveyqu/loading.dart';
+import 'package:surveyqu/model/profile.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
@@ -13,21 +14,60 @@ import 'package:surveyqu/info.dart';
 import 'package:surveyqu/network_utils/api.dart';
 
 class ChangeProfile extends StatefulWidget {
-  String email, firstname, lastname, address, ktp, ktpVerif, hp, hpVerif;
-  ChangeProfile({this.email, this.address,this.firstname,this.hp,this.hpVerif,this.ktp,this.ktpVerif,this.lastname});
+  String email, firstname, lastname, address, ktp, ktpVerif, hp, hpVerif, id_prov, namaprov, id_kab, namakab;
+  ChangeProfile({this.email, this.address,this.firstname,this.hp,this.hpVerif,this.ktp,this.ktpVerif,this.lastname,
+    this.id_kab, this.id_prov, this.namakab, this.namaprov});
   @override
   _ChangeProfileState createState() => _ChangeProfileState(email: email, address: address, firstname: firstname, hp: hp, hpVerif: hpVerif, ktp:ktp, ktpVerif: ktpVerif, lastname: lastname);
 }
 
 class _ChangeProfileState extends State<ChangeProfile> {
   Size size;
-  String email, firstname, lastname, address, ktp, ktpVerif, hp, hpVerif;
+  String email, firstname, lastname, address, ktp, ktpVerif, hp, hpVerif, id_prov, namaprov, id_kab, namakab;
   Domain domain = new Domain();
   Info info = new Info();
   bool enableHp;
   var dataJson;
+  List<Province> listProv;
+  List<Kabkot> listKabkot;
+  List prov = List();
+  List kabkot = List();
+  String selectedProv, selectedProvId, selectedKabkot, selectedKabkotId;
 
-  _ChangeProfileState({this.email, this.address,this.firstname,this.hp,this.hpVerif,this.ktp,this.ktpVerif,this.lastname});
+  _ChangeProfileState({this.email, this.address,this.firstname,this.hp,this.hpVerif,this.ktp,this.ktpVerif,this.lastname, this.id_kab, this.id_prov, this.namakab, this.namaprov});
+
+  Future<void> getProv() async {
+    var res = await Network().postToken('/provinsi');
+    if (res.statusCode == 200) {
+      var body = jsonDecode(res.body);
+      var dataJson = body['content'];
+      setState(() {
+        listProv = dataJson.map<Province>((json) => Province.fromJson(json)).toList();
+      });
+      for (var i = 0; i < listProv.length; i++) {
+        prov.add(listProv[i].nama);
+      }
+    }
+    return listProv;
+  }
+
+  Future<void> getKabkot(String idprov) async {
+    var data={
+      'id_prov': idprov,
+    };
+    var res = await Network().postDataToken(data,'/kabkot');
+    if (res.statusCode == 200) {
+      var body = jsonDecode(res.body);
+      var dataJson = body['content'];
+      setState(() {
+        listKabkot = dataJson.map<Kabkot>((json) => Kabkot.fromJson(json)).toList();
+      });
+      for (var i = 0; i < listKabkot.length; i++) {
+        kabkot.add(listKabkot[i].nama);
+      }
+    }
+    return listKabkot;
+  }
 
   bool pict;
   String status = '';
@@ -36,12 +76,12 @@ class _ChangeProfileState extends State<ChangeProfile> {
   File _image;
   final picker = ImagePicker();
 
-  startUpload(BuildContext context, String firstname, String lastname, String address, String hp) {
+  startUpload(BuildContext context, String firstname, String lastname, String address, String hp, String provId, String kabId) {
     fileName = _image == null ? ktp.split('/').last : _image.path.split('/').last;
-    upload(context, firstname, lastname, address, hp, fileName);
+    upload(context, firstname, lastname, address, hp, fileName, provId, kabId);
   }
 
-  upload(BuildContext context,String firstname, String lastname, String address, String hp, String fileName) async{
+  upload(BuildContext context,String firstname, String lastname, String address, String hp, String fileName, String provId, String kabId) async{
     var data = {
       "email": email,
       "firstname": firstname,
@@ -50,6 +90,8 @@ class _ChangeProfileState extends State<ChangeProfile> {
       "hp": hp,
       "fotoKTP": base64Image,
       "namaFile": fileName,
+      "id_Prov": provId,
+      "id_kab": kabId
     };
     var res = await Network().postDataToken(data, '/changeProfile');
     if (res.statusCode == 200) {
@@ -130,7 +172,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
     );
     new Future.delayed(new Duration(seconds: 3), () {
       Navigator.pop(context); //pop dialog
-      startUpload(context, firstname, lastname, address, hp);
+      startUpload(context, firstname, lastname, address, hp, selectedProvId, selectedKabkotId);
     });
   }
   
@@ -138,6 +180,8 @@ class _ChangeProfileState extends State<ChangeProfile> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    this.getProv();
+    this.getKabkot('');
     if(hpVerif == '1'){
       setState(() {
         enableHp = true;
@@ -154,7 +198,138 @@ class _ChangeProfileState extends State<ChangeProfile> {
       textAddress.text = address == null ? "" : address;
       textHp.text = hp == null ? "" : hp;
       imgProfile = ktp  == null || ktp == "" ? "1" : ktp;
+      selectedProv = namaprov == null ? "" : namaprov;
+      selectedKabkot = namakab == null ? "" : namakab;
+      selectedProvId = id_prov == null ? "" : id_prov;
+      selectedKabkotId = id_kab == null ? "" : id_kab;
     });
+  }
+
+  void ShowProvince(BuildContext context) {
+    showModalBottomSheet<void>(
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        builder: (BuildContext context) {
+          return new StatefulBuilder(builder: (context, state) {
+            return new Container(
+                height: MediaQuery.of(context).size.height * 0.70,
+                decoration: new BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: new BorderRadius.only(
+                    topLeft: const Radius.circular(10.0),
+                    topRight: const Radius.circular(10.0),
+                  ),
+                ),
+                child: new Stack(
+                  children: [
+                    new Container(
+                      padding: const EdgeInsets.only(top: 20.0, left: 15.0, bottom: 10.0),
+                      child: new Text('Provinsi',
+                        style: new TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                    new Divider(
+                      height: 120,
+                    ),
+                    listProv == null ? new Container(alignment: Alignment.center, child: new CircularProgressIndicator()) :
+                    new Container(
+                      padding: const EdgeInsets.only(top: 60),
+                      child: new Scrollbar(
+                        child: new ListView.separated(
+                          itemCount: listProv.length,
+                          itemBuilder: (context, i) {
+                            return new InkWell(
+                              onTap: (){
+                                setState(() {
+                                  selectedProv = listProv[i].nama;
+                                  selectedProvId = listProv[i].idProv;
+                                  this.getKabkot(listProv[i].idProv);
+                                  Navigator.of(context).pop();
+                                });
+                              },
+                              child: new Container(
+                                child: new ListTile(
+                                  title: new Text(listProv[i].nama),
+                                  trailing: new Icon(Icons.arrow_forward_ios),
+                                ),
+                              ),
+                            );
+                          },
+                          separatorBuilder: (context, i) => new Divider(),
+                        ),
+                      ),
+                    )
+                  ],
+                )
+            );
+          }
+          );
+        }
+    );
+  }
+
+  void ShowCity(BuildContext context) {
+    showModalBottomSheet<void>(
+        context: context,
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        builder: (BuildContext context) {
+          return new StatefulBuilder(builder: (context, state) {
+            return new Container(
+                height: MediaQuery.of(context).size.height * 0.70,
+                decoration: new BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: new BorderRadius.only(
+                    topLeft: const Radius.circular(10.0),
+                    topRight: const Radius.circular(10.0),
+                  ),
+                ),
+                child: new Stack(
+                  children: [
+                    new Container(
+                      padding: const EdgeInsets.only(top: 20.0, left: 15.0, bottom: 10.0),
+                      child: new Text('Kabupaten/ Kota',
+                        style: new TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                      ),
+                    ),
+                    new Divider(
+                      height: 120,
+                    ),
+                    listKabkot == null ? new Container(alignment: Alignment.center, child: new Text("Please select province"),) :
+                    new Container(
+                      padding: const EdgeInsets.only(top: 60),
+                      child: new Scrollbar(
+                        child: new ListView.separated(
+                          itemCount: listKabkot == null ? 0 : listKabkot.length,
+                          itemBuilder: (context, i) {
+                            return new InkWell(
+                              onTap: (){
+                                setState(() {
+                                  selectedKabkot = listKabkot[i].nama;
+                                  selectedKabkotId = listKabkot[i].idKab;
+                                  Navigator.of(context).pop();
+                                });
+                              },
+                              child: new Container(
+                                child: new ListTile(
+                                  title: new Text(listKabkot[i].nama),
+                                  trailing: new Icon(Icons.arrow_forward_ios),
+                                ),
+                              ),
+                            );
+                          },
+                          separatorBuilder: (context, i) => new Divider(),
+                        ),
+                      ),
+                    )
+                  ],
+                )
+            );
+          }
+          );
+        }
+    );
   }
 
 
@@ -180,6 +355,10 @@ class _ChangeProfileState extends State<ChangeProfile> {
                 info.messagesNoButton(context, "Info", "Nomor Hp harus diawali dengan 08");
               } else if (textLname.text == ''){
                 info.messagesNoButton(context, "Info", "Nama belakang harus diisi");
+              } else if (selectedProvId == '' || selectedProvId == null){
+                info.messagesNoButton(context, "Info", "Alamat provinsi harus diisi");
+              } else if (selectedKabkotId == '' || selectedKabkotId == null){
+                info.messagesNoButton(context, "Info", "Alamat Kabupaten/ Kota harus diisi");
               } else {
                 setState(() {
                   // Navigator.push(context, new MaterialPageRoute(builder: (context) => Verification(email: textEmail.text,)));
@@ -203,7 +382,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
                   fontWeight: FontWeight.w600),
             )),
       ),
-      body: new GestureDetector(
+      body: listProv == null ? new Loading() : new GestureDetector(
         behavior: HitTestBehavior.opaque,
         onPanDown: (_) {
           FocusScope.of(context).requestFocus(FocusNode());
@@ -305,6 +484,67 @@ class _ChangeProfileState extends State<ChangeProfile> {
                       ),
                   ),
                 ],
+              ),
+              new Container(
+                margin: const EdgeInsets.only(top: 10),
+                child: new Text('Provinsi'),
+              ),
+              new Container(
+                //width: size.width - 20,
+                height: 45,
+                margin: const EdgeInsets.only(top: 3),
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  border: Border.all(color: Colors.grey.withOpacity(.2), width: 1,),
+                  borderRadius: BorderRadius.all(Radius.circular(5)),
+                ),
+                child: new FlatButton(
+                  onPressed: (){
+                    setState(() {
+                      this.ShowProvince(context);
+                    });
+                  },
+                  color: Colors.grey[200],
+                  child: new Align(
+                    alignment: Alignment.centerLeft,
+                    child: new Text(selectedProv == null ? 'Pilih Provinsi' : selectedProv,
+                      textAlign: TextAlign.left,
+                      style: new TextStyle(color: selectedProv == null ? Colors.grey : Colors.black),
+                    ),
+                  ),
+                ),
+              ),
+              new Container(
+                margin: const EdgeInsets.only(top: 10),
+                child: new Text('Kabupaten/ Kota'),
+              ),
+              new Container(
+                //width: size.width - 20,
+                height: 45,
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  border: Border.all(color: Colors.grey.withOpacity(.2), width: 1,),
+                  borderRadius: BorderRadius.all(Radius.circular(5)),
+                ),
+                margin: const EdgeInsets.only(top: 5),
+                child: new FlatButton(
+                  onPressed: (){
+                    setState(() {
+                      if(selectedProv == "" || selectedProv == null){
+                      info.MessageToast("Pilih provinsi terlebih dahulu");
+                      } else {
+                        this.ShowCity(context);
+                      }
+                    });
+                  },
+                  child: new Align(
+                    alignment: Alignment.centerLeft,
+                    child: new Text(selectedKabkot == null ? 'Pilih Kabupaten/ Kota' : selectedKabkot,
+                      textAlign: TextAlign.left,
+                      style: new TextStyle(color: selectedKabkot == null ? Colors.grey : Colors.black),
+                    ),
+                  ),
+                ),
               ),
               new Container(
                 margin: const EdgeInsets.only(top: 10),

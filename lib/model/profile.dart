@@ -81,16 +81,25 @@ class User {
   String hp;
   String ishpVerify;
   String foto;
+  String id_prov;
+  String namaprov;
+  String id_kab;
+  String namakab;
 
   User(
       {this.firstname,
-        this.lastname,
-        this.address,
-        this.ktp,
-        this.ktpVerify,
-        this.hp,
-        this.ishpVerify,
-        this.foto});
+      this.lastname,
+      this.address,
+      this.ktp,
+      this.ktpVerify,
+      this.hp,
+      this.ishpVerify,
+      this.foto,
+      this.id_kab,
+      this.id_prov,
+      this.namakab,
+      this.namaprov
+      });
 
   User.fromJson(Map<String, dynamic> json) {
     firstname = json['firstname'];
@@ -101,6 +110,10 @@ class User {
     hp = json['hp'];
     ishpVerify = json['ishp_verify'];
     foto = json['foto'];
+    id_prov = json['id_prov'];
+    namaprov = json['namaprov'];
+    id_kab = json['id_kab'];
+    namakab = json['namakab'];
   }
 
   Map<String, dynamic> toJson() {
@@ -113,6 +126,54 @@ class User {
     data['hp'] = this.hp;
     data['ishp_verify'] = this.ishpVerify;
     data['foto'] = this.foto;
+    data['id_prov'] = this.id_prov;
+    data['namaprov'] = this.namaprov;
+    data['id_kab'] = this.id_kab;
+    data['namakab'] = this.namakab;
+    return data;
+  }
+}
+
+class Province {
+  String idProv;
+  String nama;
+
+  Province({this.idProv, this.nama});
+
+  Province.fromJson(Map<String, dynamic> json) {
+    idProv = json['id_prov'];
+    nama = json['nama'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id_prov'] = this.idProv;
+    data['nama'] = this.nama;
+    return data;
+  }
+}
+
+class Kabkot {
+  String idKab;
+  String idProv;
+  String nama;
+  String idJenis;
+
+  Kabkot({this.idKab, this.idProv, this.nama, this.idJenis});
+
+  Kabkot.fromJson(Map<String, dynamic> json) {
+    idKab = json['id_kab'];
+    idProv = json['id_prov'];
+    nama = json['nama'];
+    idJenis = json['id_jenis'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id_kab'] = this.idKab;
+    data['id_prov'] = this.idProv;
+    data['nama'] = this.nama;
+    data['id_jenis'] = this.idJenis;
     return data;
   }
 }

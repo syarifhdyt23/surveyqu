@@ -34,7 +34,7 @@ class _Profile extends State<Profile> {
   List<User> listUser;
   bool pict;
   String status = '';
-  String base64Image, fileName, imgProfile, ktpVerify, hpVerify;
+  String base64Image, fileName, imgProfile, ktpVerify, hpVerify, id_prov, namaprov, id_kab, namakab;
   String errMessage = 'Error Uploading Image';
   File _image;
   final picker = ImagePicker();
@@ -156,16 +156,21 @@ class _Profile extends State<Profile> {
       var body = jsonDecode(res.body);
       var dataJson = body['result'];
       setState(() {
-        // if(dataJson == 'null'){
-        //   imgProfile = '';
-        //   ktpVerify = '0';
-        //   hpVerify = '0';
-        // } else {
+        if(dataJson == 'null'){
+          imgProfile = '';
+          ktpVerify = '0';
+          hpVerify = '0';
+        } else {
           listUser = dataJson.map<User>((json) => User.fromJson(json)).toList();
+          nama = listUser[0].firstname == null ? "" : listUser[0].firstname;
           imgProfile = listUser[0].foto == null ? "" : listUser[0].foto;
           ktpVerify = listUser[0].ktpVerify == null ? "0" : listUser[0].ktpVerify;
           hpVerify = listUser[0].ishpVerify == null ? "0" : listUser[0].ishpVerify;
-        // }
+          id_kab = listUser[0].id_kab == null ? "" : listUser[0].id_kab;
+          id_prov = listUser[0].id_prov == null ? "" : listUser[0].id_prov;
+          namakab = listUser[0].namakab == null ? "" : listUser[0].namakab;
+          namaprov = listUser[0].namaprov == null ? "" : listUser[0].namaprov;
+        }
       });
     }
     return listUser;
@@ -268,7 +273,10 @@ class _Profile extends State<Profile> {
                           child: new InkWell(
                               onTap: () {
                                 // this.messagesLogout(context, 'keluar', 'anda yakin ingin keluar?');
-                                Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context,) => new ChangeProfile(email: email,address: listUser[0].address, firstname: listUser[0].firstname, hp: listUser[0].hp, lastname: listUser[0].lastname, hpVerif: listUser[0].ishpVerify, ktpVerif: listUser[0].ktpVerify, ktp: listUser[0].ktp,)));
+                                Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context,) =>
+                                new ChangeProfile(email: email,address: listUser[0].address, firstname: listUser[0].firstname, hp: listUser[0].hp,
+                                  lastname: listUser[0].lastname, hpVerif: listUser[0].ishpVerify, ktpVerif: listUser[0].ktpVerify, ktp: listUser[0].ktp,
+                                id_kab: listUser[0].id_kab, id_prov: listUser[0].id_prov, namakab: listUser[0].namakab, namaprov: listUser[0].namaprov,)));
                               },
                               child: new ListTile(
                                 title: new Text(

@@ -52,7 +52,23 @@ class _Home extends State<Home> {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
     token = jsonDecode(localStorage.getString('token'));
     email = jsonDecode(localStorage.getString('email'));
-    nama = jsonDecode(localStorage.getString('firstname'));
+  }
+
+  Future<void> getUser() async {
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    email = jsonDecode(localStorage.getString('email'));
+    var data = {
+      'email': email,
+    };
+    var res = await Network().postDataToken(data, '/loadProfile');
+    if (res.statusCode == 200) {
+      var body = jsonDecode(res.body);
+      var dataJson = body['result'];
+      setState(() {
+        nama = dataJson[0]['firstname'] == null ? "" : dataJson[0]['firstname'];
+      });
+    }
+    return listUser;
   }
 
   Future<void> getSqpoint() async {
@@ -173,13 +189,13 @@ class _Home extends State<Home> {
   @override
   void initState() {
     super.initState();
+    this.getUser();
     this.getPengumuman();
     this.getSqpoint();
     this.getNotif();
     this.getQuestion();
     // this.getAds();
     this.getSurvey();
-
   }
 
   @override
@@ -188,7 +204,7 @@ class _Home extends State<Home> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 0,
-        title: new Text('SurveyQu'),
+        title: new Text('surveyQu'),
         actions: [
           new InkWell(
             onTap: (){
@@ -394,7 +410,7 @@ class _Home extends State<Home> {
                   alignment: Alignment.bottomCenter,
                   margin: EdgeInsets.only(bottom: 10),
                   child: new Text(
-                    "Hai $nama, Selamat Datang",
+                    "Hai "+(nama == null ? '' : nama)+", Selamat Datang",
                     style: TextStyle(color: Colors.white, fontSize: 18),
                   )
                 )
@@ -418,7 +434,7 @@ class _Home extends State<Home> {
           child: new Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              new Text("SurveyQu",
+              new Text("surveyQu",
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 20.0,
