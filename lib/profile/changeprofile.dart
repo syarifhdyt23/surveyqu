@@ -12,29 +12,65 @@ import 'package:surveyqu/hexacolor.dart';
 import 'package:surveyqu/home/mainhome.dart';
 import 'package:surveyqu/info.dart';
 import 'package:surveyqu/network_utils/api.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ChangeProfile extends StatefulWidget {
-  String email, firstname, lastname, address, ktp, ktpVerif, hp, hpVerif, id_prov, namaprov, id_kab, namakab;
-  ChangeProfile({this.email, this.address,this.firstname,this.hp,this.hpVerif,this.ktp,this.ktpVerif,this.lastname,
-    this.id_kab, this.id_prov, this.namakab, this.namaprov});
+  String email;
+  ChangeProfile({this.email});
   @override
-  _ChangeProfileState createState() => _ChangeProfileState(email: email, address: address, firstname: firstname, hp: hp, hpVerif: hpVerif, ktp:ktp, ktpVerif: ktpVerif, lastname: lastname);
+  _ChangeProfileState createState() => _ChangeProfileState(email: email);
 }
 
 class _ChangeProfileState extends State<ChangeProfile> {
   Size size;
-  String email, firstname, lastname, address, ktp, ktpVerif, hp, hpVerif, id_prov, namaprov, id_kab, namakab;
+  String email, firstname, lastname, address, ktp, ktpVerif, hp, hpVerif;
   Domain domain = new Domain();
   Info info = new Info();
   bool enableHp;
   var dataJson;
   List<Province> listProv;
   List<Kabkot> listKabkot;
+  List<User> listUser;
   List prov = List();
   List kabkot = List();
   String selectedProv, selectedProvId, selectedKabkot, selectedKabkotId;
 
-  _ChangeProfileState({this.email, this.address,this.firstname,this.hp,this.hpVerif,this.ktp,this.ktpVerif,this.lastname, this.id_kab, this.id_prov, this.namakab, this.namaprov});
+  _ChangeProfileState({this.email});
+
+  Future<void> getUser() async {
+    var data = {
+      'email': email,
+    };
+    var res = await Network().postDataToken(data, '/loadProfile');
+    if (res.statusCode == 200) {
+      var body = jsonDecode(res.body);
+      var dataJson = body['result'];
+      setState(() {
+        listUser = dataJson.map<User>((json) => User.fromJson(json)).toList();
+        textFname.text = listUser[0].firstname == null ? "" : listUser[0].firstname;
+        textLname.text = listUser[0].lastname == null ? "" : listUser[0].lastname;
+        textAddress.text = listUser[0].address == null ? "" : listUser[0].address;
+        textHp.text = listUser[0].hp == null ? "" : listUser[0].hp;
+        ktpVerif = listUser[0].ktpVerify == null ? "0" : listUser[0].ktpVerify;
+        hpVerif = listUser[0].ishpVerify == null ? "0" : listUser[0].ishpVerify;
+        selectedKabkotId = listUser[0].id_kab == null ? "" : listUser[0].id_kab;
+        selectedProvId = listUser[0].id_prov == null ? "" : listUser[0].id_prov;
+        selectedKabkot = listUser[0].namakab == null ? "" : listUser[0].namakab;
+        selectedProv = listUser[0].namaprov == null ? "" : listUser[0].namaprov;
+        imgProfile = listUser[0].ktp == null ? "1" : listUser[0].ktp;
+        if(hpVerif == '1'){
+          setState(() {
+            enableHp = true;
+          });
+        } else {
+          setState(() {
+            enableHp = false;
+          });
+        }
+      });
+    }
+    return listUser;
+  }
 
   Future<void> getProv() async {
     var res = await Network().postToken('/provinsi');
@@ -77,7 +113,11 @@ class _ChangeProfileState extends State<ChangeProfile> {
   final picker = ImagePicker();
 
   startUpload(BuildContext context, String firstname, String lastname, String address, String hp, String provId, String kabId) {
-    fileName = _image == null ? ktp.split('/').last : _image.path.split('/').last;
+    if(base64Image != null){
+      fileName = _image == null ? ktp.split('/').last : _image.path.split('/').last;
+    } else {
+      fileName = imgProfile.split('/').last;
+    }
     upload(context, firstname, lastname, address, hp, fileName, provId, kabId);
   }
 
@@ -182,27 +222,28 @@ class _ChangeProfileState extends State<ChangeProfile> {
     super.initState();
     this.getProv();
     this.getKabkot('');
-    if(hpVerif == '1'){
-      setState(() {
-        enableHp = true;
-      });
-    } else {
-      setState(() {
-        enableHp = false;
-      });
-    }
-    // firstname, lastname, address, ktp, ktpVerif, hp, hpVerif
-    setState(() {
-      textFname.text = firstname == null ? "" : firstname;
-      textLname.text = lastname == null ? "" : lastname;
-      textAddress.text = address == null ? "" : address;
-      textHp.text = hp == null ? "" : hp;
-      imgProfile = ktp  == null || ktp == "" ? "1" : ktp;
-      selectedProv = namaprov == null ? "" : namaprov;
-      selectedKabkot = namakab == null ? "" : namakab;
-      selectedProvId = id_prov == null ? "" : id_prov;
-      selectedKabkotId = id_kab == null ? "" : id_kab;
-    });
+    this.getUser();
+    // if(hpVerif == '1'){
+    //   setState(() {
+    //     enableHp = true;
+    //   });
+    // } else {
+    //   setState(() {
+    //     enableHp = false;
+    //   });
+    // }
+    // // firstname, lastname, address, ktp, ktpVerif, hp, hpVerif
+    // setState(() {
+    //   textFname.text = firstname == null ? "" : firstname;
+    //   textLname.text = lastname == null ? "" : lastname;
+    //   textAddress.text = address == null ? "" : address;
+    //   textHp.text = hp == null ? "" : hp;
+    //   imgProfile = ktp  == null || ktp == "" ? "1" : ktp;
+    //   selectedProv = namaprov == null ? "" : namaprov;
+    //   selectedKabkot = namakab == null ? "" : namakab;
+    //   selectedProvId = id_prov == null ? "" : id_prov;
+    //   selectedKabkotId = id_kab == null ? "" : id_kab;
+    // });
   }
 
   void ShowProvince(BuildContext context) {
@@ -359,6 +400,8 @@ class _ChangeProfileState extends State<ChangeProfile> {
                 info.messagesNoButton(context, "Info", "Alamat provinsi harus diisi");
               } else if (selectedKabkotId == '' || selectedKabkotId == null){
                 info.messagesNoButton(context, "Info", "Alamat Kabupaten/ Kota harus diisi");
+              } else if (imgProfile == null){
+                info.messagesNoButton(context, "Info", "Unggah foto KTP");
               } else {
                 setState(() {
                   // Navigator.push(context, new MaterialPageRoute(builder: (context) => Verification(email: textEmail.text,)));
@@ -382,7 +425,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
                   fontWeight: FontWeight.w600),
             )),
       ),
-      body: listProv == null ? new Loading() : new GestureDetector(
+      body: listUser == null ? new Loading() : new GestureDetector(
         behavior: HitTestBehavior.opaque,
         onPanDown: (_) {
           FocusScope.of(context).requestFocus(FocusNode());

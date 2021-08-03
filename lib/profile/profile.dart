@@ -156,21 +156,21 @@ class _Profile extends State<Profile> {
       var body = jsonDecode(res.body);
       var dataJson = body['result'];
       setState(() {
-        if(dataJson == 'null'){
-          imgProfile = '';
-          ktpVerify = '0';
-          hpVerify = '0';
-        } else {
-          listUser = dataJson.map<User>((json) => User.fromJson(json)).toList();
-          nama = listUser[0].firstname == null ? "" : listUser[0].firstname;
-          imgProfile = listUser[0].foto == null ? "" : listUser[0].foto;
-          ktpVerify = listUser[0].ktpVerify == null ? "0" : listUser[0].ktpVerify;
-          hpVerify = listUser[0].ishpVerify == null ? "0" : listUser[0].ishpVerify;
-          id_kab = listUser[0].id_kab == null ? "" : listUser[0].id_kab;
-          id_prov = listUser[0].id_prov == null ? "" : listUser[0].id_prov;
-          namakab = listUser[0].namakab == null ? "" : listUser[0].namakab;
-          namaprov = listUser[0].namaprov == null ? "" : listUser[0].namaprov;
-        }
+        // if(dataJson == 'null'){
+        //   imgProfile = '';
+        //   ktpVerify = '0';
+        //   hpVerify = '0';
+        // } else {
+        listUser = dataJson.map<User>((json) => User.fromJson(json)).toList();
+        nama = listUser[0].firstname == null ? "" : listUser[0].firstname;
+        imgProfile = listUser[0].foto == null ? "" : listUser[0].foto;
+        ktpVerify = listUser[0].ktpVerify == null ? "0" : listUser[0].ktpVerify;
+        hpVerify = listUser[0].ishpVerify == null ? "0" : listUser[0].ishpVerify;
+        // id_kab = listUser[0].id_kab == null ? "" : listUser[0].id_kab;
+        // id_prov = listUser[0].id_prov == null ? "" : listUser[0].id_prov;
+        // namakab = listUser[0].namakab == null ? "" : listUser[0].namakab;
+        // namaprov = listUser[0].namaprov == null ? "" : listUser[0].namaprov;
+        // }
       });
     }
     return listUser;
@@ -274,9 +274,7 @@ class _Profile extends State<Profile> {
                               onTap: () {
                                 // this.messagesLogout(context, 'keluar', 'anda yakin ingin keluar?');
                                 Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context,) =>
-                                new ChangeProfile(email: email,address: listUser[0].address, firstname: listUser[0].firstname, hp: listUser[0].hp,
-                                  lastname: listUser[0].lastname, hpVerif: listUser[0].ishpVerify, ktpVerif: listUser[0].ktpVerify, ktp: listUser[0].ktp,
-                                id_kab: listUser[0].id_kab, id_prov: listUser[0].id_prov, namakab: listUser[0].namakab, namaprov: listUser[0].namaprov,)));
+                                new ChangeProfile(email: email)));
                               },
                               child: new ListTile(
                                 title: new Text(
