@@ -130,7 +130,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
       "hp": hp,
       "fotoKTP": base64Image,
       "namaFile": fileName,
-      "id_Prov": provId,
+      "id_prov": provId,
       "id_kab": kabId
     };
     var res = await Network().postDataToken(data, '/changeProfile');

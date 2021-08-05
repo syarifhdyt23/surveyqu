@@ -362,7 +362,7 @@ class _Home extends State<Home> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                         image: DecorationImage(
-                          image: AssetImage('images/bannerlandscape.png'),
+                          image: AssetImage('images/qnews.jpeg'),
                           fit: BoxFit.cover,
                         ),
                         boxShadow: [
@@ -374,10 +374,10 @@ class _Home extends State<Home> {
                           ),
                         ],
                       ),
-                      child: Container(
-                        margin: EdgeInsets.only(top: 10),
-                        child: Text('dummy banner', style: TextStyle(fontWeight: FontWeight.w600),),
-                      ),
+                      // child: Container(
+                      //   margin: EdgeInsets.only(top: 10),
+                      //   child: Text('Qnews', style: TextStyle(fontWeight: FontWeight.w600),),
+                      // ),
                     )
                 ),
               ]
@@ -597,7 +597,7 @@ class _Home extends State<Home> {
                                     new Container(
                                       margin: const EdgeInsets.only(left: 10, right: 10),
                                       child: new Text(
-                                        'Poin',
+                                        'Q-Score',
                                         overflow: TextOverflow.ellipsis,
                                         softWrap: false,
                                         style: new TextStyle(
@@ -614,7 +614,7 @@ class _Home extends State<Home> {
                                         left: 10,
                                       ),
                                       child: new Text(
-                                        sqpoint == null ? '0 Poin' : sqpoint +' Poin',
+                                        sqpoint == null ? '0' : sqpoint,
                                         style: new TextStyle(
                                             fontFamily: "helvetica, bold",
                                             color: Colors.black,

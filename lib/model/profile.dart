@@ -106,7 +106,7 @@ class User {
     lastname = json['lastname'];
     address = json['address'];
     ktp = json['ktp'];
-    ktpVerify = json['ktp_verify'];
+    ktpVerify = json['isktp_verify'];
     hp = json['hp'];
     ishpVerify = json['ishp_verify'];
     foto = json['foto'];
@@ -122,7 +122,7 @@ class User {
     data['lastname'] = this.lastname;
     data['address'] = this.address;
     data['ktp'] = this.ktp;
-    data['ktp_verify'] = this.ktpVerify;
+    data['isktp_verify'] = this.ktpVerify;
     data['hp'] = this.hp;
     data['ishp_verify'] = this.ishpVerify;
     data['foto'] = this.foto;
