@@ -122,3 +122,76 @@ class NotifHome {
     return data;
   }
 }
+
+class HomeContent {
+  String api;
+  String urutan;
+  String nama;
+  String judul;
+  String imgurl;
+  String jenis;
+  String status;
+  String divisi;
+
+  HomeContent(
+      {this.api,
+        this.urutan,
+        this.nama,
+        this.judul,
+        this.imgurl,
+        this.jenis,
+        this.status,
+        this.divisi});
+
+  HomeContent.fromJson(Map<String, dynamic> json) {
+    api = json['api'];
+    urutan = json['urutan'];
+    nama = json['nama'];
+    judul = json['judul'];
+    imgurl = json['imgurl'];
+    jenis = json['jenis'];
+    status = json['status'];
+    divisi = json['divisi'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['api'] = this.api;
+    data['urutan'] = this.urutan;
+    data['nama'] = this.nama;
+    data['judul'] = this.judul;
+    data['imgurl'] = this.imgurl;
+    data['jenis'] = this.jenis;
+    data['status'] = this.status;
+    data['divisi'] = this.divisi;
+    return data;
+  }
+}
+
+class Qnews {
+  String judul;
+  String deskripsi;
+  String id;
+  String color;
+  String gambar;
+
+  Qnews({this.judul, this.deskripsi, this.id, this.color, this.gambar});
+
+  Qnews.fromJson(Map<String, dynamic> json) {
+    judul = json['judul'];
+    deskripsi = json['deskripsi'];
+    id = json['id'];
+    color = json['color'];
+    gambar = json['gambar'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['judul'] = this.judul;
+    data['deskripsi'] = this.deskripsi;
+    data['id'] = this.id;
+    data['color'] = this.color;
+    data['gambar'] = this.gambar;
+    return data;
+  }
+}

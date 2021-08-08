@@ -101,6 +101,7 @@ class _SurveyViewState extends State<SurveyView> {
                       }),
                 ),
                 new Container(
+                  alignment: Alignment.center,
                   padding: EdgeInsets.only(top: 60, left: 10, right: 10, bottom: 10),
                   child: new Column(
                     // mainAxisAlignment: MainAxisAlignment.center,

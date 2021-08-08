@@ -6,6 +6,8 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:surveyqu/domain.dart';
 import 'package:surveyqu/model/profile.dart';
+import 'package:surveyqu/survey/surveydetail.dart';
+import 'package:surveyqu/survey/surveyview.dart';
 import 'package:surveyqu/widget/advertisement_card.dart';
 import 'package:surveyqu/home/notif.dart';
 import 'package:surveyqu/widget/survey_card.dart';
@@ -15,6 +17,7 @@ import 'package:surveyqu/info.dart';
 import 'package:surveyqu/loading.dart';
 import 'package:surveyqu/login/login.dart';
 import 'package:surveyqu/model/home.dart';
+import 'package:surveyqu/widget/survey_slider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../hexacolor.dart';
 import '../network_utils/api.dart';
@@ -32,6 +35,7 @@ class _Home extends State<Home> {
   var token, sqpoint, sqreward, nama, email;
   String message, notif;
   List<Pengumuman> listNews;
+  List<Qnews> listQnews;
   List<Advertising> listAds;
   List<Question> listQna;
   List<QSurvey> listSurv;
@@ -85,6 +89,25 @@ class _Home extends State<Home> {
     return sqpoint;
   }
 
+  // Future<List<HomeContent>> getHome() async {
+  //   this._getToken();
+  //   var res = await Network().postToken('/contentHome');
+  //   if (res.statusCode == 200) {
+  //     var body = jsonDecode(res.body);
+  //     var dataJson = body['result'] as List;
+  //     setState(() {
+  //       listHome = dataJson.map<HomeContent>((json) => HomeContent.fromJson(json)).toList();
+  //     });
+  //   } else {
+  //     SharedPreferences localStorage = await SharedPreferences.getInstance();
+  //     localStorage.clear();
+  //     Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+  //         new MaterialPageRoute(builder: (context) => Login()),
+  //             (route) => false);
+  //   }
+  //   return listHome;
+  // }
+
   Future<List<Pengumuman>> getPengumuman() async {
     this._getToken();
     var body = {
@@ -127,20 +150,20 @@ class _Home extends State<Home> {
     }
   }
 
-  Future<List<Advertising>> getAds() async {
-    var body = {
-      "jenis": 'a'
-    };
-    var res = await Network().postDataToken(body, '/pengumuman');
-    if (res.statusCode == 200) {
-      var body = jsonDecode(res.body);
-      var dataJson = body['result'] as List;
-      setState(() {
-        listAds = dataJson.map<Advertising>((json) => Advertising.fromJson(json)).toList();
-      });
-    }
-    return listAds;
-  }
+  // Future<List<Advertising>> getAds() async {
+  //   var body = {
+  //     "jenis": 'a'
+  //   };
+  //   var res = await Network().postDataToken(body, '/pengumuman');
+  //   if (res.statusCode == 200) {
+  //     var body = jsonDecode(res.body);
+  //     var dataJson = body['result'] as List;
+  //     setState(() {
+  //       listAds = dataJson.map<Advertising>((json) => Advertising.fromJson(json)).toList();
+  //     });
+  //   }
+  //   return listAds;
+  // }
 
   Future<List<Question>> getQuestion() async {
     var body = {
@@ -172,13 +195,28 @@ class _Home extends State<Home> {
     return listSurv;
   }
 
+  Future<List<Qnews>> getQnews() async {
+    var body = {
+      "jenis": 'qn'
+    };
+    var res = await Network().postDataToken(body, '/question');
+    if (res.statusCode == 200) {
+      var body = jsonDecode(res.body);
+      var dataJson = body['result'] as List;
+      setState(() {
+        listQnews = dataJson.map<Qnews>((json) => Qnews.fromJson(json)).toList();
+      });
+    }
+    return listQnews;
+  }
+
   Future<void> _onRefresh() {
     Completer<void> completer = new Completer<void>();
     timer = new Timer(new Duration(seconds: 2), () {
       this.getPengumuman();
       this.getSqpoint();
       this.getQuestion();
-      // this.getAds();
+      this.getQnews();
       this.getSurvey();
       this.getNotif();
       completer.complete();
@@ -194,7 +232,7 @@ class _Home extends State<Home> {
     this.getSqpoint();
     this.getNotif();
     this.getQuestion();
-    // this.getAds();
+    this.getQnews();
     this.getSurvey();
   }
 
@@ -206,18 +244,18 @@ class _Home extends State<Home> {
         elevation: 0,
         title: new Text('surveyQu'),
         actions: [
-          new InkWell(
-            onTap: (){
-            },
-            child:new Container(
-              margin: const EdgeInsets.only(right: 10.0,),
-              child: new Icon(
-                Icons.search,
-                color: Colors.white,
-                size: kToolbarHeight - 30,
-              ),
-            ),
-          ),
+          // new InkWell(
+          //   onTap: (){
+          //   },
+          //   child:new Container(
+          //     margin: const EdgeInsets.only(right: 10.0,),
+          //     child: new Icon(
+          //       Icons.search,
+          //       color: Colors.white,
+          //       size: kToolbarHeight - 30,
+          //     ),
+          //   ),
+          // ),
           new InkWell(
             highlightColor: Colors.transparent,
             splashColor: Colors.transparent,
@@ -332,33 +370,7 @@ class _Home extends State<Home> {
                     child: Container(
                       height: 180,
                       alignment: Alignment.topCenter,
-                      margin: EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        image: DecorationImage(
-                          image: AssetImage('images/bannerlandscape.png'),
-                          fit: BoxFit.cover,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 2,
-                            blurRadius: 4,
-                            offset: Offset(1, 2), // changes position of shadow
-                          ),
-                        ],
-                      ),
-                      child: Container(
-                        margin: EdgeInsets.only(top: 10),
-                        child: Text('dummy banner', style: TextStyle(fontWeight: FontWeight.w600),),
-                      ),
-                    )
-                ),
-                InkWell(
-                    child: Container(
-                      height: 180,
-                      alignment: Alignment.topCenter,
-                      margin: EdgeInsets.all(20),
+                      margin: EdgeInsets.only(left: 25,right: 25,top: 20,bottom: 20),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                         image: DecorationImage(
@@ -380,6 +392,56 @@ class _Home extends State<Home> {
                       // ),
                     )
                 ),
+                listQnews == null ? new Container() : new Container(
+                    height: 180,
+                    margin: EdgeInsets.only(top: 10, bottom: 10),
+                    child: new Swiper(
+                      itemCount: listQnews == null ? 0 : listQnews.length,
+                      viewportFraction: 0.9,
+                      scale: 0.9,
+                      autoplay: true,
+                      pagination: new SwiperPagination(),
+                      itemBuilder: (BuildContext context, int i) {
+                        return SurveySlider(
+                          gambar: listQnews[i].gambar,
+                          color: listQnews[i].color,
+                          id: listQnews[i].id,
+                          deskripsi: listQnews[i].deskripsi,
+                          judul: listQnews[i].judul,
+                          jenis: 'qn',
+                        );
+                      },
+                    )
+                ),
+                // InkWell(
+                //   onTap: (){
+                //     Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context) => SurveyView(id: '1',jenis: 'qn',judul: 'QNEWS',deskripsi: "Qnews berita",)));
+                //   },
+                //     child: Container(
+                //       height: 180,
+                //       alignment: Alignment.topCenter,
+                //       margin: EdgeInsets.all(20),
+                //       decoration: BoxDecoration(
+                //         borderRadius: BorderRadius.all(Radius.circular(10)),
+                //         image: DecorationImage(
+                //           image: AssetImage('images/bannerlandscape.png'),
+                //           fit: BoxFit.cover,
+                //         ),
+                //         boxShadow: [
+                //           BoxShadow(
+                //             color: Colors.grey.withOpacity(0.5),
+                //             spreadRadius: 2,
+                //             blurRadius: 4,
+                //             offset: Offset(1, 2), // changes position of shadow
+                //           ),
+                //         ],
+                //       ),
+                //       child: Container(
+                //         margin: EdgeInsets.only(top: 10),
+                //         child: Text('dummy banner', style: TextStyle(fontWeight: FontWeight.w600),),
+                //       ),
+                //     )
+                // ),
               ]
             )
           )
@@ -442,19 +504,19 @@ class _Home extends State<Home> {
               new Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  new InkWell(
-                    onTap: (){
-
-                    },
-                    child:new Container(
-                      margin: const EdgeInsets.only(right: 10.0,),
-                      child: new Icon(
-                        Icons.search,
-                        color: Colors.white,
-                        size: kToolbarHeight - 30,
-                      ),
-                    ),
-                  ),
+                  // new InkWell(
+                  //   onTap: (){
+                  //
+                  //   },
+                  //   child:new Container(
+                  //     margin: const EdgeInsets.only(right: 10.0,),
+                  //     child: new Icon(
+                  //       Icons.search,
+                  //       color: Colors.white,
+                  //       size: kToolbarHeight - 30,
+                  //     ),
+                  //   ),
+                  // ),
                   new InkWell(
                     onTap: (){
 
