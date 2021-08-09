@@ -137,3 +137,28 @@ class HeaderSurvey {
     return data;
   }
 }
+
+class ResultQnews {
+  String id;
+  String judul;
+  String deskripsi;
+  String urutan;
+
+  ResultQnews({this.id, this.judul, this.deskripsi, this.urutan});
+
+  ResultQnews.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    judul = json['judul'];
+    deskripsi = json['deskripsi'];
+    urutan = json['urutan'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['judul'] = this.judul;
+    data['deskripsi'] = this.deskripsi;
+    data['urutan'] = this.urutan;
+    return data;
+  }
+}
