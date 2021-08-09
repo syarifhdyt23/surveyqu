@@ -8,6 +8,7 @@ import 'package:surveyqu/info.dart';
 import 'package:surveyqu/loading.dart';
 import 'package:surveyqu/model/survey.dart';
 import 'package:surveyqu/network_utils/api.dart';
+import 'package:surveyqu/profile/privacypolicy.dart';
 import 'package:surveyqu/survey/surveydetail.dart';
 
 class SurveyView extends StatefulWidget {
@@ -143,7 +144,9 @@ class _SurveyViewState extends State<SurveyView> {
           itemBuilder: (context, i) {
             return new InkWell(
               onTap: () {
-                if(listSurvey[i].status == '0'){
+                if (jenis == 'qn'){
+                  Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context) => PrivacyPolicy(link: '/detailQ',title: judul,)));
+                } else if(listSurvey[i].status == '0'){
                   Navigator.of(context).push(new MaterialPageRoute(
                       builder: (context) => SurveyDetail(
                         id: listSurvey[i].id,

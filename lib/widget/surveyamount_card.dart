@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:surveyqu/home/description_page.dart';
+import 'package:surveyqu/widget/description_page.dart';
 
 import '../hexacolor.dart';
 
