@@ -14,10 +14,10 @@ import 'package:surveyqu/model/survey.dart';
 import 'package:surveyqu/network_utils/api.dart';
 
 class SliderDetail extends StatefulWidget {
-  String id, urutanSoal, message, jenis, email;
-  SliderDetail({this.id, this.urutanSoal, this.message, this.jenis, this.email});
+  String id, urutanSoal, jenis, email;
+  SliderDetail({this.id, this.urutanSoal, this.jenis, this.email});
   @override
-  _SliderDetailState createState() => _SliderDetailState(id: id, urutanSoal: urutanSoal, message: message, jenis:jenis, email: email);
+  _SliderDetailState createState() => _SliderDetailState(id: id, urutanSoal: urutanSoal, jenis:jenis, email: email);
 }
 
 class _SliderDetailState extends State<SliderDetail> {
@@ -25,11 +25,10 @@ class _SliderDetailState extends State<SliderDetail> {
   String radioValue = '';
   String id, email;
   Info info = new Info();
-  String type, soal, idSoal, urutanSoal, nextId, nextUrutan, message, prevId, prevUrutan, jenis;
-  TextEditingController _textanswer = new TextEditingController();
-  List<ResultQnews> listSoal;
+  String urutanSoal, jenis;
+  List<ResultQnews> listDetail;
 
-  _SliderDetailState({this.id, this.urutanSoal, this.message, this.jenis, this.email});
+  _SliderDetailState({this.id, this.urutanSoal, this.jenis, this.email});
 
   Future<List<ResultQnews>> getQuestion() async {
     var data = {
@@ -43,13 +42,12 @@ class _SliderDetailState extends State<SliderDetail> {
       var body = jsonDecode(res.body);
       var dataJson = body['result'];
       setState(() {
-        listSoal =
-            dataJson.map<ResultQnews>((json) => ResultQnews.fromJson(json)).toList();
+        listDetail = dataJson.map<ResultQnews>((json) => ResultQnews.fromJson(json)).toList();
       });
     } else {
       info.messagesNoButton(context, 'info','Detail Error');
     }
-    return listSoal;
+    return listDetail;
   }
 
   @override
@@ -62,13 +60,13 @@ class _SliderDetailState extends State<SliderDetail> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: new Text(listSoal[0].judul),
+        title: new Text(listDetail == null ? 'Loading' : listDetail[0].judul),
       ),
-      body: listSoal == null ? new Loading() : new ListView(
+      body: listDetail == null ? new Loading() : new ListView(
         children: [
           new Container(
             padding: EdgeInsets.all(10),
-            child: new Text(listSoal[0].deskripsi, textAlign: TextAlign.justify,),
+            child: new Text(listDetail[0].deskripsi, textAlign: TextAlign.justify,),
           )
         ],
       ),

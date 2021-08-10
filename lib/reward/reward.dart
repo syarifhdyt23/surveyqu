@@ -125,7 +125,7 @@ class _Reward extends State<Reward> {
         child: new Stack(
           children: <Widget>[
             new Container(
-              height: 200,
+              height: 190,
                 width: size.width,
                 padding: const EdgeInsets.only(top: 80, left: 15, right: 15),
                 decoration: BoxDecoration(
@@ -212,7 +212,7 @@ class _Reward extends State<Reward> {
               )
             ) :
             new Container(
-              padding: EdgeInsets.only(top: 200),
+              padding: EdgeInsets.only(top: 190),
               child: DefaultTabController(
                 length: 2,
                 child: Scaffold(

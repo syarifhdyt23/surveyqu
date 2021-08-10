@@ -10,7 +10,7 @@ import 'package:surveyqu/model/survey.dart';
 import 'package:surveyqu/network_utils/api.dart';
 import 'package:surveyqu/profile/privacypolicy.dart';
 import 'package:surveyqu/survey/surveydetail.dart';
-import 'package:surveyqu/widget/description_page.dart';
+import 'package:surveyqu/widget/survey_slider_detail.dart';
 
 class SurveyView extends StatefulWidget {
   String judul, deskripsi, id, jenis;

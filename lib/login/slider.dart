@@ -128,7 +128,7 @@ class _SliderInfo extends State<SliderInfo> {
                       mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
                         new Container(
-                          margin: EdgeInsets.only(left: 80,right: 80),
+                          margin: EdgeInsets.only(left: 60,right: 60),
                           height: 200,
                           child: Image.asset(
                             'images/logo.png',
@@ -201,8 +201,9 @@ class _SliderInfo extends State<SliderInfo> {
                 padding: const EdgeInsets.all(27.0),
                 child: FlatButton(
                   onPressed: () {
-                    liquidController.animateToPage(
-                        page: slideCount - 1, duration: 200);
+                    Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context) => new Login()));
+                    // liquidController.animateToPage(
+                    //     page: slideCount - 1, duration: 200);
                   },
                   child: Text("Lewati", style: TextStyle(color: Colors.white)),
                   color: Colors.white.withOpacity(0.01),

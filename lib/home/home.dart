@@ -453,7 +453,7 @@ class _Home extends State<Home> {
   SliverAppBar imageWidget() {
     return SliverAppBar(
       backgroundColor: new HexColor('#2670A1'),
-      expandedHeight: 100,
+      expandedHeight: 60,
       elevation: 0,
       flexibleSpace: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {

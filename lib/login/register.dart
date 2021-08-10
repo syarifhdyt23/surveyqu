@@ -104,7 +104,7 @@ class _RegisterState extends State<Register> {
           children: <Widget>[
             new Container(
               height: 150,
-              margin: const EdgeInsets.only(left: 30.0, right: 30.0, top: 50),
+              margin: const EdgeInsets.only(left: 80.0, right: 80.0, top: 50),
               decoration: new BoxDecoration(
                 image: new DecorationImage(
                   image: new AssetImage('images/logo.png'),
@@ -215,44 +215,44 @@ class _RegisterState extends State<Register> {
                         textInputAction: TextInputAction.done,
                       ),
                     ),
-                    new Container(
-                      margin: const EdgeInsets.only(top: 10),
-                      child: new Text('Nomor HP (08XXX)', style: TextStyle(color: Colors.white),),
-                    ),
-                    new Container(
-                      width: size.width,
-                      height: 45,
-                      margin: const EdgeInsets.only(top: 5),
-                      child: new TextField(
-                        controller: textHp,
-                        decoration: InputDecoration(
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.grey.withOpacity(.2), width: 1.0),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Colors.grey.withOpacity(.2), width: 1.0),
-                          ),
-                          contentPadding: const EdgeInsets.only(
-                              left: 10.0, bottom: 0.0, top: 7.0),
-                          //border: InputBorder.none,
-                          // hintText: "Nomor Handphone (08xx)",
-                          // hintStyle: TextStyle(
-                          //     color: Colors.grey, fontFamily: 'helvetica'),
-                          labelStyle: TextStyle(
-                            color: Colors.black,
-                          ),
-                          fillColor: Colors.grey[200],
-                          filled: true,
-                          // prefixIcon: Padding(padding: const EdgeInsets.fromLTRB(0.0, 0.0, 1.0, 1.0),
-                          //   child: Icon(Icons.phone,),
-                          // ),
-                        ),
-                        textInputAction: TextInputAction.done,
-                        keyboardType: TextInputType.number,
-                      ),
-                    ),
+                    // new Container(
+                    //   margin: const EdgeInsets.only(top: 10),
+                    //   child: new Text('Nomor HP (08XXX)', style: TextStyle(color: Colors.white),),
+                    // ),
+                    // new Container(
+                    //   width: size.width,
+                    //   height: 45,
+                    //   margin: const EdgeInsets.only(top: 5),
+                    //   child: new TextField(
+                    //     controller: textHp,
+                    //     decoration: InputDecoration(
+                    //       focusedBorder: OutlineInputBorder(
+                    //         borderSide: BorderSide(
+                    //             color: Colors.grey.withOpacity(.2), width: 1.0),
+                    //       ),
+                    //       enabledBorder: OutlineInputBorder(
+                    //         borderSide: BorderSide(
+                    //             color: Colors.grey.withOpacity(.2), width: 1.0),
+                    //       ),
+                    //       contentPadding: const EdgeInsets.only(
+                    //           left: 10.0, bottom: 0.0, top: 7.0),
+                    //       //border: InputBorder.none,
+                    //       // hintText: "Nomor Handphone (08xx)",
+                    //       // hintStyle: TextStyle(
+                    //       //     color: Colors.grey, fontFamily: 'helvetica'),
+                    //       labelStyle: TextStyle(
+                    //         color: Colors.black,
+                    //       ),
+                    //       fillColor: Colors.grey[200],
+                    //       filled: true,
+                    //       // prefixIcon: Padding(padding: const EdgeInsets.fromLTRB(0.0, 0.0, 1.0, 1.0),
+                    //       //   child: Icon(Icons.phone,),
+                    //       // ),
+                    //     ),
+                    //     textInputAction: TextInputAction.done,
+                    //     keyboardType: TextInputType.number,
+                    //   ),
+                    // ),
 
                     new Container(
                       margin: const EdgeInsets.only(top: 10),
@@ -444,10 +444,6 @@ class _RegisterState extends State<Register> {
                               info.messagesNoButton(context, "Info", "Input nama depan anda");
                             } else if (textLName.text == '') {
                               info.messagesNoButton(context, "Info", "Input nama belakang anda");
-                            } else if (textHp.text == ''){
-                              info.messagesNoButton(context, "Info", "Input nomor handphone anda");
-                            } else if (textHp.text.contains('08') == false){
-                              info.messagesNoButton(context, "Info", "Nomor handphone harus diawali dengan 08");
                             } else if (textEmail.text == ''){
                               info.messagesNoButton(context, "Info", "Input email anda");
                             } else if (textEmail.text.contains('@') == false || textEmail.text.contains('.') == false ){
@@ -461,7 +457,7 @@ class _RegisterState extends State<Register> {
                             } else {
                               setState(() {
                                 // Navigator.push(context, new MaterialPageRoute(builder: (context) => Verification(email: textEmail.text,)));
-                                this._onLoading(textEmail.text, textPass.text, textFName.text, textLName.text, textRef.text, textHp.text);
+                                this._onLoading(textEmail.text, textPass.text, textFName.text, textLName.text, textRef.text, '');
                               });
                             }
                           },
