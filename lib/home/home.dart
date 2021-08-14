@@ -350,6 +350,17 @@ class _Home extends State<Home> {
                 //       },
                 //     )
                 // ),
+                new Container(
+                    margin: EdgeInsets.only(left: 20, top: 10),
+                    width: size.width,
+                    child: new Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        new Text("Q-Survey", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 22),),
+                        new Text("Kerjakan study sesuai dengan kriteriamu", style: TextStyle(fontSize: 18),),
+                      ],
+                    )
+                ),
                 listSurv == null ? new Container() : new ListView.builder(
                     physics: BouncingScrollPhysics(),
                     padding: EdgeInsets.only(top: 10,bottom: 10),
@@ -366,6 +377,17 @@ class _Home extends State<Home> {
                         jenis: 'qt',
                       );
                     }),
+                new Container(
+                  margin: EdgeInsets.only(left: 20, top: 10),
+                  width: size.width,
+                  child: new Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      new Text("Q-Polling", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 22),),
+                      new Text("Kerjakan study sesuai dengan kriteriamu", style: TextStyle(fontSize: 18),),
+                    ],
+                  )
+                ),
                 InkWell(
                     child: Container(
                       height: 180,
@@ -390,6 +412,17 @@ class _Home extends State<Home> {
                       //   margin: EdgeInsets.only(top: 10),
                       //   child: Text('Qnews', style: TextStyle(fontWeight: FontWeight.w600),),
                       // ),
+                    )
+                ),
+                new Container(
+                    margin: EdgeInsets.only(left: 20, top: 10),
+                    width: size.width,
+                    child: new Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        new Text("Q-Study", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 22),),
+                        new Text("Kerjakan study sesuai dengan kriteriamu", style: TextStyle(fontSize: 18),),
+                      ],
                     )
                 ),
                 listQnews == null ? new Container() : new Container(

@@ -22,7 +22,6 @@ class _RegisterState extends State<Register> {
   bool visiblePassword = false;
   bool visibleConfPassword = false;
 
-
   // http://surveyqu.com/sqws/sqmid/index.php/auth/register
   // {"name" : "test", "password" : "12345","hp" : "0812345789","email":"ahmadsyarifhidayat23@gmail.com","ref":"123456"}
   TextEditingController textFName = new TextEditingController();

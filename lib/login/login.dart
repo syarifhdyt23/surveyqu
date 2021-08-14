@@ -327,7 +327,7 @@ class _LoginState extends State<Login> {
                                       "Daftar",
                                       style: new TextStyle(
                                           fontSize: 17,
-                                          color: Colors.white,
+                                          color: new HexColor("#F07B3F"),
                                           fontWeight: FontWeight.w500),
                                     ),
                                   ],

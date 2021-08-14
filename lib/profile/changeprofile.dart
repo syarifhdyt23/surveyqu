@@ -413,7 +413,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
                 });
               }
             },
-            color: new HexColor("#EA5455"),
+            color: new HexColor("#F07B3F"),
             shape: new RoundedRectangleBorder(
               borderRadius: new BorderRadius.circular(7.0),
             ),
@@ -460,7 +460,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
                                       color: Colors.grey.withOpacity(.2), width: 1.0),
                                 ),
                                 contentPadding: const EdgeInsets.only(
-                                    left: 10.0, bottom: 0.0, top: 7.0),
+                                    left: 18.0, bottom: 0.0, top: 7.0),
                                 //border: InputBorder.none,
                                 // hintText: "Nama",
                                 // hintStyle: TextStyle(
@@ -505,7 +505,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
                                       color: Colors.grey.withOpacity(.2), width: 1.0),
                                 ),
                                 contentPadding: const EdgeInsets.only(
-                                    left: 10.0, bottom: 0.0, top: 7.0),
+                                    left: 18.0, bottom: 0.0, top: 7.0),
                                 //border: InputBorder.none,
                                 // hintText: "Nomor Handphone (08xx)",
                                 // hintStyle: TextStyle(
@@ -552,7 +552,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
                     alignment: Alignment.centerLeft,
                     child: new Text(selectedProv == null ? 'Pilih Provinsi' : selectedProv,
                       textAlign: TextAlign.left,
-                      style: new TextStyle(color: selectedProv == null ? Colors.grey : Colors.black),
+                      style: new TextStyle(color: selectedProv == null ? Colors.grey : Colors.black, fontWeight: FontWeight.w400, fontFamily: 'Roboto'),
                     ),
                   ),
                 ),
@@ -584,7 +584,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
                     alignment: Alignment.centerLeft,
                     child: new Text(selectedKabkot == null ? 'Pilih Kabupaten/ Kota' : selectedKabkot,
                       textAlign: TextAlign.left,
-                      style: new TextStyle(color: selectedKabkot == null ? Colors.grey : Colors.black),
+                      style: new TextStyle(color: selectedKabkot == null ? Colors.grey : Colors.black, fontWeight: FontWeight.w400, fontFamily: 'Roboto'),
                     ),
                   ),
                 ),
@@ -609,7 +609,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
                           color: Colors.grey.withOpacity(.2), width: 1.0),
                     ),
                     contentPadding: const EdgeInsets.only(
-                        left: 10.0, bottom: 0.0, top: 7.0),
+                        left: 18.0, bottom: 0.0, top: 7.0),
                     //border: InputBorder.none,
                     // hintText: "Email",
                     // hintStyle: TextStyle(
@@ -661,7 +661,7 @@ class _ChangeProfileState extends State<ChangeProfile> {
                           color: Colors.grey.withOpacity(.2), width: 1.0),
                     ),
                     contentPadding: const EdgeInsets.only(
-                        left: 10.0, bottom: 0.0, top: 7.0),
+                        left: 18.0, bottom: 0.0, top: 7.0),
                     //border: InputBorder.none,
                     // hintText: "Password",
                     // hintStyle: TextStyle(
