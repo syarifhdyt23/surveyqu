@@ -313,6 +313,17 @@ class _Home extends State<Home> {
                     },
                   )
                 ),
+                new Container(
+                    margin: EdgeInsets.only(left: 20, top: 10),
+                    width: size.width,
+                    child: new Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        new Text("Q-Survey", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),),
+                        new Text("Kerjakan study sesuai dengan kriteriamu", style: TextStyle(fontSize: 18),),
+                      ],
+                    )
+                ),
                 listQna == null ? new Container() : new ListView.builder(
                   physics: BouncingScrollPhysics(),
                   scrollDirection: Axis.vertical,
@@ -356,7 +367,7 @@ class _Home extends State<Home> {
                     child: new Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        new Text("Q-Survey", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 22),),
+                        new Text("Q-Polling", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),),
                         new Text("Kerjakan study sesuai dengan kriteriamu", style: TextStyle(fontSize: 18),),
                       ],
                     )
@@ -368,7 +379,7 @@ class _Home extends State<Home> {
                     shrinkWrap: true,
                     itemCount: listSurv == null ? 0 : listSurv.length,
                     itemBuilder: (context, i){
-                      return SurveyCard(
+                      return SurveyCardLeft(
                         gambar: listSurv[i].gambar,
                         color: listSurv[i].color,
                         id: listSurv[i].id,
@@ -383,7 +394,7 @@ class _Home extends State<Home> {
                   child: new Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      new Text("Q-Polling", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 22),),
+                      new Text("Q-Games", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),),
                       new Text("Kerjakan study sesuai dengan kriteriamu", style: TextStyle(fontSize: 18),),
                     ],
                   )
@@ -420,7 +431,7 @@ class _Home extends State<Home> {
                     child: new Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        new Text("Q-Study", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 22),),
+                        new Text("Q-News", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),),
                         new Text("Kerjakan study sesuai dengan kriteriamu", style: TextStyle(fontSize: 18),),
                       ],
                     )

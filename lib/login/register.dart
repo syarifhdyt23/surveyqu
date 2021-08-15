@@ -103,7 +103,7 @@ class _RegisterState extends State<Register> {
           children: <Widget>[
             new Container(
               height: 150,
-              margin: const EdgeInsets.only(left: 80.0, right: 80.0, top: 50),
+              margin: const EdgeInsets.only(left: 100.0, right: 100.0, top: 50),
               decoration: new BoxDecoration(
                 image: new DecorationImage(
                   image: new AssetImage('images/logo.png'),
@@ -460,7 +460,7 @@ class _RegisterState extends State<Register> {
                               });
                             }
                           },
-                          color: new HexColor("#EA5455"),
+                          color: new HexColor("#F07B3F"),
                           shape: new RoundedRectangleBorder(
                               borderRadius: new BorderRadius.circular(7.0),
                           ),

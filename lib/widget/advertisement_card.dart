@@ -30,10 +30,10 @@ class AdvertisementCard extends StatelessWidget {
               ),
             ],
           ),
-          child: Container(
-            margin: EdgeInsets.only(top: 10),
-            child: Text(isi, style: TextStyle(fontWeight: FontWeight.w600),),
-          ),
+          // child: Container(
+          //   margin: EdgeInsets.only(top: 10),
+          //   child: Text(isi, style: TextStyle(fontWeight: FontWeight.w600),),
+          // ),
         )
     );
   }
