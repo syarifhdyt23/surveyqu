@@ -34,6 +34,7 @@ class _Home extends State<Home> {
   bool _visible = false;
   var token, sqpoint, sqreward, nama, email;
   String message, notif;
+  // List listNews;
   List<Pengumuman> listNews;
   List<Qnews> listQnews;
   List<Advertising> listAds;
@@ -89,36 +90,16 @@ class _Home extends State<Home> {
     return sqpoint;
   }
 
-  // Future<List<HomeContent>> getHome() async {
-  //   this._getToken();
-  //   var res = await Network().postToken('/contentHome');
-  //   if (res.statusCode == 200) {
-  //     var body = jsonDecode(res.body);
-  //     var dataJson = body['result'] as List;
-  //     setState(() {
-  //       listHome = dataJson.map<HomeContent>((json) => HomeContent.fromJson(json)).toList();
-  //     });
-  //   } else {
-  //     SharedPreferences localStorage = await SharedPreferences.getInstance();
-  //     localStorage.clear();
-  //     Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-  //         new MaterialPageRoute(builder: (context) => Login()),
-  //             (route) => false);
-  //   }
-  //   return listHome;
-  // }
-
-  Future<List<Pengumuman>> getPengumuman() async {
+  Future<void> getHome() async {
     this._getToken();
-    var body = {
-      "jenis": 'p'
-    };
-    var res = await Network().postDataToken(body, '/pengumuman');
+    var res = await Network().postToken('/contentHome');
     if (res.statusCode == 200) {
       var body = jsonDecode(res.body);
-      var dataJson = body['result'] as List;
+      var pengumuman = body['pengumuman'] as List;
       setState(() {
-        listNews = dataJson.map<Pengumuman>((json) => Pengumuman.fromJson(json)).toList();
+        // final contentHome = contentHomeFromJson(body);
+        // listNews = contentHome.pengumuman;
+        listNews = pengumuman.map<Pengumuman>((json) => Pengumuman.fromJson(json)).toList();
       });
     } else {
       SharedPreferences localStorage = await SharedPreferences.getInstance();
@@ -127,8 +108,29 @@ class _Home extends State<Home> {
           new MaterialPageRoute(builder: (context) => Login()),
               (route) => false);
     }
-    return listNews;
   }
+
+  // Future<List<Pengumuman>> getPengumuman() async {
+  //   this._getToken();
+  //   var body = {
+  //     "jenis": 'p'
+  //   };
+  //   var res = await Network().postDataToken(body, '/pengumuman');
+  //   if (res.statusCode == 200) {
+  //     var body = jsonDecode(res.body);
+  //     var dataJson = body['result'] as List;
+  //     setState(() {
+  //       listNews = dataJson.map<Pengumuman>((json) => Pengumuman.fromJson(json)).toList();
+  //     });
+  //   } else {
+  //     SharedPreferences localStorage = await SharedPreferences.getInstance();
+  //     localStorage.clear();
+  //     Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+  //         new MaterialPageRoute(builder: (context) => Login()),
+  //             (route) => false);
+  //   }
+  //   return listNews;
+  // }
 
   Future<void> getNotif() async {
     await this._getToken();
@@ -213,11 +215,12 @@ class _Home extends State<Home> {
   Future<void> _onRefresh() {
     Completer<void> completer = new Completer<void>();
     timer = new Timer(new Duration(seconds: 2), () {
-      this.getPengumuman();
-      this.getSqpoint();
-      this.getQuestion();
-      this.getQnews();
-      this.getSurvey();
+      this.getHome();
+      // this.getPengumuman();
+      // this.getSqpoint();
+      // this.getQuestion();
+      // this.getQnews();
+      // this.getSurvey();
       this.getNotif();
       completer.complete();
     });
@@ -228,12 +231,13 @@ class _Home extends State<Home> {
   void initState() {
     super.initState();
     this.getUser();
-    this.getPengumuman();
-    this.getSqpoint();
+    this.getHome();
+    // this.getPengumuman();
+    // this.getSqpoint();
     this.getNotif();
-    this.getQuestion();
-    this.getQnews();
-    this.getSurvey();
+    // this.getQuestion();
+    // this.getQnews();
+    // this.getSurvey();
   }
 
   @override
