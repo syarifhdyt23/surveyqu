@@ -96,10 +96,12 @@ class _Home extends State<Home> {
     if (res.statusCode == 200) {
       var body = jsonDecode(res.body);
       var pengumuman = body['pengumuman'] as List;
+      var survey = body['survey'] as List;
       setState(() {
         // final contentHome = contentHomeFromJson(body);
         // listNews = contentHome.pengumuman;
         listNews = pengumuman.map<Pengumuman>((json) => Pengumuman.fromJson(json)).toList();
+        listQna = survey.map<Question>((json) => Question.fromJson(json)).toList();
       });
     } else {
       SharedPreferences localStorage = await SharedPreferences.getInstance();
@@ -167,20 +169,20 @@ class _Home extends State<Home> {
   //   return listAds;
   // }
 
-  Future<List<Question>> getQuestion() async {
-    var body = {
-      "jenis": 'qc'
-    };
-    var res = await Network().postDataToken(body, '/question');
-    if (res.statusCode == 200) {
-      var body = jsonDecode(res.body);
-      var dataJson = body['result'] as List;
-      setState(() {
-        listQna = dataJson.map<Question>((json) => Question.fromJson(json)).toList();
-      });
-    }
-    return listQna;
-  }
+  // Future<List<Question>> getQuestion() async {
+  //   var body = {
+  //     "jenis": 'qc'
+  //   };
+  //   var res = await Network().postDataToken(body, '/question');
+  //   if (res.statusCode == 200) {
+  //     var body = jsonDecode(res.body);
+  //     var dataJson = body['result'] as List;
+  //     setState(() {
+  //       listQna = dataJson.map<Question>((json) => Question.fromJson(json)).toList();
+  //     });
+  //   }
+  //   return listQna;
+  // }
 
   Future<List<QSurvey>> getSurvey() async {
     var body = {
