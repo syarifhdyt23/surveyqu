@@ -34,24 +34,18 @@ class _Home extends State<Home> {
   bool _visible = false;
   var token, sqpoint, sqreward, nama, email;
   String message, notif;
+
   // List listNews;
   List<Pengumuman> listNews;
+  List<Tutorial> listTutorial;
+  List<Qscreen> listQscreen;
+  List<Qsurvey> listQsurvey;
+  List<Qgames> listQgames;
   List<Qnews> listQnews;
-  List<Advertising> listAds;
-  List<Question> listQna;
-  List<QSurvey> listSurv;
   List<NotifHome> listNotif;
   List<User> listUser;
   Timer timer;
   final currencyFormat = new NumberFormat.currency(locale: 'en', symbol: "Rp", decimalDigits: 0);
-
-  Future<void> openURL(BuildContext context, String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      info.MessageInfo(context, 'Message', "Please install this apps");
-    }
-  }
 
   _getToken() async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
@@ -90,18 +84,32 @@ class _Home extends State<Home> {
     return sqpoint;
   }
 
+  // 1. pengumuman (Tanpa header )
+  // 2. Tutuorial (Tanpa header )
+  // 3. Q-screeen (Tanpa Header)
+  // 4. Q-survey (Header)
+  // 5. Q-polling (Header & Result)
+  // 6. Q-games (Header)
+  // 7. Q-news(Header & Detail)
+
   Future<void> getHome() async {
     this._getToken();
     var res = await Network().postToken('/contentHome');
     if (res.statusCode == 200) {
       var body = jsonDecode(res.body);
       var pengumuman = body['pengumuman'] as List;
-      var survey = body['survey'] as List;
+      var tutorial = body['tutorial'] as List;
+      var qsreen = body['qscreen'] as List;
+      var qsurvey = body['qsurvey'] as List;
+      var qgames = body['qgames'] as List;
+      var qnews = body['qnews'] as List;
       setState(() {
-        // final contentHome = contentHomeFromJson(body);
-        // listNews = contentHome.pengumuman;
         listNews = pengumuman.map<Pengumuman>((json) => Pengumuman.fromJson(json)).toList();
-        listQna = survey.map<Question>((json) => Question.fromJson(json)).toList();
+        listTutorial = tutorial.map<Tutorial>((json) => Tutorial.fromJson(json)).toList();
+        listQscreen = qsreen.map<Qscreen>((json) => Qscreen.fromJson(json)).toList();
+        listQsurvey = qsurvey.map<Qsurvey>((json) => Qsurvey.fromJson(json)).toList();
+        listQgames = qgames.map<Qgames>((json) => Qgames.fromJson(json)).toList();
+        listQnews = qnews.map<Qnews>((json) => Qnews.fromJson(json)).toList();
       });
     } else {
       SharedPreferences localStorage = await SharedPreferences.getInstance();
@@ -184,42 +192,42 @@ class _Home extends State<Home> {
   //   return listQna;
   // }
 
-  Future<List<QSurvey>> getSurvey() async {
-    var body = {
-      "jenis": 'qt'
-    };
-    var res = await Network().postDataToken(body, '/question');
-    if (res.statusCode == 200) {
-      var body = jsonDecode(res.body);
-      var dataJson = body['result'] as List;
-      setState(() {
-        listSurv = dataJson.map<QSurvey>((json) => QSurvey.fromJson(json)).toList();
-      });
-    }
-    return listSurv;
-  }
-
-  Future<List<Qnews>> getQnews() async {
-    var body = {
-      "jenis": 'qn'
-    };
-    var res = await Network().postDataToken(body, '/question');
-    if (res.statusCode == 200) {
-      var body = jsonDecode(res.body);
-      var dataJson = body['result'] as List;
-      setState(() {
-        listQnews = dataJson.map<Qnews>((json) => Qnews.fromJson(json)).toList();
-      });
-    }
-    return listQnews;
-  }
+  // Future<List<QSurvey>> getSurvey() async {
+  //   var body = {
+  //     "jenis": 'qt'
+  //   };
+  //   var res = await Network().postDataToken(body, '/question');
+  //   if (res.statusCode == 200) {
+  //     var body = jsonDecode(res.body);
+  //     var dataJson = body['result'] as List;
+  //     setState(() {
+  //       listSurv = dataJson.map<QSurvey>((json) => QSurvey.fromJson(json)).toList();
+  //     });
+  //   }
+  //   return listSurv;
+  // }
+  //
+  // Future<List<Qnews>> getQnews() async {
+  //   var body = {
+  //     "jenis": 'qn'
+  //   };
+  //   var res = await Network().postDataToken(body, '/question');
+  //   if (res.statusCode == 200) {
+  //     var body = jsonDecode(res.body);
+  //     var dataJson = body['result'] as List;
+  //     setState(() {
+  //       listQnews = dataJson.map<Qnews>((json) => Qnews.fromJson(json)).toList();
+  //     });
+  //   }
+  //   return listQnews;
+  // }
 
   Future<void> _onRefresh() {
     Completer<void> completer = new Completer<void>();
     timer = new Timer(new Duration(seconds: 2), () {
       this.getHome();
       // this.getPengumuman();
-      // this.getSqpoint();
+      this.getSqpoint();
       // this.getQuestion();
       // this.getQnews();
       // this.getSurvey();
@@ -235,7 +243,7 @@ class _Home extends State<Home> {
     this.getUser();
     this.getHome();
     // this.getPengumuman();
-    // this.getSqpoint();
+    this.getSqpoint();
     this.getNotif();
     // this.getQuestion();
     // this.getQnews();
@@ -307,45 +315,105 @@ class _Home extends State<Home> {
                     viewportFraction: 0.8,
                     scale: 0.9,
                     autoplay: true,
-                    pagination: new SwiperPagination(),
+                    pagination: new SwiperPagination(
+                      alignment: Alignment.bottomCenter,
+                      builder: new DotSwiperPaginationBuilder(
+                          color: Colors.grey, activeColor: new HexColor('#256fa0')),
+                    ),
                     itemBuilder: (BuildContext context, int i) {
                       return AdvertisementCard(
                         gambar: listNews[i].gambar,
                         isi: listNews[i].isi,
                         onTap: (){
-                          openURL(context, listNews[i].url);
+                          info.ShowDescriptionItem(context, listNews[i].judul, listNews[i].gambar, listNews[i].isi, listNews[i].url);
                         },
                       );
                     },
                   )
                 ),
+                listTutorial == null ? new Container() : new Container(
+                    height: 220,
+                    margin: EdgeInsets.only(top: 10, bottom: 10),
+                    child: new Swiper(
+                        itemCount: listTutorial == null ? 0 : listTutorial.length,
+                        viewportFraction: 0.9,
+                        scale: 0.9,
+                        autoplay: true,
+                        pagination: new SwiperPagination(
+                          alignment: Alignment.bottomCenter,
+                          builder: new DotSwiperPaginationBuilder(
+                              color: Colors.grey, activeColor: new HexColor('#256fa0')),
+                        ),
+                        itemBuilder: (BuildContext context, int i) {
+                      return SurveyCardLeft(
+                        gambar: listTutorial[i].gambar,
+                        color: listTutorial[i].color,
+                        id: listTutorial[i].id,
+                        deskripsi: listTutorial[i].deskripsi,
+                        judul: listTutorial[i].judul,
+                        jenis: listTutorial[i].jenis,
+                        quota: listTutorial[i].quota,
+                      );
+                    })),
+                listQscreen == null ? new Container() : new Container(
+                    height: 220,
+                    margin: EdgeInsets.only(top: 10, bottom: 10),
+                    child: new Swiper(
+                        itemCount: listQscreen == null ? 0 : listQscreen.length,
+                        viewportFraction: 0.9,
+                        scale: 0.9,
+                        autoplay: true,
+                        pagination: new SwiperPagination(
+                          alignment: Alignment.bottomCenter,
+                          builder: new DotSwiperPaginationBuilder(
+                              color: Colors.grey, activeColor: new HexColor('#256fa0')),
+                        ),
+                        itemBuilder: (BuildContext context, int i) {
+                      return SurveyCardLeft(
+                        gambar: listQscreen[i].gambar,
+                        color: listQscreen[i].color,
+                        id: listQscreen[i].id,
+                        deskripsi: listQscreen[i].deskripsi,
+                        judul: listQscreen[i].judul,
+                        jenis: listQscreen[i].jenis,
+                        quota: listQscreen[i].quota,
+                      );
+                    })),
                 new Container(
-                    margin: EdgeInsets.only(left: 20, top: 10),
+                    margin: EdgeInsets.only(left: 30, top: 10),
                     width: size.width,
                     child: new Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        new Text("Q-Survey", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),),
-                        new Text("Kerjakan study sesuai dengan kriteriamu", style: TextStyle(fontSize: 18),),
+                        new Text("Q-Survey", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),),
+                        new Text("Kerjakan study sesuai dengan kriteriamu", style: TextStyle(fontSize: 15),),
                       ],
                     )
                 ),
-                listQna == null ? new Container() : new ListView.builder(
-                  physics: BouncingScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  padding: EdgeInsets.only(top: 10,bottom: 10),
-                  shrinkWrap: true,
-                  itemCount: listQna == null ? 0 : listQna.length,
-                  itemBuilder: (context, i){
-                    return SurveyCard(
-                      gambar: listQna[i].gambar,
-                      color: listQna[i].color,
-                      id: listQna[i].id,
-                      deskripsi: listQna[i].deskripsi,
-                      judul: listQna[i].judul,
-                      jenis: 'qc',
+                listQsurvey == null ? new Container() : new Container(
+                    height: 220,
+                    margin: EdgeInsets.only(top: 10, bottom: 10),
+                    child: new Swiper(
+                        itemCount: listQscreen == null ? 0 : listQscreen.length,
+                        viewportFraction: 0.9,
+                        scale: 0.9,
+                        autoplay: true,
+                        pagination: new SwiperPagination(
+                          alignment: Alignment.bottomCenter,
+                          builder: new DotSwiperPaginationBuilder(
+                              color: Colors.grey, activeColor: new HexColor('#256fa0')),
+                        ),
+                        itemBuilder: (BuildContext context, int i) {
+                    return SurveyCardLeft(
+                      gambar: listQsurvey[i].gambar,
+                      color: listQsurvey[i].color,
+                      id: listQsurvey[i].id,
+                      deskripsi: listQsurvey[i].deskripsi,
+                      judul: listQsurvey[i].judul,
+                      jenis: listQsurvey[i].jenis,
+                      quota: listQsurvey[i].quota,
                     );
-                  }),
+                  })),
                 // listAds == null ? new Container() :
                 // new Container(
                 //     height: 180,
@@ -367,78 +435,75 @@ class _Home extends State<Home> {
                 //       },
                 //     )
                 // ),
+                ///qpolling
+                // new Container(
+                //     margin: EdgeInsets.only(left: 20, top: 10),
+                //     width: size.width,
+                //     child: new Column(
+                //       crossAxisAlignment: CrossAxisAlignment.start,
+                //       children: [
+                //         new Text("Q-Polling", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),),
+                //         new Text("Kerjakan study sesuai dengan kriteriamu", style: TextStyle(fontSize: 18),),
+                //       ],
+                //     )
+                // ),
+                // listSurv == null ? new Container() : new ListView.builder(
+                //     physics: BouncingScrollPhysics(),
+                //     padding: EdgeInsets.only(top: 10,bottom: 10),
+                //     scrollDirection: Axis.vertical,
+                //     shrinkWrap: true,
+                //     itemCount: listSurv == null ? 0 : listSurv.length,
+                //     itemBuilder: (context, i){
+                //       return SurveyCardLeft(
+                //         gambar: listSurv[i].gambar,
+                //         color: listSurv[i].color,
+                //         id: listSurv[i].id,
+                //         deskripsi: listSurv[i].deskripsi,
+                //         judul: listSurv[i].judul,
+                //         jenis: 'qt',
+                //       );
+                //     }),
                 new Container(
-                    margin: EdgeInsets.only(left: 20, top: 10),
-                    width: size.width,
-                    child: new Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        new Text("Q-Polling", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),),
-                        new Text("Kerjakan study sesuai dengan kriteriamu", style: TextStyle(fontSize: 18),),
-                      ],
-                    )
-                ),
-                listSurv == null ? new Container() : new ListView.builder(
-                    physics: BouncingScrollPhysics(),
-                    padding: EdgeInsets.only(top: 10,bottom: 10),
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemCount: listSurv == null ? 0 : listSurv.length,
-                    itemBuilder: (context, i){
-                      return SurveyCardLeft(
-                        gambar: listSurv[i].gambar,
-                        color: listSurv[i].color,
-                        id: listSurv[i].id,
-                        deskripsi: listSurv[i].deskripsi,
-                        judul: listSurv[i].judul,
-                        jenis: 'qt',
-                      );
-                    }),
-                new Container(
-                  margin: EdgeInsets.only(left: 20, top: 10),
+                  margin: EdgeInsets.only(left: 30, top: 10),
                   width: size.width,
                   child: new Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      new Text("Q-Games", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),),
-                      new Text("Kerjakan study sesuai dengan kriteriamu", style: TextStyle(fontSize: 18),),
+                      new Text("Q-Games", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),),
+                      new Text("Kerjakan study sesuai dengan kriteriamu", style: TextStyle(fontSize: 15),),
                     ],
                   )
                 ),
-                InkWell(
-                    child: Container(
-                      height: 180,
-                      alignment: Alignment.topCenter,
-                      margin: EdgeInsets.only(left: 25,right: 25,top: 20,bottom: 20),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        image: DecorationImage(
-                          image: AssetImage('images/qnews.jpeg'),
-                          fit: BoxFit.cover,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 2,
-                            blurRadius: 4,
-                            offset: Offset(1, 2), // changes position of shadow
-                          ),
-                        ],
-                      ),
-                      // child: Container(
-                      //   margin: EdgeInsets.only(top: 10),
-                      //   child: Text('Qnews', style: TextStyle(fontWeight: FontWeight.w600),),
-                      // ),
+                listQgames == null ? new Container() : new Container(
+                    height: 180,
+                    margin: EdgeInsets.only(top: 10, bottom: 10),
+                    child: new Swiper(
+                      itemCount: listQgames == null ? 0 : listQgames.length,
+                      viewportFraction: 0.9,
+                      scale: 0.9,
+                      autoplay: true,
+                      pagination: new SwiperPagination(),
+                      itemBuilder: (BuildContext context, int i) {
+                        return SurveySlider(
+                          gambar: listQgames[i].gambar,
+                          color: listQgames[i].color,
+                          id: listQgames[i].id,
+                          deskripsi: listQgames[i].deskripsi,
+                          judul: listQgames[i].judul,
+                          jenis: listQgames[i].jenis,
+                          quota: listQgames[i].quota,
+                        );
+                      },
                     )
                 ),
                 new Container(
-                    margin: EdgeInsets.only(left: 20, top: 10),
+                    margin: EdgeInsets.only(left: 30, top: 10),
                     width: size.width,
                     child: new Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        new Text("Q-News", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),),
-                        new Text("Kerjakan study sesuai dengan kriteriamu", style: TextStyle(fontSize: 18),),
+                        new Text("Q-News", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),),
+                        new Text("Kerjakan study sesuai dengan kriteriamu", style: TextStyle(fontSize: 15),),
                       ],
                     )
                 ),
@@ -458,7 +523,8 @@ class _Home extends State<Home> {
                           id: listQnews[i].id,
                           deskripsi: listQnews[i].deskripsi,
                           judul: listQnews[i].judul,
-                          jenis: 'qn',
+                          jenis: listQnews[i].jenis,
+                          quota: listQnews[i].quota,
                         );
                       },
                     )

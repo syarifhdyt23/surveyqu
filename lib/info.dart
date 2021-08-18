@@ -7,7 +7,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:async';
 
 import 'package:surveyqu/domain.dart';
+import 'package:surveyqu/hexacolor.dart';
 import 'package:surveyqu/home/mainhome.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Info {
   Size size;
@@ -15,6 +17,14 @@ class Info {
   String sku, email, phoneWS, type;
   Domain domain = new Domain();
   FToast toast = new FToast();
+
+  Future<void> openURL(BuildContext context, String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      MessageInfo(context, 'Message', "Please install this apps");
+    }
+  }
 
   void MessageInfo(BuildContext context, String title, String message) {
     Dialog fancyDialog = Dialog(
@@ -39,6 +49,7 @@ class Info {
             ),
             Container(
               width: double.infinity,
+              color: new HexColor('#256fa0'),
               height: 50,
               alignment: Alignment.bottomCenter,
               child: Align(
@@ -46,7 +57,7 @@ class Info {
                 child: Text(
                   title,
                   style: TextStyle(
-                    color: Colors.black,
+                    color: Colors.white,
                     fontSize: 17,
                   ),
                 ),
@@ -67,11 +78,10 @@ class Info {
                 child: new Container(
                     height: 45,
                     width: 350,
-                    //padding: const EdgeInsets.only(top: 2.0, left: 10.0, right: 10.0),
+                    margin: const EdgeInsets.only(top: 2.0, left: 10.0, right: 10.0, bottom: 10),
                     decoration: BoxDecoration(
-                      color: Colors.grey[400].withOpacity(.2),
-                      borderRadius: BorderRadius.only(
-                          bottomRight: new Radius.circular(15.0)),
+                      color: HexColor("#F07B3F"),
+                      borderRadius: BorderRadius.all(new Radius.circular(7.0)),
                     ),
                     child: new Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,7 +94,7 @@ class Info {
                               onPressed: () {
                                 Navigator.of(context, rootNavigator: true).pop();
                               },
-                              child: new Text('Ok', style: new TextStyle( fontWeight: FontWeight.w600, color: Colors.black),
+                              child: new Text('Ok', style: new TextStyle( fontWeight: FontWeight.w600, color: Colors.white),
                               ),
                               shape: RoundedRectangleBorder(
                                 //borderRadius: BorderRadius.only(bottomLeft: new Radius.circular(15)),
@@ -258,6 +268,107 @@ class Info {
         btnOkIcon: Icons.cancel,
         btnOkColor: Colors.red)
       ..show();
+  }
+
+  void ShowDescriptionItem(BuildContext context, String judul, String image,
+      String desk, String url) {
+    showModalBottomSheet<void>(
+        context: context,
+        isScrollControlled: true,
+        useRootNavigator: true,
+        isDismissible: false,
+        enableDrag: false,
+        backgroundColor: Colors.transparent,
+        builder: (BuildContext context) {
+          return new Container(
+              height: MediaQuery.of(context).size.height * 0.80,
+              decoration: new BoxDecoration(
+                color: Colors.white,
+                borderRadius: new BorderRadius.only(
+                  topLeft: const Radius.circular(7),
+                  topRight: const Radius.circular(7),
+                ),
+              ),
+              child: new Stack(
+                children: <Widget>[
+                  new Container(
+                    child: new Column(
+                      children: [
+                        new Container(
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: new HexColor('#256fa0'),
+                            borderRadius: new BorderRadius.only(
+                              topLeft: const Radius.circular(7),
+                              topRight: const Radius.circular(7),
+                            ),
+                          ),
+                          child: new Padding(
+                            padding: EdgeInsets.only(top: 10, bottom: 10, left: 10, right: 10),
+                            child: new Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                new Align(
+                                  alignment: Alignment.topCenter,
+                                  child: new Text(judul, style: new TextStyle(color: Colors.white, fontSize: 20),),
+                                ),
+                                new Container(
+                                  width: 50,
+                                  child: new FlatButton(
+                                    highlightColor: Colors.transparent,
+                                    splashColor: Colors.transparent,
+                                    onPressed: () {
+                                      // this.openURL(context, url);
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: new Icon(Icons.close, color: Colors.white, size: 30,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        new Container(
+                          margin: EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 10),
+                          height: 215,
+                          width: 500,
+                          decoration: BoxDecoration(
+                            //boxShadow: kElevationToShadow[2],
+                            borderRadius: new BorderRadius.circular(7.0),
+                            image: new DecorationImage(
+                              image: new NetworkImage(image),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+
+                        Expanded(
+                          child: ListView(
+                            children: [
+                              new Container(
+                                // height: 200,
+                                padding: EdgeInsets.only(right: 10, left: 10),
+                                margin: EdgeInsets.only(bottom: 10),
+                                child: new Text(
+                                  desk,
+                                  textAlign: TextAlign.justify,
+                                  style: new TextStyle(
+                                    fontFamily: 'helvetica',
+                                    fontSize: 17,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              )
+          );
+        });
   }
 
 }
