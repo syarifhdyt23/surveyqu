@@ -42,6 +42,7 @@ class _Home extends State<Home> {
   List<Qsurvey> listQsurvey;
   List<Qgames> listQgames;
   List<Qnews> listQnews;
+  List<Qpolling> listQpolling;
   List<NotifHome> listNotif;
   List<User> listUser;
   Timer timer;
@@ -103,6 +104,7 @@ class _Home extends State<Home> {
       var qsurvey = body['qsurvey'] as List;
       var qgames = body['qgames'] as List;
       var qnews = body['qnews'] as List;
+      var qpolling = body['qpolling'] as List;
       setState(() {
         listNews = pengumuman.map<Pengumuman>((json) => Pengumuman.fromJson(json)).toList();
         listTutorial = tutorial.map<Tutorial>((json) => Tutorial.fromJson(json)).toList();
@@ -110,6 +112,7 @@ class _Home extends State<Home> {
         listQsurvey = qsurvey.map<Qsurvey>((json) => Qsurvey.fromJson(json)).toList();
         listQgames = qgames.map<Qgames>((json) => Qgames.fromJson(json)).toList();
         listQnews = qnews.map<Qnews>((json) => Qnews.fromJson(json)).toList();
+        listQpolling = qpolling.map<Qpolling>((json) => Qpolling.fromJson(json)).toList();
       });
     } else {
       SharedPreferences localStorage = await SharedPreferences.getInstance();
@@ -314,7 +317,7 @@ class _Home extends State<Home> {
                     itemCount: listNews == null ? 0 : listNews.length,
                     viewportFraction: 0.8,
                     scale: 0.9,
-                    autoplay: true,
+                    autoplay: listNews[0].autoscroll == '1' ? true : false,
                     pagination: new SwiperPagination(
                       alignment: Alignment.bottomCenter,
                       builder: new DotSwiperPaginationBuilder(
@@ -338,7 +341,7 @@ class _Home extends State<Home> {
                         itemCount: listTutorial == null ? 0 : listTutorial.length,
                         viewportFraction: 0.9,
                         scale: 0.9,
-                        autoplay: true,
+                        autoplay: listTutorial[0].autoscroll == '1' ? true : false,
                         pagination: new SwiperPagination(
                           alignment: Alignment.bottomCenter,
                           builder: new DotSwiperPaginationBuilder(
@@ -362,7 +365,7 @@ class _Home extends State<Home> {
                         itemCount: listQscreen == null ? 0 : listQscreen.length,
                         viewportFraction: 0.9,
                         scale: 0.9,
-                        autoplay: true,
+                        autoplay: listQscreen[0].autoscroll == '1' ? true : false,
                         pagination: new SwiperPagination(
                           alignment: Alignment.bottomCenter,
                           builder: new DotSwiperPaginationBuilder(
@@ -380,13 +383,13 @@ class _Home extends State<Home> {
                       );
                     })),
                 new Container(
-                    margin: EdgeInsets.only(left: 30, top: 10),
+                    margin: EdgeInsets.only(left: 20, top: 10),
                     width: size.width,
                     child: new Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        new Text("Q-Survey", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),),
-                        new Text("Kerjakan study sesuai dengan kriteriamu", style: TextStyle(fontSize: 15),),
+                        new Text(listQsurvey[0].header, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),),
+                        new Text(listQsurvey[0].headerS, style: TextStyle(fontSize: 18),),
                       ],
                     )
                 ),
@@ -394,10 +397,10 @@ class _Home extends State<Home> {
                     height: 220,
                     margin: EdgeInsets.only(top: 10, bottom: 10),
                     child: new Swiper(
-                        itemCount: listQscreen == null ? 0 : listQscreen.length,
+                        itemCount: listQsurvey == null ? 0 : listQsurvey.length,
                         viewportFraction: 0.9,
                         scale: 0.9,
-                        autoplay: true,
+                        autoplay: listQsurvey[0].autoscroll == '1' ? true : false,
                         pagination: new SwiperPagination(
                           alignment: Alignment.bottomCenter,
                           builder: new DotSwiperPaginationBuilder(
@@ -414,6 +417,41 @@ class _Home extends State<Home> {
                       quota: listQsurvey[i].quota,
                     );
                   })),
+                new Container(
+                    margin: EdgeInsets.only(left: 20, top: 10),
+                    width: size.width,
+                    child: new Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        new Text(listQpolling[0].header, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),),
+                        new Text(listQpolling[0].headerS, style: TextStyle(fontSize: 18),),
+                      ],
+                    )
+                ),
+                listQpolling == null ? new Container() : new Container(
+                    height: 220,
+                    margin: EdgeInsets.only(top: 10, bottom: 10),
+                    child: new Swiper(
+                        itemCount: listQpolling == null ? 0 : listQpolling.length,
+                        viewportFraction: 0.9,
+                        scale: 0.9,
+                        autoplay: listQpolling[0].autoscroll == '1' ? true : false,
+                        pagination: new SwiperPagination(
+                          alignment: Alignment.bottomCenter,
+                          builder: new DotSwiperPaginationBuilder(
+                              color: Colors.grey, activeColor: new HexColor('#256fa0')),
+                        ),
+                        itemBuilder: (BuildContext context, int i) {
+                          return SurveyCardLeft(
+                            gambar: listQpolling[i].gambar,
+                            color: listQpolling[i].color,
+                            id: listQpolling[i].id,
+                            deskripsi: listQpolling[i].deskripsi,
+                            judul: listQpolling[i].judul,
+                            jenis: listQpolling[i].jenis,
+                            quota: listQpolling[i].quota,
+                          );
+                        })),
                 // listAds == null ? new Container() :
                 // new Container(
                 //     height: 180,
@@ -469,8 +507,8 @@ class _Home extends State<Home> {
                   child: new Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      new Text("Q-Games", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),),
-                      new Text("Kerjakan study sesuai dengan kriteriamu", style: TextStyle(fontSize: 15),),
+                      new Text(listQgames[0].header, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),),
+                      new Text(listQgames[0].headerS, style: TextStyle(fontSize: 15),),
                     ],
                   )
                 ),
@@ -481,7 +519,7 @@ class _Home extends State<Home> {
                       itemCount: listQgames == null ? 0 : listQgames.length,
                       viewportFraction: 0.9,
                       scale: 0.9,
-                      autoplay: true,
+                      autoplay: listQgames[0].autoscroll == '1' ? true : false,
                       pagination: new SwiperPagination(),
                       itemBuilder: (BuildContext context, int i) {
                         return SurveySlider(
@@ -491,7 +529,7 @@ class _Home extends State<Home> {
                           deskripsi: listQgames[i].deskripsi,
                           judul: listQgames[i].judul,
                           jenis: listQgames[i].jenis,
-                          quota: listQgames[i].quota,
+                          // quota: listQgames[i].quota,
                         );
                       },
                     )
@@ -502,8 +540,8 @@ class _Home extends State<Home> {
                     child: new Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        new Text("Q-News", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),),
-                        new Text("Kerjakan study sesuai dengan kriteriamu", style: TextStyle(fontSize: 15),),
+                        new Text(listQnews[0].header, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),),
+                        new Text(listQnews[0].headerS, style: TextStyle(fontSize: 15),),
                       ],
                     )
                 ),
@@ -514,7 +552,7 @@ class _Home extends State<Home> {
                       itemCount: listQnews == null ? 0 : listQnews.length,
                       viewportFraction: 0.9,
                       scale: 0.9,
-                      autoplay: true,
+                      autoplay: listQnews[0].autoscroll == '1' ? true : false,
                       pagination: new SwiperPagination(),
                       itemBuilder: (BuildContext context, int i) {
                         return SurveySlider(
@@ -524,40 +562,11 @@ class _Home extends State<Home> {
                           deskripsi: listQnews[i].deskripsi,
                           judul: listQnews[i].judul,
                           jenis: listQnews[i].jenis,
-                          quota: listQnews[i].quota,
+                          // quota: listQnews[i].quota,
                         );
                       },
                     )
                 ),
-                // InkWell(
-                //   onTap: (){
-                //     Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context) => SurveyView(id: '1',jenis: 'qn',judul: 'QNEWS',deskripsi: "Qnews berita",)));
-                //   },
-                //     child: Container(
-                //       height: 180,
-                //       alignment: Alignment.topCenter,
-                //       margin: EdgeInsets.all(20),
-                //       decoration: BoxDecoration(
-                //         borderRadius: BorderRadius.all(Radius.circular(10)),
-                //         image: DecorationImage(
-                //           image: AssetImage('images/bannerlandscape.png'),
-                //           fit: BoxFit.cover,
-                //         ),
-                //         boxShadow: [
-                //           BoxShadow(
-                //             color: Colors.grey.withOpacity(0.5),
-                //             spreadRadius: 2,
-                //             blurRadius: 4,
-                //             offset: Offset(1, 2), // changes position of shadow
-                //           ),
-                //         ],
-                //       ),
-                //       child: Container(
-                //         margin: EdgeInsets.only(top: 10),
-                //         child: Text('dummy banner', style: TextStyle(fontWeight: FontWeight.w600),),
-                //       ),
-                //     )
-                // ),
               ]
             )
           )

@@ -23,8 +23,15 @@ class Pengumuman {
   String urutan;
   String gambar;
   String url;
+  String autoscroll;
 
-  Pengumuman({this.judul, this.isi, this.urutan, this.gambar, this.url});
+  Pengumuman(
+      {this.judul,
+        this.isi,
+        this.urutan,
+        this.gambar,
+        this.url,
+        this.autoscroll});
 
   Pengumuman.fromJson(Map<String, dynamic> json) {
     judul = json['judul'];
@@ -32,6 +39,7 @@ class Pengumuman {
     urutan = json['urutan'];
     gambar = json['gambar'];
     url = json['url'];
+    autoscroll = json['autoscroll'];
   }
 
   Map<String, dynamic> toJson() {
@@ -41,6 +49,7 @@ class Pengumuman {
     data['urutan'] = this.urutan;
     data['gambar'] = this.gambar;
     data['url'] = this.url;
+    data['autoscroll'] = this.autoscroll;
     return data;
   }
 }
@@ -52,9 +61,11 @@ class Tutorial {
   String color;
   String gambar;
   String quota;
+  String totalquota;
   String jenis;
   String header;
   String headerS;
+  String autoscroll;
 
   Tutorial(
       {this.judul,
@@ -63,9 +74,11 @@ class Tutorial {
         this.color,
         this.gambar,
         this.quota,
+        this.totalquota,
         this.jenis,
         this.header,
-        this.headerS});
+        this.headerS,
+        this.autoscroll});
 
   Tutorial.fromJson(Map<String, dynamic> json) {
     judul = json['judul'];
@@ -74,9 +87,11 @@ class Tutorial {
     color = json['color'];
     gambar = json['gambar'];
     quota = json['quota'];
+    totalquota = json['totalquota'];
     jenis = json['jenis'];
     header = json['header'];
     headerS = json['headerS'];
+    autoscroll = json['autoscroll'];
   }
 
   Map<String, dynamic> toJson() {
@@ -87,9 +102,11 @@ class Tutorial {
     data['color'] = this.color;
     data['gambar'] = this.gambar;
     data['quota'] = this.quota;
+    data['totalquota'] = this.totalquota;
     data['jenis'] = this.jenis;
     data['header'] = this.header;
     data['headerS'] = this.headerS;
+    data['autoscroll'] = this.autoscroll;
     return data;
   }
 }
@@ -102,9 +119,11 @@ class Qscreen {
   String color;
   String gambar;
   String quota;
+  String totalquota;
   String jenis;
   String header;
   String headerS;
+  String autoscroll;
 
   Qscreen(
       {this.judul,
@@ -113,9 +132,11 @@ class Qscreen {
         this.color,
         this.gambar,
         this.quota,
+        this.totalquota,
         this.jenis,
         this.header,
-        this.headerS});
+        this.headerS,
+        this.autoscroll});
 
   Qscreen.fromJson(Map<String, dynamic> json) {
     judul = json['judul'];
@@ -124,9 +145,11 @@ class Qscreen {
     color = json['color'];
     gambar = json['gambar'];
     quota = json['quota'];
+    totalquota = json['totalquota'];
     jenis = json['jenis'];
     header = json['header'];
     headerS = json['headerS'];
+    autoscroll = json['autoscroll'];
   }
 
   Map<String, dynamic> toJson() {
@@ -137,9 +160,11 @@ class Qscreen {
     data['color'] = this.color;
     data['gambar'] = this.gambar;
     data['quota'] = this.quota;
+    data['totalquota'] = this.totalquota;
     data['jenis'] = this.jenis;
     data['header'] = this.header;
     data['headerS'] = this.headerS;
+    data['autoscroll'] = this.autoscroll;
     return data;
   }
 }
@@ -151,9 +176,11 @@ class Qsurvey {
   String color;
   String gambar;
   String quota;
+  String totalquota;
   String jenis;
   String header;
   String headerS;
+  String autoscroll;
 
   Qsurvey(
       {this.judul,
@@ -162,9 +189,11 @@ class Qsurvey {
         this.color,
         this.gambar,
         this.quota,
+        this.totalquota,
         this.jenis,
         this.header,
-        this.headerS});
+        this.headerS,
+        this.autoscroll});
 
   Qsurvey.fromJson(Map<String, dynamic> json) {
     judul = json['judul'];
@@ -173,9 +202,11 @@ class Qsurvey {
     color = json['color'];
     gambar = json['gambar'];
     quota = json['quota'];
+    totalquota = json['totalquota'];
     jenis = json['jenis'];
     header = json['header'];
     headerS = json['headerS'];
+    autoscroll = json['autoscroll'];
   }
 
   Map<String, dynamic> toJson() {
@@ -186,9 +217,68 @@ class Qsurvey {
     data['color'] = this.color;
     data['gambar'] = this.gambar;
     data['quota'] = this.quota;
+    data['totalquota'] = this.totalquota;
     data['jenis'] = this.jenis;
     data['header'] = this.header;
     data['headerS'] = this.headerS;
+    data['autoscroll'] = this.autoscroll;
+    return data;
+  }
+}
+
+class Qpolling {
+  String judul;
+  String deskripsi;
+  String id;
+  String color;
+  String gambar;
+  String quota;
+  String totalquota;
+  String jenis;
+  String header;
+  String headerS;
+  String autoscroll;
+
+  Qpolling(
+      {this.judul,
+        this.deskripsi,
+        this.id,
+        this.color,
+        this.gambar,
+        this.quota,
+        this.totalquota,
+        this.jenis,
+        this.header,
+        this.headerS,
+        this.autoscroll});
+
+  Qpolling.fromJson(Map<String, dynamic> json) {
+    judul = json['judul'];
+    deskripsi = json['deskripsi'];
+    id = json['id'];
+    color = json['color'];
+    gambar = json['gambar'];
+    quota = json['quota'];
+    totalquota = json['totalquota'];
+    jenis = json['jenis'];
+    header = json['header'];
+    headerS = json['headerS'];
+    autoscroll = json['autoscroll'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['judul'] = this.judul;
+    data['deskripsi'] = this.deskripsi;
+    data['id'] = this.id;
+    data['color'] = this.color;
+    data['gambar'] = this.gambar;
+    data['quota'] = this.quota;
+    data['totalquota'] = this.totalquota;
+    data['jenis'] = this.jenis;
+    data['header'] = this.header;
+    data['headerS'] = this.headerS;
+    data['autoscroll'] = this.autoscroll;
     return data;
   }
 }
@@ -199,10 +289,10 @@ class Qgames {
   String id;
   String color;
   String gambar;
-  String quota;
   String jenis;
   String header;
   String headerS;
+  String autoscroll;
 
   Qgames(
       {this.judul,
@@ -210,10 +300,10 @@ class Qgames {
         this.id,
         this.color,
         this.gambar,
-        this.quota,
         this.jenis,
         this.header,
-        this.headerS});
+        this.headerS,
+        this.autoscroll});
 
   Qgames.fromJson(Map<String, dynamic> json) {
     judul = json['judul'];
@@ -221,10 +311,10 @@ class Qgames {
     id = json['id'];
     color = json['color'];
     gambar = json['gambar'];
-    quota = json['quota'];
     jenis = json['jenis'];
     header = json['header'];
     headerS = json['headerS'];
+    autoscroll = json['autoscroll'];
   }
 
   Map<String, dynamic> toJson() {
@@ -234,10 +324,10 @@ class Qgames {
     data['id'] = this.id;
     data['color'] = this.color;
     data['gambar'] = this.gambar;
-    data['quota'] = this.quota;
     data['jenis'] = this.jenis;
     data['header'] = this.header;
     data['headerS'] = this.headerS;
+    data['autoscroll'] = this.autoscroll;
     return data;
   }
 }
@@ -248,10 +338,10 @@ class Qnews {
   String id;
   String color;
   String gambar;
-  String quota;
   String jenis;
   String header;
   String headerS;
+  String autoscroll;
 
   Qnews(
       {this.judul,
@@ -259,10 +349,10 @@ class Qnews {
         this.id,
         this.color,
         this.gambar,
-        this.quota,
         this.jenis,
         this.header,
-        this.headerS});
+        this.headerS,
+        this.autoscroll});
 
   Qnews.fromJson(Map<String, dynamic> json) {
     judul = json['judul'];
@@ -270,10 +360,10 @@ class Qnews {
     id = json['id'];
     color = json['color'];
     gambar = json['gambar'];
-    quota = json['quota'];
     jenis = json['jenis'];
     header = json['header'];
     headerS = json['headerS'];
+    autoscroll = json['autoscroll'];
   }
 
   Map<String, dynamic> toJson() {
@@ -283,11 +373,12 @@ class Qnews {
     data['id'] = this.id;
     data['color'] = this.color;
     data['gambar'] = this.gambar;
-    data['quota'] = this.quota;
     data['jenis'] = this.jenis;
     data['header'] = this.header;
     data['headerS'] = this.headerS;
+    data['autoscroll'] = this.autoscroll;
     return data;
   }
 }
+
 
