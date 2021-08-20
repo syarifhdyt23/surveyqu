@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:surveyqu/hexacolor.dart';
 import 'package:surveyqu/info.dart';
@@ -12,6 +13,8 @@ class SurveyCardProgress extends StatelessWidget {
   SurveyCardProgress({Key key, this.color, this.judul, this.deskripsi, this.gambar, this.id, this.jenis, this.quota, this.totalquota}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    var percentage = int.parse(quota) / int.parse(totalquota) * 100;
+    var _percentage = percentage / 100;
     return Container(
         margin: EdgeInsets.only(bottom: 10, left: 10, right: 10, top: 20),
         // width: size.width,
@@ -31,7 +34,7 @@ class SurveyCardProgress extends StatelessWidget {
         child: new Column(
           children: [
             new Expanded(
-                flex:4,
+                flex:3,
                 child: new Container(
                   alignment: Alignment.center,
                   child: new ListTile(
@@ -63,54 +66,83 @@ class SurveyCardProgress extends StatelessWidget {
                   borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
                 ),
                 child: new ListTile(
-                  title: new CircularPercentIndicator(
-                    radius: 50.0,
-                    animation: true,
-                    animationDuration: 1200,
-                    lineWidth: 8.0,
-                    percent: 1.0,
-                    startAngle: double.parse(quota),
-                    footer: new Text(
-                      "40 hours",
-                      style:
-                      new TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-                    ),
-                    circularStrokeCap: CircularStrokeCap.butt,
-                    backgroundColor: Colors.yellow,
-                    progressColor: Colors.red,
-                  ),
-                  subtitle: new Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  contentPadding: EdgeInsets.only(top: 15, left: 15,right: 15),
+                  title: new Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      new Text('Reward per tugas'),
                       new Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          new Icon(Icons.control_point_duplicate_sharp),
-                          new Padding(padding: EdgeInsets.only(left: 10)),
-                          new Text('100 poin'),
+                          new CircularPercentIndicator(
+                            radius: 50.0,
+                            animation: true,
+                            animationDuration: 1000,
+                            lineWidth: 8.0,
+                            percent: _percentage,
+                            // startAngle: double.parse(quota),
+                            circularStrokeCap: CircularStrokeCap.round,
+                            backgroundColor: Colors.yellow,
+                            progressColor: Colors.red,
+                          ),
+                          new Container(
+                            height: 50,
+                            padding: EdgeInsets.only(left: 10, top: 5),
+                            child: new Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                new Text(
+                                  "$quota / $totalquota",
+                                  style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600, fontSize: 15),
+                                ),
+                                new Text(
+                                  'Polling Terjawab',
+                                  style: TextStyle(color: Colors.black, fontSize: 15),
+                                ),
+                              ],
+                            )
+                          )
                         ],
-                      )
+                      ),
+                      new InkWell(
+                        onTap: (){
+                          if(quota == '0'){
+                            info.MessageInfo(context, 'info','Survey sudah memenuhi kuota');
+                          } else {
+                            Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context) => SurveyView(judul: judul, deskripsi: deskripsi, id: id, jenis: jenis,)));
+                          }
+                        },
+                        child: new Container(
+                          alignment: Alignment.center,
+                          height: 40,
+                          width: 80,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            color: new HexColor("#F07B3F"),
+                          ),
+                          child: new Text('Mulai', style: TextStyle(color: Colors.white),),
+                        ),
+                      ),
                     ],
                   ),
-                  trailing: new InkWell(
-                    onTap: (){
-                      if(quota == '0'){
-                        info.MessageInfo(context, 'info','Survey sudah memenuhi kuota');
-                      } else {
-                        Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context) => SurveyView(judul: judul, deskripsi: deskripsi, id: id, jenis: jenis,)));
-                      }
-                    },
-                    child: new Container(
-                      alignment: Alignment.center,
-                      height: 40,
-                      width: 80,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(10)),
-                        color: new HexColor("#F07B3F"),
+                  subtitle: new Column(
+                    children: [
+                      new Divider(),
+                      new Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          new Text('Reward per tugas'),
+                          new Row(
+                            children: [
+                              new Icon(Icons.control_point_duplicate_sharp),
+                              new Padding(padding: EdgeInsets.only(left: 10)),
+                              new Text('100 poin'),
+                            ],
+                          )
+                        ],
                       ),
-                      child: new Text('Mulai', style: TextStyle(color: Colors.white),),
-                    ),
-                  ),
+                    ],
+                  )
                 ),
               ),),
           ],

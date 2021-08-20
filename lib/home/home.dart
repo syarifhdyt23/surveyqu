@@ -384,13 +384,13 @@ class _Home extends State<Home> {
                       );
                     })),
                 new Container(
-                    margin: EdgeInsets.only(left: 20, top: 10),
+                    margin: EdgeInsets.only(left: 30, top: 10),
                     width: size.width,
                     child: new Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        new Text(listQsurvey[0].header, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),),
-                        new Text(listQsurvey[0].headerS, style: TextStyle(fontSize: 18),),
+                        new Text(listQsurvey[0].header, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),),
+                        new Text(listQsurvey[0].headerS, style: TextStyle(fontSize: 15),),
                       ],
                     )
                 ),
@@ -419,13 +419,13 @@ class _Home extends State<Home> {
                     );
                   })),
                 new Container(
-                    margin: EdgeInsets.only(left: 20, top: 10),
+                    margin: EdgeInsets.only(left: 30, top: 10),
                     width: size.width,
                     child: new Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         new Text(listQpolling[0].header, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),),
-                        new Text(listQpolling[0].headerS, style: TextStyle(fontSize: 18),),
+                        new Text(listQpolling[0].headerS, style: TextStyle(fontSize: 15),),
                       ],
                     )
                 ),
@@ -508,7 +508,7 @@ class _Home extends State<Home> {
                   child: new Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      new Text(listQgames[0].header, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),),
+                      new Text(listQgames[0].header, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),),
                       new Text(listQgames[0].headerS, style: TextStyle(fontSize: 15),),
                     ],
                   )
@@ -541,7 +541,7 @@ class _Home extends State<Home> {
                     child: new Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        new Text(listQnews[0].header, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),),
+                        new Text(listQnews[0].header, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),),
                         new Text(listQnews[0].headerS, style: TextStyle(fontSize: 15),),
                       ],
                     )
