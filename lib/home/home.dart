@@ -335,7 +335,7 @@ class _Home extends State<Home> {
                   )
                 ),
                 listTutorial == null ? new Container() : new Container(
-                    height: 220,
+                    height: 300,
                     margin: EdgeInsets.only(top: 10, bottom: 10),
                     child: new Swiper(
                         itemCount: listTutorial == null ? 0 : listTutorial.length,
@@ -348,7 +348,7 @@ class _Home extends State<Home> {
                               color: Colors.grey, activeColor: new HexColor('#256fa0')),
                         ),
                         itemBuilder: (BuildContext context, int i) {
-                      return SurveyCardLeft(
+                      return SurveyCardProgress(
                         gambar: listTutorial[i].gambar,
                         color: listTutorial[i].color,
                         id: listTutorial[i].id,
@@ -356,6 +356,7 @@ class _Home extends State<Home> {
                         judul: listTutorial[i].judul,
                         jenis: listTutorial[i].jenis,
                         quota: listTutorial[i].quota,
+                        totalquota: listTutorial[i].totalquota,
                       );
                     })),
                 listQscreen == null ? new Container() : new Container(
