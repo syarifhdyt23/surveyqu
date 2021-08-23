@@ -111,7 +111,6 @@ class Tutorial {
   }
 }
 
-
 class Qscreen {
   String judul;
   String deskripsi;
@@ -124,6 +123,7 @@ class Qscreen {
   String header;
   String headerS;
   String autoscroll;
+  String urutan;
 
   Qscreen(
       {this.judul,
@@ -136,7 +136,8 @@ class Qscreen {
         this.jenis,
         this.header,
         this.headerS,
-        this.autoscroll});
+        this.autoscroll,
+        this.urutan});
 
   Qscreen.fromJson(Map<String, dynamic> json) {
     judul = json['judul'];
@@ -146,10 +147,12 @@ class Qscreen {
     gambar = json['gambar'];
     quota = json['quota'];
     totalquota = json['totalquota'];
+    urutan = json['urutan'];
     jenis = json['jenis'];
     header = json['header'];
     headerS = json['headerS'];
     autoscroll = json['autoscroll'];
+    urutan = json['urutan'];
   }
 
   Map<String, dynamic> toJson() {
@@ -235,6 +238,7 @@ class Qpolling {
   String quota;
   String totalquota;
   String jenis;
+  String urutan;
   String header;
   String headerS;
   String autoscroll;
@@ -248,6 +252,7 @@ class Qpolling {
         this.quota,
         this.totalquota,
         this.jenis,
+        this.urutan,
         this.header,
         this.headerS,
         this.autoscroll});
@@ -261,6 +266,7 @@ class Qpolling {
     quota = json['quota'];
     totalquota = json['totalquota'];
     jenis = json['jenis'];
+    urutan = json['urutan'];
     header = json['header'];
     headerS = json['headerS'];
     autoscroll = json['autoscroll'];
@@ -276,6 +282,7 @@ class Qpolling {
     data['quota'] = this.quota;
     data['totalquota'] = this.totalquota;
     data['jenis'] = this.jenis;
+    data['urutan'] = this.urutan;
     data['header'] = this.header;
     data['headerS'] = this.headerS;
     data['autoscroll'] = this.autoscroll;

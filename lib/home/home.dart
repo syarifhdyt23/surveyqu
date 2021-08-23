@@ -335,7 +335,7 @@ class _Home extends State<Home> {
                   )
                 ),
                 listTutorial == null ? new Container() : new Container(
-                    height: 300,
+                    height: 220,
                     margin: EdgeInsets.only(top: 10, bottom: 10),
                     child: new Swiper(
                         itemCount: listTutorial == null ? 0 : listTutorial.length,
@@ -348,7 +348,7 @@ class _Home extends State<Home> {
                               color: Colors.grey, activeColor: new HexColor('#256fa0')),
                         ),
                         itemBuilder: (BuildContext context, int i) {
-                      return SurveyCardProgress(
+                      return SurveyCardLeft(
                         gambar: listTutorial[i].gambar,
                         color: listTutorial[i].color,
                         id: listTutorial[i].id,
@@ -356,7 +356,6 @@ class _Home extends State<Home> {
                         judul: listTutorial[i].judul,
                         jenis: listTutorial[i].jenis,
                         quota: listTutorial[i].quota,
-                        totalquota: listTutorial[i].totalquota,
                       );
                     })),
                 listQscreen == null ? new Container() : new Container(
@@ -381,6 +380,8 @@ class _Home extends State<Home> {
                         judul: listQscreen[i].judul,
                         jenis: listQscreen[i].jenis,
                         quota: listQscreen[i].quota,
+                        urutan: listQscreen[i].urutan,
+                        email: email,
                       );
                     })),
                 new Container(
@@ -389,13 +390,13 @@ class _Home extends State<Home> {
                     child: new Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        new Text(listQsurvey[0].header, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),),
+                        new Text(listQsurvey[0].header, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),),
                         new Text(listQsurvey[0].headerS, style: TextStyle(fontSize: 15),),
                       ],
                     )
                 ),
                 listQsurvey == null ? new Container() : new Container(
-                    height: 220,
+                    height: 300,
                     margin: EdgeInsets.only(top: 10, bottom: 10),
                     child: new Swiper(
                         itemCount: listQsurvey == null ? 0 : listQsurvey.length,
@@ -408,7 +409,7 @@ class _Home extends State<Home> {
                               color: Colors.grey, activeColor: new HexColor('#256fa0')),
                         ),
                         itemBuilder: (BuildContext context, int i) {
-                    return SurveyCardLeft(
+                    return SurveyCardProgress(
                       gambar: listQsurvey[i].gambar,
                       color: listQsurvey[i].color,
                       id: listQsurvey[i].id,
@@ -416,6 +417,7 @@ class _Home extends State<Home> {
                       judul: listQsurvey[i].judul,
                       jenis: listQsurvey[i].jenis,
                       quota: listQsurvey[i].quota,
+                      totalquota: listQsurvey[i].totalquota,
                     );
                   })),
                 new Container(
@@ -430,7 +432,7 @@ class _Home extends State<Home> {
                     )
                 ),
                 listQpolling == null ? new Container() : new Container(
-                    height: 220,
+                    height: 300,
                     margin: EdgeInsets.only(top: 10, bottom: 10),
                     child: new Swiper(
                         itemCount: listQpolling == null ? 0 : listQpolling.length,
@@ -443,7 +445,7 @@ class _Home extends State<Home> {
                               color: Colors.grey, activeColor: new HexColor('#256fa0')),
                         ),
                         itemBuilder: (BuildContext context, int i) {
-                          return SurveyCardLeft(
+                          return SurveyCardProgress(
                             gambar: listQpolling[i].gambar,
                             color: listQpolling[i].color,
                             id: listQpolling[i].id,
@@ -451,6 +453,9 @@ class _Home extends State<Home> {
                             judul: listQpolling[i].judul,
                             jenis: listQpolling[i].jenis,
                             quota: listQpolling[i].quota,
+                            totalquota: listQpolling[i].totalquota,
+                            urutan: listQpolling[i].urutan,
+                            email: email,
                           );
                         })),
                 // listAds == null ? new Container() :
@@ -508,7 +513,7 @@ class _Home extends State<Home> {
                   child: new Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      new Text(listQgames[0].header, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),),
+                      new Text(listQgames[0].header, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),),
                       new Text(listQgames[0].headerS, style: TextStyle(fontSize: 15),),
                     ],
                   )
@@ -541,7 +546,7 @@ class _Home extends State<Home> {
                     child: new Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        new Text(listQnews[0].header, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),),
+                        new Text(listQnews[0].header, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),),
                         new Text(listQnews[0].headerS, style: TextStyle(fontSize: 15),),
                       ],
                     )

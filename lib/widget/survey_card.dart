@@ -3,14 +3,15 @@ import 'package:intl/intl.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:surveyqu/hexacolor.dart';
 import 'package:surveyqu/info.dart';
+import 'package:surveyqu/survey/surveydetail.dart';
 import 'package:surveyqu/survey/surveyview.dart';
 
 class SurveyCardProgress extends StatelessWidget {
   Info info = new Info();
   Size size;
-  final String color,judul,deskripsi,gambar, id, jenis, quota, totalquota;
+  final String color,judul,deskripsi,gambar, id, jenis, quota, totalquota, email, urutan;
 
-  SurveyCardProgress({Key key, this.color, this.judul, this.deskripsi, this.gambar, this.id, this.jenis, this.quota, this.totalquota}) : super(key: key);
+  SurveyCardProgress({Key key, this.color, this.judul, this.deskripsi, this.gambar, this.id, this.jenis, this.quota, this.totalquota, this.urutan, this.email}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     var percentage = int.parse(quota) / int.parse(totalquota) * 100;
@@ -18,7 +19,7 @@ class SurveyCardProgress extends StatelessWidget {
     return Container(
         margin: EdgeInsets.only(bottom: 10, left: 10, right: 10, top: 20),
         // width: size.width,
-        height: 200,
+        height: 300,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(10)),
           color: new HexColor(color),
@@ -108,7 +109,11 @@ class SurveyCardProgress extends StatelessWidget {
                           if(quota == '0'){
                             info.MessageInfo(context, 'info','Survey sudah memenuhi kuota');
                           } else {
-                            Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context) => SurveyView(judul: judul, deskripsi: deskripsi, id: id, jenis: jenis,)));
+                            if(jenis == 'qpl' || jenis == 'sc'){
+                              Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context) => SurveyDetail(id: id, jenis: jenis, urutanSoal: urutan, email: email,)));
+                            } else {
+                              Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context) => SurveyView(judul: judul, deskripsi: deskripsi, id: id, jenis: jenis,)));
+                            }
                           }
                         },
                         child: new Container(
@@ -154,15 +159,15 @@ class SurveyCardProgress extends StatelessWidget {
 class SurveyCardLeft extends StatelessWidget {
   Info info = new Info();
   Size size;
-  final String color,judul,deskripsi,gambar, id, jenis, quota;
+  final String color,judul,deskripsi,gambar, id, jenis, quota, urutan, email;
 
-  SurveyCardLeft({Key key, this.color, this.judul, this.deskripsi, this.gambar, this.id, this.jenis, this.quota}) : super(key: key);
+  SurveyCardLeft({Key key, this.color, this.judul, this.deskripsi, this.gambar, this.id, this.jenis, this.quota, this.urutan, this.email}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
         margin: EdgeInsets.only(bottom: 10, left: 10, right: 10, top: 20),
         // width: size.width,
-        height: 200,
+        height: 220,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(10)),
           color: new HexColor(color),
@@ -223,7 +228,11 @@ class SurveyCardLeft extends StatelessWidget {
                       if(quota == '0'){
                         info.MessageInfo(context, 'info','Survey sudah memenuhi kuota');
                       } else {
-                        Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context) => SurveyView(judul: judul, deskripsi: deskripsi, id: id, jenis: jenis,)));
+                        if(jenis == 'qpl' || jenis == 'sc'){
+                          Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context) => SurveyDetail(id: id, jenis: jenis, urutanSoal: urutan, email: email,)));
+                        } else {
+                          Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context) => SurveyView(judul: judul, deskripsi: deskripsi, id: id, jenis: jenis,)));
+                        }
                       }
                     },
                     child: new Container(
