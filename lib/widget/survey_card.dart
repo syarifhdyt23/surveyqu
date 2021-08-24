@@ -109,7 +109,7 @@ class SurveyCardProgress extends StatelessWidget {
                           if(quota == '0'){
                             info.MessageInfo(context, 'info','Survey sudah memenuhi kuota');
                           } else {
-                            if(jenis == 'qpl' || jenis == 'sc'){
+                            if(jenis == 'qpl' || jenis == 'qsc'){
                               Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context) => SurveyDetail(id: id, jenis: jenis, urutanSoal: urutan, email: email,)));
                             } else {
                               Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context) => SurveyView(judul: judul, deskripsi: deskripsi, id: id, jenis: jenis,)));
@@ -228,7 +228,7 @@ class SurveyCardLeft extends StatelessWidget {
                       if(quota == '0'){
                         info.MessageInfo(context, 'info','Survey sudah memenuhi kuota');
                       } else {
-                        if(jenis == 'qpl' || jenis == 'sc'){
+                        if(jenis == 'qpl' || jenis == 'qsc'){
                           Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context) => SurveyDetail(id: id, jenis: jenis, urutanSoal: urutan, email: email,)));
                         } else {
                           Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context) => SurveyView(judul: judul, deskripsi: deskripsi, id: id, jenis: jenis,)));
