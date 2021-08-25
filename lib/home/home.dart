@@ -348,17 +348,46 @@ class _Home extends State<Home> {
                               color: Colors.grey, activeColor: new HexColor('#256fa0')),
                         ),
                         itemBuilder: (BuildContext context, int i) {
-                      return SurveyCardLeft(
-                        gambar: listTutorial[i].gambar,
-                        color: listTutorial[i].color,
-                        id: listTutorial[i].id,
-                        deskripsi: listTutorial[i].deskripsi,
-                        judul: listTutorial[i].judul,
-                        jenis: listTutorial[i].jenis,
-                        quota: listTutorial[i].quota,
-                        rewards: listTutorial[i].rewards,
-                      );
-                    })),
+                          if(listTutorial[i].totalquota != '0'){
+                            return SurveyCardProgress(
+                              gambar: listTutorial[i].gambar,
+                              color: listTutorial[i].color,
+                              id: listTutorial[i].id,
+                              deskripsi: listTutorial[i].deskripsi,
+                              judul: listTutorial[i].judul,
+                              jenis: listTutorial[i].jenis,
+                              quota: listTutorial[i].quota,
+                              totalquota: listTutorial[i].totalquota,
+                              email: email,
+                            );
+                          } else if(listTutorial[i].rewards != '0'){
+                            return SurveyCardReward(
+                              gambar: listTutorial[i].gambar,
+                              color: listTutorial[i].color,
+                              id: listTutorial[i].id,
+                              deskripsi: listTutorial[i].deskripsi,
+                              judul: listTutorial[i].judul,
+                              jenis: listTutorial[i].jenis,
+                              quota: listTutorial[i].quota,
+                              rewards: listTutorial[i].rewards,
+                              email: email,
+                            );
+                          } else {
+                            return SurveyCardBasic(
+                              gambar: listTutorial[i].gambar,
+                              color: listTutorial[i].color,
+                              id: listTutorial[i].id,
+                              deskripsi: listTutorial[i].deskripsi,
+                              judul: listTutorial[i].judul,
+                              jenis: listTutorial[i].jenis,
+                              quota: listTutorial[i].quota,
+                              rewards: listTutorial[i].rewards,
+                              email: email,
+                            );
+                          }
+                        }
+                    )
+                ),
                 listQscreen == null ? new Container() : new Container(
                     height: 220,
                     margin: EdgeInsets.only(top: 10, bottom: 10),
@@ -373,19 +402,49 @@ class _Home extends State<Home> {
                               color: Colors.grey, activeColor: new HexColor('#256fa0')),
                         ),
                         itemBuilder: (BuildContext context, int i) {
-                      return SurveyCardLeft(
-                        gambar: listQscreen[i].gambar,
-                        color: listQscreen[i].color,
-                        id: listQscreen[i].id,
-                        deskripsi: listQscreen[i].deskripsi,
-                        judul: listQscreen[i].judul,
-                        jenis: listQscreen[i].jenis,
-                        quota: listQscreen[i].quota,
-                        urutan: listQscreen[i].urutan,
-                        email: email,
-                        rewards: listQscreen[i].rewards,
-                      );
-                    })),
+                          if(listQscreen[i].totalquota != '0'){
+                            return SurveyCardProgress(
+                              gambar: listQscreen[i].gambar,
+                              color: listQscreen[i].color,
+                              id: listQscreen[i].id,
+                              deskripsi: listQscreen[i].deskripsi,
+                              judul: listQscreen[i].judul,
+                              jenis: listQscreen[i].jenis,
+                              quota: listQscreen[i].quota,
+                              totalquota: listQscreen[i].totalquota,
+                              email: email,
+                              urutan: listQscreen[i].urutan,
+                            );
+                          } else if(listQscreen[i].rewards != '0'){
+                            return SurveyCardReward(
+                              gambar: listQscreen[i].gambar,
+                              color: listQscreen[i].color,
+                              id: listQscreen[i].id,
+                              deskripsi: listQscreen[i].deskripsi,
+                              judul: listQscreen[i].judul,
+                              jenis: listQscreen[i].jenis,
+                              quota: listQscreen[i].quota,
+                              urutan: listQscreen[i].urutan,
+                              rewards: listQscreen[i].rewards,
+                              email: email,
+                            );
+                          } else {
+                            return SurveyCardBasic(
+                              gambar: listQscreen[i].gambar,
+                              color: listQscreen[i].color,
+                              id: listQscreen[i].id,
+                              deskripsi: listQscreen[i].deskripsi,
+                              judul: listQscreen[i].judul,
+                              jenis: listQscreen[i].jenis,
+                              quota: listQscreen[i].quota,
+                              rewards: listQscreen[i].rewards,
+                              email: email,
+                              urutan: listQscreen[i].urutan,
+                            );
+                          }
+                      }
+                    )
+                ),
                 new Container(
                     margin: EdgeInsets.only(left: 30, top: 10),
                     width: size.width,
@@ -398,7 +457,7 @@ class _Home extends State<Home> {
                     )
                 ),
                 listQsurvey == null ? new Container() : new Container(
-                    height: 300,
+                    height: 220,
                     margin: EdgeInsets.only(top: 10, bottom: 10),
                     child: new Swiper(
                         itemCount: listQsurvey == null ? 0 : listQsurvey.length,
@@ -411,18 +470,46 @@ class _Home extends State<Home> {
                               color: Colors.grey, activeColor: new HexColor('#256fa0')),
                         ),
                         itemBuilder: (BuildContext context, int i) {
-                    return SurveyCardProgress(
-                      gambar: listQsurvey[i].gambar,
-                      color: listQsurvey[i].color,
-                      id: listQsurvey[i].id,
-                      deskripsi: listQsurvey[i].deskripsi,
-                      judul: listQsurvey[i].judul,
-                      jenis: listQsurvey[i].jenis,
-                      quota: listQsurvey[i].quota,
-                      totalquota: listQsurvey[i].totalquota,
-                      rewards: listQsurvey[i].rewards,
-                    );
-                  })),
+                          if(listQsurvey[i].totalquota != '0'){
+                            return SurveyCardProgress(
+                              gambar: listQsurvey[i].gambar,
+                              color: listQsurvey[i].color,
+                              id: listQsurvey[i].id,
+                              deskripsi: listQsurvey[i].deskripsi,
+                              judul: listQsurvey[i].judul,
+                              jenis: listQsurvey[i].jenis,
+                              quota: listQsurvey[i].quota,
+                              totalquota: listQsurvey[i].totalquota,
+                              email: email,
+                            );
+                          } else if(listQsurvey[i].rewards != '0'){
+                            return SurveyCardReward(
+                              gambar: listQsurvey[i].gambar,
+                              color: listQsurvey[i].color,
+                              id: listQsurvey[i].id,
+                              deskripsi: listQsurvey[i].deskripsi,
+                              judul: listQsurvey[i].judul,
+                              jenis: listQsurvey[i].jenis,
+                              quota: listQsurvey[i].quota,
+                              rewards: listQsurvey[i].rewards,
+                              email: email,
+                            );
+                          } else {
+                            return SurveyCardBasic(
+                              gambar: listQsurvey[i].gambar,
+                              color: listQsurvey[i].color,
+                              id: listQsurvey[i].id,
+                              deskripsi: listQsurvey[i].deskripsi,
+                              judul: listQsurvey[i].judul,
+                              jenis: listQsurvey[i].jenis,
+                              quota: listQsurvey[i].quota,
+                              rewards: listQsurvey[i].rewards,
+                              email: email,
+                            );
+                          }
+                        }
+                  )
+                ),
                 new Container(
                     margin: EdgeInsets.only(left: 30, top: 10),
                     width: size.width,
@@ -435,7 +522,7 @@ class _Home extends State<Home> {
                     )
                 ),
                 listQpolling == null ? new Container() : new Container(
-                    height: 300,
+                    height: 220,
                     margin: EdgeInsets.only(top: 10, bottom: 10),
                     child: new Swiper(
                         itemCount: listQpolling == null ? 0 : listQpolling.length,
@@ -448,20 +535,49 @@ class _Home extends State<Home> {
                               color: Colors.grey, activeColor: new HexColor('#256fa0')),
                         ),
                         itemBuilder: (BuildContext context, int i) {
-                          return SurveyCardProgress(
-                            gambar: listQpolling[i].gambar,
-                            color: listQpolling[i].color,
-                            id: listQpolling[i].id,
-                            deskripsi: listQpolling[i].deskripsi,
-                            judul: listQpolling[i].judul,
-                            jenis: listQpolling[i].jenis,
-                            quota: listQpolling[i].quota,
-                            totalquota: listQpolling[i].totalquota,
-                            urutan: listQpolling[i].urutan,
-                            email: email,
-                            rewards: listQpolling[i].rewards,
-                          );
-                        })),
+                          if(listQpolling[i].totalquota != '0'){
+                            return SurveyCardProgress(
+                              gambar: listQpolling[i].gambar,
+                              color: listQpolling[i].color,
+                              id: listQpolling[i].id,
+                              deskripsi: listQpolling[i].deskripsi,
+                              judul: listQpolling[i].judul,
+                              jenis: listQpolling[i].jenis,
+                              quota: listQpolling[i].quota,
+                              totalquota: listQpolling[i].totalquota,
+                              email: email,
+                              urutan: listQpolling[i].urutan,
+                            );
+                          } else if(listQpolling[i].rewards != '0'){
+                            return SurveyCardReward(
+                              gambar: listQpolling[i].gambar,
+                              color: listQpolling[i].color,
+                              id: listQpolling[i].id,
+                              deskripsi: listQpolling[i].deskripsi,
+                              judul: listQpolling[i].judul,
+                              jenis: listQpolling[i].jenis,
+                              quota: listQpolling[i].quota,
+                              urutan: listQpolling[i].urutan,
+                              rewards: listQpolling[i].rewards,
+                              email: email,
+                            );
+                          } else {
+                            return SurveyCardBasic(
+                              gambar: listQpolling[i].gambar,
+                              color: listQpolling[i].color,
+                              id: listQpolling[i].id,
+                              deskripsi: listQpolling[i].deskripsi,
+                              judul: listQpolling[i].judul,
+                              jenis: listQpolling[i].jenis,
+                              quota: listQpolling[i].quota,
+                              rewards: listQpolling[i].rewards,
+                              email: email,
+                              urutan: listQpolling[i].urutan,
+                            );
+                          }
+                        }
+                    )
+                ),
                 new Container(
                   margin: EdgeInsets.only(left: 30, top: 10),
                   width: size.width,
