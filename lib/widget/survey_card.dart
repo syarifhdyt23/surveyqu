@@ -9,9 +9,9 @@ import 'package:surveyqu/survey/surveyview.dart';
 class SurveyCardProgress extends StatelessWidget {
   Info info = new Info();
   Size size;
-  final String color,judul,deskripsi,gambar, id, jenis, quota, totalquota, email, urutan;
+  final String color,judul,deskripsi,gambar, id, jenis, quota, totalquota, email, urutan, rewards;
 
-  SurveyCardProgress({Key key, this.color, this.judul, this.deskripsi, this.gambar, this.id, this.jenis, this.quota, this.totalquota, this.urutan, this.email}) : super(key: key);
+  SurveyCardProgress({Key key, this.color, this.judul, this.deskripsi, this.gambar, this.id, this.jenis, this.quota, this.totalquota, this.urutan, this.email, this.rewards}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     var percentage = int.parse(quota) / int.parse(totalquota) * 100;
@@ -19,7 +19,7 @@ class SurveyCardProgress extends StatelessWidget {
     return Container(
         margin: EdgeInsets.only(bottom: 10, left: 10, right: 10, top: 20),
         // width: size.width,
-        height: 300,
+        height: rewards == 'null' ? 220 : 300,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(10)),
           color: new HexColor(color),
@@ -71,7 +71,25 @@ class SurveyCardProgress extends StatelessWidget {
                   title: new Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      new Row(
+                      totalquota == '0' ? new Column(
+                        children: [
+                          new Divider(),
+                          new Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              new Text('Reward per tugas'),
+                              new Row(
+                                children: [
+                                  new Icon(Icons.control_point_duplicate_sharp),
+                                  new Padding(padding: EdgeInsets.only(left: 10)),
+                                  new Text(rewards+ ' poin'),
+                                ],
+                              )
+                            ],
+                          ),
+                        ],
+                      ): new Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           new CircularPercentIndicator(
@@ -129,7 +147,7 @@ class SurveyCardProgress extends StatelessWidget {
                       ),
                     ],
                   ),
-                  subtitle: new Column(
+                  subtitle: rewards == '0' ? new Container() :new Column(
                     children: [
                       new Divider(),
                       new Row(
@@ -141,7 +159,7 @@ class SurveyCardProgress extends StatelessWidget {
                             children: [
                               new Icon(Icons.control_point_duplicate_sharp),
                               new Padding(padding: EdgeInsets.only(left: 10)),
-                              new Text('100 poin'),
+                              new Text(rewards+ ' poin'),
                             ],
                           )
                         ],
@@ -159,9 +177,9 @@ class SurveyCardProgress extends StatelessWidget {
 class SurveyCardLeft extends StatelessWidget {
   Info info = new Info();
   Size size;
-  final String color,judul,deskripsi,gambar, id, jenis, quota, urutan, email;
+  final String color,judul,deskripsi,gambar, id, jenis, quota, urutan, email, rewards;
 
-  SurveyCardLeft({Key key, this.color, this.judul, this.deskripsi, this.gambar, this.id, this.jenis, this.quota, this.urutan, this.email}) : super(key: key);
+  SurveyCardLeft({Key key, this.color, this.judul, this.deskripsi, this.gambar, this.id, this.jenis, this.quota, this.urutan, this.email, this.rewards}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -215,12 +233,12 @@ class SurveyCardLeft extends StatelessWidget {
                   borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
                 ),
                 child: new ListTile(
-                  title: new Text('Reward per tugas'),
-                  subtitle: new Row(
+                  title: rewards == '0' ? new Container() : new Text('Reward per tugas'),
+                  subtitle: rewards == '0' ? new Container() :new Row(
                     children: [
                       new Icon(Icons.control_point_duplicate_sharp),
                       new Padding(padding: EdgeInsets.only(left: 10)),
-                      new Text('100 poin'),
+                      new Text(rewards + ' poin'),
                     ],
                   ),
                   trailing: new InkWell(

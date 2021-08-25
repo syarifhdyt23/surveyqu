@@ -356,6 +356,7 @@ class _Home extends State<Home> {
                         judul: listTutorial[i].judul,
                         jenis: listTutorial[i].jenis,
                         quota: listTutorial[i].quota,
+                        rewards: listTutorial[i].rewards,
                       );
                     })),
                 listQscreen == null ? new Container() : new Container(
@@ -382,6 +383,7 @@ class _Home extends State<Home> {
                         quota: listQscreen[i].quota,
                         urutan: listQscreen[i].urutan,
                         email: email,
+                        rewards: listQscreen[i].rewards,
                       );
                     })),
                 new Container(
@@ -418,6 +420,7 @@ class _Home extends State<Home> {
                       jenis: listQsurvey[i].jenis,
                       quota: listQsurvey[i].quota,
                       totalquota: listQsurvey[i].totalquota,
+                      rewards: listQsurvey[i].rewards,
                     );
                   })),
                 new Container(
@@ -456,57 +459,9 @@ class _Home extends State<Home> {
                             totalquota: listQpolling[i].totalquota,
                             urutan: listQpolling[i].urutan,
                             email: email,
+                            rewards: listQpolling[i].rewards,
                           );
                         })),
-                // listAds == null ? new Container() :
-                // new Container(
-                //     height: 180,
-                //     margin: EdgeInsets.only(top: 10),
-                //     child: new Swiper(
-                //       itemCount: listAds == null ? 0 : listAds.length,
-                //       viewportFraction: 0.8,
-                //       scale: 0.9,
-                //       autoplay: true,
-                //       pagination: new SwiperPagination(),
-                //       itemBuilder: (BuildContext context, int i) {
-                //         return AdvertisementCard(
-                //           gambar: listAds[i].gambar,
-                //           isi: listAds[i].isi,
-                //           onTap: (){
-                //             openURL(context, listAds[i].url);
-                //           },
-                //         );
-                //       },
-                //     )
-                // ),
-                ///qpolling
-                // new Container(
-                //     margin: EdgeInsets.only(left: 20, top: 10),
-                //     width: size.width,
-                //     child: new Column(
-                //       crossAxisAlignment: CrossAxisAlignment.start,
-                //       children: [
-                //         new Text("Q-Polling", style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),),
-                //         new Text("Kerjakan study sesuai dengan kriteriamu", style: TextStyle(fontSize: 18),),
-                //       ],
-                //     )
-                // ),
-                // listSurv == null ? new Container() : new ListView.builder(
-                //     physics: BouncingScrollPhysics(),
-                //     padding: EdgeInsets.only(top: 10,bottom: 10),
-                //     scrollDirection: Axis.vertical,
-                //     shrinkWrap: true,
-                //     itemCount: listSurv == null ? 0 : listSurv.length,
-                //     itemBuilder: (context, i){
-                //       return SurveyCardLeft(
-                //         gambar: listSurv[i].gambar,
-                //         color: listSurv[i].color,
-                //         id: listSurv[i].id,
-                //         deskripsi: listSurv[i].deskripsi,
-                //         judul: listSurv[i].judul,
-                //         jenis: 'qt',
-                //       );
-                //     }),
                 new Container(
                   margin: EdgeInsets.only(left: 30, top: 10),
                   width: size.width,
