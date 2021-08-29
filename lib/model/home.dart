@@ -255,6 +255,7 @@ class Qpolling {
   String headerS;
   String autoscroll;
   String rewards;
+  String status_result;
 
   Qpolling(
       {this.judul,
@@ -269,7 +270,8 @@ class Qpolling {
         this.header,
         this.headerS,
         this.autoscroll,
-      this.rewards});
+      this.rewards,
+      this.status_result});
 
   Qpolling.fromJson(Map<String, dynamic> json) {
     judul = json['judul'];
@@ -285,6 +287,7 @@ class Qpolling {
     headerS = json['headerS'];
     autoscroll = json['autoscroll'];
     rewards = json['rewards'];
+    status_result = json['status_result'];
   }
 
   Map<String, dynamic> toJson() {
@@ -302,6 +305,7 @@ class Qpolling {
     data['headerS'] = this.headerS;
     data['autoscroll'] = this.autoscroll;
     data['rewards'] = this.rewards;
+    data['status_result'] = this.status_result;
     return data;
   }
 }

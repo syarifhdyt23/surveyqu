@@ -582,6 +582,7 @@ class _Home extends State<Home> {
                               quota: listQpolling[i].quota,
                               rewards: listQpolling[i].rewards,
                               totalquota: listQpolling[i].totalquota,
+                              status_result: listQpolling[i].status_result,
                               email: email,
                             );
                           }else if(listQpolling[i].totalquota != '0'){
@@ -594,6 +595,7 @@ class _Home extends State<Home> {
                               jenis: listQpolling[i].jenis,
                               quota: listQpolling[i].quota,
                               totalquota: listQpolling[i].totalquota,
+                              status_result: listQpolling[i].status_result,
                               email: email,
                             );
                           } else if(listQpolling[i].rewards != '0'){
@@ -606,6 +608,7 @@ class _Home extends State<Home> {
                               jenis: listQpolling[i].jenis,
                               quota: listQpolling[i].quota,
                               rewards: listQpolling[i].rewards,
+                              status_result: listQpolling[i].status_result,
                               email: email,
                             );
                           } else {
@@ -618,6 +621,7 @@ class _Home extends State<Home> {
                               jenis: listQpolling[i].jenis,
                               quota: listQpolling[i].quota,
                               rewards: listQpolling[i].rewards,
+                              status_result: listQpolling[i].status_result,
                               email: email,
                             );
                           }

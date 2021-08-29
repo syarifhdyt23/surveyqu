@@ -9,9 +9,9 @@ import 'package:surveyqu/survey/surveyview.dart';
 class SurveyCardProgress extends StatelessWidget {
   Info info = new Info();
   Size size;
-  final String color,judul,deskripsi,gambar, id, jenis, quota, totalquota, email, urutan, rewards;
+  final String color,judul,deskripsi,gambar, id, jenis, quota, totalquota, email, urutan, rewards, status_result;
 
-  SurveyCardProgress({Key key, this.color, this.judul, this.deskripsi, this.gambar, this.id, this.jenis, this.quota, this.totalquota, this.urutan, this.email, this.rewards}) : super(key: key);
+  SurveyCardProgress({Key key, this.color, this.judul, this.deskripsi, this.gambar, this.id, this.jenis, this.quota, this.totalquota, this.urutan, this.email, this.rewards, this.status_result}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     var percentage = int.parse(quota) / int.parse(totalquota) * 100;
@@ -110,9 +110,23 @@ class SurveyCardProgress extends StatelessWidget {
                             info.MessageInfo(context, 'info','Survey sudah memenuhi kuota');
                           } else {
                             if(jenis == 'qpl' || jenis == 'qsc'){
-                              Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context) => SurveyDetail(id: id, jenis: jenis, urutanSoal: urutan, email: email,)));
+                              if(status_result == '1'){
+                                info.ShowResult(context, judul, "", 'test', '');
+                              } else {
+                                Navigator.of(context, rootNavigator: true).push(
+                                    new MaterialPageRoute(builder: (context) =>
+                                        SurveyDetail(id: id,
+                                          jenis: jenis,
+                                          urutanSoal: urutan,
+                                          email: email,)));
+                              }
                             } else {
-                              Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context) => SurveyView(judul: judul, deskripsi: deskripsi, id: id, jenis: jenis,)));
+                              Navigator.of(context, rootNavigator: true).push(
+                                  new MaterialPageRoute(builder: (context) =>
+                                      SurveyView(judul: judul,
+                                        deskripsi: deskripsi,
+                                        id: id,
+                                        jenis: jenis,)));
                             }
                           }
                         },
@@ -129,25 +143,6 @@ class SurveyCardProgress extends StatelessWidget {
                       ),
                     ],
                   ),
-                  // subtitle: rewards == '0' ? new Container() :new Column(
-                  //   children: [
-                  //     new Divider(),
-                  //     new Row(
-                  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //       crossAxisAlignment: CrossAxisAlignment.start,
-                  //       children: [
-                  //         new Text('Reward per tugas'),
-                  //         new Row(
-                  //           children: [
-                  //             new Icon(Icons.control_point_duplicate_sharp),
-                  //             new Padding(padding: EdgeInsets.only(left: 10)),
-                  //             new Text(rewards+ ' poin'),
-                  //           ],
-                  //         )
-                  //       ],
-                  //     ),
-                  //   ],
-                  // )
                 ),
               ),),
           ],
@@ -159,9 +154,9 @@ class SurveyCardProgress extends StatelessWidget {
 class SurveyCardReward extends StatelessWidget {
   Info info = new Info();
   Size size;
-  final String color,judul,deskripsi,gambar, id, jenis, quota, urutan, email, rewards;
+  final String color,judul,deskripsi,gambar, id, jenis, quota, urutan, email, rewards, status_result;
 
-  SurveyCardReward({Key key, this.color, this.judul, this.deskripsi, this.gambar, this.id, this.jenis, this.quota, this.urutan, this.email, this.rewards}) : super(key: key);
+  SurveyCardReward({Key key, this.color, this.judul, this.deskripsi, this.gambar, this.id, this.jenis, this.quota, this.urutan, this.email, this.rewards, this.status_result}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -229,7 +224,14 @@ class SurveyCardReward extends StatelessWidget {
                         info.MessageInfo(context, 'info','Survey sudah memenuhi kuota');
                       } else {
                         if(jenis == 'qpl' || jenis == 'qsc'){
-                          Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context) => SurveyDetail(id: id, jenis: jenis, urutanSoal: urutan, email: email,)));
+                          if(status_result == '1'){
+                          info.ShowResult(context, judul, "", 'test', '');
+                          } else {
+                            Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(
+                                builder: (context) =>
+                                    SurveyDetail(
+                                      id: id, jenis: jenis, urutanSoal: urutan, email: email,)));
+                          }
                         } else {
                           Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context) => SurveyView(judul: judul, deskripsi: deskripsi, id: id, jenis: jenis,)));
                         }
@@ -257,9 +259,9 @@ class SurveyCardReward extends StatelessWidget {
 class SurveyCardBasic extends StatelessWidget {
   Info info = new Info();
   Size size;
-  final String color,judul,deskripsi,gambar, id, jenis, quota, urutan, email, rewards;
+  final String color,judul,deskripsi,gambar, id, jenis, quota, urutan, email, rewards, status_result;
 
-  SurveyCardBasic({Key key, this.color, this.judul, this.deskripsi, this.gambar, this.id, this.jenis, this.quota, this.urutan, this.email, this.rewards}) : super(key: key);
+  SurveyCardBasic({Key key, this.color, this.judul, this.deskripsi, this.gambar, this.id, this.jenis, this.quota, this.urutan, this.email, this.rewards, this.status_result}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -309,11 +311,12 @@ class SurveyCardBasic extends StatelessWidget {
               flex:3,
               child: new Container(
                 decoration: BoxDecoration(
-                  // color: Colors.white,
+                  color: Colors.white,
                   borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
                 ),
                 child: new ListTile(
-                  // title: rewards == '0' ? new Container() : new Text('Reward per tugas'),
+                  contentPadding: EdgeInsets.only(top: 15, left: 15,right: 15),
+                  title: new Text('Isi survey sekarang'),
                   // subtitle: rewards == '0' ? new Container() :new Row(
                   //   children: [
                   //     new Icon(Icons.control_point_duplicate_sharp),
@@ -327,7 +330,14 @@ class SurveyCardBasic extends StatelessWidget {
                         info.MessageInfo(context, 'info','Survey sudah memenuhi kuota');
                       } else {
                         if(jenis == 'qpl' || jenis == 'qsc'){
-                          Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context) => SurveyDetail(id: id, jenis: jenis, urutanSoal: urutan, email: email,)));
+                          if(status_result == '1'){
+                          info.ShowResult(context, judul, "", 'test', '');
+                          } else {
+                            Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(
+                                builder: (context) =>
+                                    SurveyDetail(
+                                      id: id, jenis: jenis, urutanSoal: urutan, email: email,)));
+                          }
                         } else {
                           Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context) => SurveyView(judul: judul, deskripsi: deskripsi, id: id, jenis: jenis,)));
                         }
@@ -355,9 +365,9 @@ class SurveyCardBasic extends StatelessWidget {
 class SurveyCardBoth extends StatelessWidget {
   Info info = new Info();
   Size size;
-  final String color,judul,deskripsi,gambar, id, jenis, quota, totalquota, email, urutan, rewards;
+  final String color,judul,deskripsi,gambar, id, jenis, quota, totalquota, email, urutan, rewards, status_result;
 
-  SurveyCardBoth({Key key, this.color, this.judul, this.deskripsi, this.gambar, this.id, this.jenis, this.quota, this.totalquota, this.urutan, this.email, this.rewards}) : super(key: key);
+  SurveyCardBoth({Key key, this.color, this.judul, this.deskripsi, this.gambar, this.id, this.jenis, this.quota, this.totalquota, this.urutan, this.email, this.rewards, this.status_result}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     var percentage = int.parse(quota) / int.parse(totalquota) * 100;
@@ -413,7 +423,7 @@ class SurveyCardBoth extends StatelessWidget {
                   borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
                 ),
                 child: new ListTile(
-                    contentPadding: EdgeInsets.only(top: 10, left: 15,right: 15),
+                    contentPadding: EdgeInsets.only(top: 5, left: 15,right: 15),
                     title: new Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -456,7 +466,14 @@ class SurveyCardBoth extends StatelessWidget {
                               info.MessageInfo(context, 'info','Survey sudah memenuhi kuota');
                             } else {
                               if(jenis == 'qpl' || jenis == 'qsc'){
-                                Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context) => SurveyDetail(id: id, jenis: jenis, urutanSoal: urutan, email: email,)));
+                                if(status_result == '1'){
+                                info.ShowResult(context, judul, "", 'test', '');
+                                } else {
+                                  Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(
+                                      builder: (context) =>
+                                          SurveyDetail(
+                                            id: id, jenis: jenis, urutanSoal: urutan, email: email,)));
+                                }
                               } else {
                                 Navigator.of(context, rootNavigator: true).push(new MaterialPageRoute(builder: (context) => SurveyView(judul: judul, deskripsi: deskripsi, id: id, jenis: jenis,)));
                               }
