@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 import 'dart:async';
 
 import 'package:surveyqu/domain.dart';
@@ -430,35 +431,100 @@ class Info {
                             ),
                           ),
                         ),
-                        new Container(
-                          margin: EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 10),
-                          height: 215,
-                          width: 500,
-                          decoration: BoxDecoration(
-                            //boxShadow: kElevationToShadow[2],
-                            borderRadius: new BorderRadius.circular(7.0),
-                            image: new DecorationImage(
-                              image: new NetworkImage(image),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
+                        // new Container(
+                        //   margin: EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 10),
+                        //   height: 215,
+                        //   width: 500,
+                        //   decoration: BoxDecoration(
+                        //     //boxShadow: kElevationToShadow[2],
+                        //     borderRadius: new BorderRadius.circular(7.0),
+                        //     image: new DecorationImage(
+                        //       image: new NetworkImage(image),
+                        //       fit: BoxFit.cover,
+                        //     ),
+                        //   ),
+                        // ),
 
                         Expanded(
-                          child: ListView(
+                          child: Column(
                             children: [
                               new Container(
                                 // height: 200,
                                 padding: EdgeInsets.only(right: 10, left: 10),
-                                margin: EdgeInsets.only(bottom: 10),
+                                margin: EdgeInsets.only(top: 10),
+                                alignment: Alignment.centerLeft,
                                 child: new Text(
-                                  desk,
+                                  'Jawaban A',
                                   textAlign: TextAlign.justify,
                                   style: new TextStyle(
                                     fontFamily: 'helvetica',
                                     fontSize: 17,
                                   ),
                                 ),
+                              ),
+                              new LinearPercentIndicator(
+                                padding: EdgeInsets.only(right: 10, left: 10, top: 10),
+                                // radius: 50.0,
+                                animation: true,
+                                animationDuration: 1000,
+                                // lineWidth: 8.0,
+                                percent: 1.0,
+                                // startAngle: double.parse(quota),
+                                // circularStrokeCap: CircularStrokeCap.round,
+                                backgroundColor: Colors.yellow,
+                                progressColor: Colors.red,
+                              ),
+                              new Container(
+                                // height: 200,
+                                padding: EdgeInsets.only(right: 10, left: 10),
+                                margin: EdgeInsets.only(top: 10),
+                                alignment: Alignment.centerLeft,
+                                child: new Text(
+                                  'Jawaban B',
+                                  textAlign: TextAlign.justify,
+                                  style: new TextStyle(
+                                    fontFamily: 'helvetica',
+                                    fontSize: 17,
+                                  ),
+                                ),
+                              ),
+                              new LinearPercentIndicator(
+                                padding: EdgeInsets.only(right: 10, left: 10, top: 10),
+                                // radius: 50.0,
+                                animation: true,
+                                animationDuration: 1000,
+                                // lineWidth: 8.0,
+                                percent: 0.6,
+                                // startAngle: double.parse(quota),
+                                // circularStrokeCap: CircularStrokeCap.round,
+                                backgroundColor: Colors.yellow,
+                                progressColor: Colors.red,
+                              ),
+                              new Container(
+                                // height: 200,
+                                padding: EdgeInsets.only(right: 10, left: 10),
+                                margin: EdgeInsets.only(top: 10),
+                                alignment: Alignment.centerLeft,
+                                child: new Text(
+                                  'Jawaban C',
+                                  textAlign: TextAlign.justify,
+                                  style: new TextStyle(
+                                    fontFamily: 'helvetica',
+                                    fontSize: 17,
+                                  ),
+                                ),
+                              ),
+                              new LinearPercentIndicator(
+                                padding: EdgeInsets.only(right: 10, left: 10, top: 10),
+                                // radius: 50.0,
+                                animation: true,
+                                animationDuration: 1000,
+                                // lineWidth: 8.0,
+                                percent: 0.8,
+                                // startAngle: double.parse(quota),
+                                // circularStrokeCap: CircularStrokeCap.round,
+                                backgroundColor: Colors.yellow,
+                                progressColor: Colors.red,
                               ),
                             ],
                           ),
