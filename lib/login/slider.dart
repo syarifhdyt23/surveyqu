@@ -38,7 +38,7 @@ class _SliderInfo extends State<SliderInfo> {
     };
     http.Response hasil = await http.post(Uri.parse(url), headers: headers);
 
-    if (200 == hasil.statusCode) {
+    if(200 == hasil.statusCode) {
       setState(() {
         dataJson = jsonDecode(hasil.body);
         slideCount = dataJson == null ? 0 : dataJson['result'].length;

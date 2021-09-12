@@ -244,30 +244,28 @@ class _LoginState extends State<Login> {
                       margin: const EdgeInsets.only(left: 20, right: 20.0, top: 15),
                       child: new FlatButton(
                         onPressed: () async {
-                          setState(() async {
-                            if(textEmaill.text == ''){
-                              // info.MessageInfo(context, 'Message', 'Please input email address');
-                              info.messagesNoButton(context, "Info", "Masukkan email anda");
-                            }else if(!textEmaill.text.contains('@') || !textEmaill.text.contains('.')) {
-                              info.messagesNoButton(context, 'Info', 'Your email is not valid');
-                            }else if(textPassword.text == '') {
-                              info.messagesNoButton(context, 'Info', 'Please input your password');
-                            }else {
-                              _onLoading();
-                              //Navigator.push(context,
-                              //    new MaterialPageRoute(builder: (context) => new ValidasiLogin(identifier: identifier, email: textEmaill.text, password: textPassword.text,)));
-                              //this.getData(textEmaill.text, textPassword.text);
-                            }
-                          });
+                          if(textEmaill.text == ''){
+                            // info.MessageInfo(context, 'Message', 'Please input email address');
+                            info.messagesNoButton(context, "Info", "Masukkan email anda");
+                          }else if(!textEmaill.text.contains('@') || !textEmaill.text.contains('.')) {
+                            info.messagesNoButton(context, 'Info', 'Your email is not valid');
+                          }else if(textPassword.text == '') {
+                            info.messagesNoButton(context, 'Info', 'Please input your password');
+                          }else {
+                            this._onLoading();
+                            //Navigator.push(context,
+                            //    new MaterialPageRoute(builder: (context) => new ValidasiLogin(identifier: identifier, email: textEmaill.text, password: textPassword.text,)));
+                            //this.getData(textEmaill.text, textPassword.text);
+                          }
                         },
                         splashColor: new HexColor("#F07B3F"),
                         highlightColor: new HexColor("#F07B3F"),
                         child: new Text('Masuk', style: new TextStyle( color: Colors.white, fontSize: 19)),
                         shape: new RoundedRectangleBorder(
                             borderRadius: new BorderRadius.circular(5.0),
-                            side: new BorderSide(color: new HexColor("#F07B3F"))
+                            side: new BorderSide(color: Colors.red)
                         ),
-                        color: new HexColor("#F07B3F"),
+                        color: Colors.red,
                       ),
                     ),
 

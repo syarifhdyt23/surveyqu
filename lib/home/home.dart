@@ -348,56 +348,20 @@ class _Home extends State<Home> {
                               color: Colors.grey, activeColor: new HexColor('#256fa0')),
                         ),
                         itemBuilder: (BuildContext context, int i) {
-                          if(listTutorial[i].totalquota != '0' && listTutorial[i].rewards != '0') {
-                            return SurveyCardBoth(
-                              gambar: listTutorial[i].gambar,
-                              color: listTutorial[i].color,
-                              id: listTutorial[i].id,
-                              deskripsi: listTutorial[i].deskripsi,
-                              judul: listTutorial[i].judul,
-                              jenis: listTutorial[i].jenis,
-                              quota: listTutorial[i].quota,
-                              rewards: listTutorial[i].rewards,
-                              totalquota: listTutorial[i].totalquota,
-                              email: email,
-                            );
-                          }else if(listTutorial[i].totalquota != '0'){
-                            return SurveyCardProgress(
-                              gambar: listTutorial[i].gambar,
-                              color: listTutorial[i].color,
-                              id: listTutorial[i].id,
-                              deskripsi: listTutorial[i].deskripsi,
-                              judul: listTutorial[i].judul,
-                              jenis: listTutorial[i].jenis,
-                              quota: listTutorial[i].quota,
-                              totalquota: listTutorial[i].totalquota,
-                              email: email,
-                            );
-                          } else if(listTutorial[i].rewards != '0'){
-                            return SurveyCardReward(
-                              gambar: listTutorial[i].gambar,
-                              color: listTutorial[i].color,
-                              id: listTutorial[i].id,
-                              deskripsi: listTutorial[i].deskripsi,
-                              judul: listTutorial[i].judul,
-                              jenis: listTutorial[i].jenis,
-                              quota: listTutorial[i].quota,
-                              rewards: listTutorial[i].rewards,
-                              email: email,
-                            );
-                          } else {
-                            return SurveyCardBasic(
-                              gambar: listTutorial[i].gambar,
-                              color: listTutorial[i].color,
-                              id: listTutorial[i].id,
-                              deskripsi: listTutorial[i].deskripsi,
-                              judul: listTutorial[i].judul,
-                              jenis: listTutorial[i].jenis,
-                              quota: listTutorial[i].quota,
-                              rewards: listTutorial[i].rewards,
-                              email: email,
-                            );
-                          }
+
+                          return SurveyCard(
+                            gambar: listTutorial[i].gambar,
+                            color: listTutorial[i].color,
+                            id: listTutorial[i].id,
+                            deskripsi: listTutorial[i].deskripsi,
+                            judul: listTutorial[i].judul,
+                            jenis: listTutorial[i].jenis,
+                            quota: listTutorial[i].quota,
+                            rewards: listTutorial[i].rewards,
+                            totalquota: listTutorial[i].totalquota,
+                            status_result: '0',
+                            email: email,
+                          );
                         }
                     )
                 ),
@@ -415,56 +379,20 @@ class _Home extends State<Home> {
                               color: Colors.grey, activeColor: new HexColor('#256fa0')),
                         ),
                         itemBuilder: (BuildContext context, int i) {
-                          if(listQscreen[i].totalquota != '0' && listQscreen[i].rewards != '0') {
-                            return SurveyCardBoth(
-                              gambar: listQscreen[i].gambar,
-                              color: listQscreen[i].color,
-                              id: listQscreen[i].id,
-                              deskripsi: listQscreen[i].deskripsi,
-                              judul: listQscreen[i].judul,
-                              jenis: listQscreen[i].jenis,
-                              quota: listQscreen[i].quota,
-                              rewards: listQscreen[i].rewards,
-                              totalquota: listQscreen[i].totalquota,
-                              email: email,
-                            );
-                          }else if(listQscreen[i].totalquota != '0'){
-                            return SurveyCardProgress(
-                              gambar: listQscreen[i].gambar,
-                              color: listQscreen[i].color,
-                              id: listQscreen[i].id,
-                              deskripsi: listQscreen[i].deskripsi,
-                              judul: listQscreen[i].judul,
-                              jenis: listQscreen[i].jenis,
-                              quota: listQscreen[i].quota,
-                              totalquota: listQscreen[i].totalquota,
-                              email: email,
-                            );
-                          } else if(listQscreen[i].rewards != '0'){
-                            return SurveyCardReward(
-                              gambar: listQscreen[i].gambar,
-                              color: listQscreen[i].color,
-                              id: listQscreen[i].id,
-                              deskripsi: listQscreen[i].deskripsi,
-                              judul: listQscreen[i].judul,
-                              jenis: listQscreen[i].jenis,
-                              quota: listQscreen[i].quota,
-                              rewards: listQscreen[i].rewards,
-                              email: email,
-                            );
-                          } else {
-                            return SurveyCardBasic(
-                              gambar: listQscreen[i].gambar,
-                              color: listQscreen[i].color,
-                              id: listQscreen[i].id,
-                              deskripsi: listQscreen[i].deskripsi,
-                              judul: listQscreen[i].judul,
-                              jenis: listQscreen[i].jenis,
-                              quota: listQscreen[i].quota,
-                              rewards: listQscreen[i].rewards,
-                              email: email,
-                            );
-                          }
+
+                          return SurveyCard(
+                            gambar: listQscreen[i].gambar,
+                            color: listQscreen[i].color,
+                            id: listQscreen[i].id,
+                            deskripsi: listQscreen[i].deskripsi,
+                            judul: listQscreen[i].judul,
+                            jenis: listQscreen[i].jenis,
+                            quota: listQscreen[i].quota,
+                            rewards: listQscreen[i].rewards,
+                            totalquota: listQscreen[i].totalquota,
+                            status_result: '0',
+                            email: email,
+                          );
                       }
                     )
                 ),
@@ -493,56 +421,19 @@ class _Home extends State<Home> {
                               color: Colors.grey, activeColor: new HexColor('#256fa0')),
                         ),
                         itemBuilder: (BuildContext context, int i) {
-                          if(listQsurvey[i].totalquota != '0' && listQsurvey[i].rewards != '0') {
-                            return SurveyCardBoth(
-                              gambar: listQsurvey[i].gambar,
-                              color: listQsurvey[i].color,
-                              id: listQsurvey[i].id,
-                              deskripsi: listQsurvey[i].deskripsi,
-                              judul: listQsurvey[i].judul,
-                              jenis: listQsurvey[i].jenis,
-                              quota: listQsurvey[i].quota,
-                              rewards: listQsurvey[i].rewards,
-                              totalquota: listQsurvey[i].totalquota,
-                              email: email,
-                            );
-                          }else if(listQsurvey[i].totalquota != '0'){
-                            return SurveyCardProgress(
-                              gambar: listQsurvey[i].gambar,
-                              color: listQsurvey[i].color,
-                              id: listQsurvey[i].id,
-                              deskripsi: listQsurvey[i].deskripsi,
-                              judul: listQsurvey[i].judul,
-                              jenis: listQsurvey[i].jenis,
-                              quota: listQsurvey[i].quota,
-                              totalquota: listQsurvey[i].totalquota,
-                              email: email,
-                            );
-                          } else if(listQsurvey[i].rewards != '0'){
-                            return SurveyCardReward(
-                              gambar: listQsurvey[i].gambar,
-                              color: listQsurvey[i].color,
-                              id: listQsurvey[i].id,
-                              deskripsi: listQsurvey[i].deskripsi,
-                              judul: listQsurvey[i].judul,
-                              jenis: listQsurvey[i].jenis,
-                              quota: listQsurvey[i].quota,
-                              rewards: listQsurvey[i].rewards,
-                              email: email,
-                            );
-                          } else {
-                            return SurveyCardBasic(
-                              gambar: listQsurvey[i].gambar,
-                              color: listQsurvey[i].color,
-                              id: listQsurvey[i].id,
-                              deskripsi: listQsurvey[i].deskripsi,
-                              judul: listQsurvey[i].judul,
-                              jenis: listQsurvey[i].jenis,
-                              quota: listQsurvey[i].quota,
-                              rewards: listQsurvey[i].rewards,
-                              email: email,
-                            );
-                          }
+                          return SurveyCard(
+                            gambar: listQsurvey[i].gambar,
+                            color: listQsurvey[i].color,
+                            id: listQsurvey[i].id,
+                            deskripsi: listQsurvey[i].deskripsi,
+                            judul: listQsurvey[i].judul,
+                            jenis: listQsurvey[i].jenis,
+                            quota: listQsurvey[i].quota,
+                            rewards: listQsurvey[i].rewards,
+                            totalquota: listQsurvey[i].totalquota,
+                            status_result: '0',
+                            email: email
+                          );
                         }
                   )
                 ),
@@ -571,60 +462,19 @@ class _Home extends State<Home> {
                               color: Colors.grey, activeColor: new HexColor('#256fa0')),
                         ),
                         itemBuilder: (BuildContext context, int i) {
-                          if(listQpolling[i].totalquota != '0' && listQpolling[i].rewards != '0') {
-                            return SurveyCardBoth(
-                              gambar: listQpolling[i].gambar,
-                              color: listQpolling[i].color,
-                              id: listQpolling[i].id,
-                              deskripsi: listQpolling[i].deskripsi,
-                              judul: listQpolling[i].judul,
-                              jenis: listQpolling[i].jenis,
-                              quota: listQpolling[i].quota,
-                              rewards: listQpolling[i].rewards,
-                              totalquota: listQpolling[i].totalquota,
-                              status_result: listQpolling[i].status_result,
-                              email: email,
-                            );
-                          }else if(listQpolling[i].totalquota != '0'){
-                            return SurveyCardProgress(
-                              gambar: listQpolling[i].gambar,
-                              color: listQpolling[i].color,
-                              id: listQpolling[i].id,
-                              deskripsi: listQpolling[i].deskripsi,
-                              judul: listQpolling[i].judul,
-                              jenis: listQpolling[i].jenis,
-                              quota: listQpolling[i].quota,
-                              totalquota: listQpolling[i].totalquota,
-                              status_result: listQpolling[i].status_result,
-                              email: email,
-                            );
-                          } else if(listQpolling[i].rewards != '0'){
-                            return SurveyCardReward(
-                              gambar: listQpolling[i].gambar,
-                              color: listQpolling[i].color,
-                              id: listQpolling[i].id,
-                              deskripsi: listQpolling[i].deskripsi,
-                              judul: listQpolling[i].judul,
-                              jenis: listQpolling[i].jenis,
-                              quota: listQpolling[i].quota,
-                              rewards: listQpolling[i].rewards,
-                              status_result: listQpolling[i].status_result,
-                              email: email,
-                            );
-                          } else {
-                            return SurveyCardBasic(
-                              gambar: listQpolling[i].gambar,
-                              color: listQpolling[i].color,
-                              id: listQpolling[i].id,
-                              deskripsi: listQpolling[i].deskripsi,
-                              judul: listQpolling[i].judul,
-                              jenis: listQpolling[i].jenis,
-                              quota: listQpolling[i].quota,
-                              rewards: listQpolling[i].rewards,
-                              status_result: listQpolling[i].status_result,
-                              email: email,
-                            );
-                          }
+                          return SurveyCard(
+                            gambar: listQpolling[i].gambar,
+                            color: listQpolling[i].color,
+                            id: listQpolling[i].id,
+                            deskripsi: listQpolling[i].deskripsi,
+                            judul: listQpolling[i].judul,
+                            jenis: listQpolling[i].jenis,
+                            quota: listQpolling[i].quota,
+                            rewards: listQpolling[i].rewards,
+                            totalquota: listQpolling[i].totalquota,
+                            status_result: listQpolling[i].status_result,
+                            email: email,
+                          );
                         }
                     )
                 ),

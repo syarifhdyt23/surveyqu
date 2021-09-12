@@ -162,3 +162,60 @@ class ResultQnews {
     return data;
   }
 }
+
+class SurveyRes {
+  String id;
+  String question;
+  String type;
+  String opsi;
+  String urutan;
+  String jumlah;
+  String total;
+  String j1;
+  String j2;
+  String j3;
+  String j4;
+
+  SurveyRes(
+      {this.id,
+        this.question,
+        this.type,
+        this.opsi,
+        this.urutan,
+        this.jumlah,
+        this.total,
+        this.j1,
+        this.j2,
+        this.j3,
+        this.j4});
+
+  SurveyRes.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    question = json['question'];
+    type = json['type'];
+    opsi = json['opsi'];
+    urutan = json['urutan'];
+    jumlah = json['jumlah'];
+    total = json['total'];
+    j1 = json['j1'];
+    j2 = json['j2'];
+    j3 = json['j3'];
+    j4 = json['j4'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['question'] = this.question;
+    data['type'] = this.type;
+    data['opsi'] = this.opsi;
+    data['urutan'] = this.urutan;
+    data['jumlah'] = this.jumlah;
+    data['total'] = this.total;
+    data['j1'] = this.j1;
+    data['j2'] = this.j2;
+    data['j3'] = this.j3;
+    data['j4'] = this.j4;
+    return data;
+  }
+}
