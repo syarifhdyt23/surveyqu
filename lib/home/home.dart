@@ -409,17 +409,20 @@ class _Home extends State<Home> {
                 ),
                 listQsurvey == null ? new Container() : new Container(
                     height: 300,
+                    // width: 150,
                     margin: EdgeInsets.only(top: 10, bottom: 10),
-                    child: new Swiper(
+                    child: new ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
                         itemCount: listQsurvey == null ? 0 : listQsurvey.length,
-                        viewportFraction: 0.9,
-                        scale: 0.9,
-                        autoplay: listQsurvey[0].autoscroll == '1' ? true : false,
-                        pagination: new SwiperPagination(
-                          alignment: Alignment.bottomCenter,
-                          builder: new DotSwiperPaginationBuilder(
-                              color: Colors.grey, activeColor: new HexColor('#256fa0')),
-                        ),
+                        // viewportFraction: 0.9,
+                        // scale: 0.9,
+                        // autoplay: listQsurvey[0].autoscroll == '1' ? true : false,
+                        // pagination: new SwiperPagination(
+                        //   alignment: Alignment.bottomCenter,
+                        //   builder: new DotSwiperPaginationBuilder(
+                        //       color: Colors.grey, activeColor: new HexColor('#256fa0')),
+                        // ),
                         itemBuilder: (BuildContext context, int i) {
                           return SurveyCard(
                             gambar: listQsurvey[i].gambar,

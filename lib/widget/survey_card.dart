@@ -62,8 +62,8 @@ class _SurveyCardState extends State<SurveyCard> {
   Widget build(BuildContext context) {
     return Container(
         margin: EdgeInsets.only(bottom: 10, left: 10, right: 10, top: 20),
-        // width: 100,
-        // height: 220,
+        width: 350,
+        height: 220,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(10)),
           color: color == '' ? Colors.grey : new HexColor(color),
@@ -121,7 +121,7 @@ class _SurveyCardState extends State<SurveyCard> {
             new Expanded(
               flex:2,
               child: new Container(
-                alignment: Alignment.center,
+                alignment: Alignment.topCenter,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
@@ -132,7 +132,11 @@ class _SurveyCardState extends State<SurveyCard> {
                     title: new Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        totalquota == '0' ? new Container() : new Row(
+                        totalquota == '0' ?
+                        new Container(
+                          alignment: Alignment.centerLeft,
+                          child: new Text('Mulai isi survey'),
+                        ) : new Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             new CircularPercentIndicator(
@@ -230,6 +234,15 @@ class _SurveyCardState extends State<SurveyCard> {
 
 void ShowResult(BuildContext context, String question, String opsi,
     String total, String j1, String j2, String j3, String j4) {
+
+  var countJ1 = int.parse(j1) / int.parse(total) * 100;
+  var countJ2 = int.parse(j2) / int.parse(total) * 100;
+  var countJ3 = int.parse(j3) / int.parse(total) * 100;
+  var countJ4 = int.parse(j4) / int.parse(total) * 100;
+  var resJ1 = countJ1 / 100;
+  var resJ2 = countJ2 / 100;
+  var resJ3 = countJ3 / 100;
+  var resJ4 = countJ4 / 100;
   showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
@@ -239,7 +252,7 @@ void ShowResult(BuildContext context, String question, String opsi,
       backgroundColor: Colors.transparent,
       builder: (BuildContext context) {
         return new Container(
-            height: MediaQuery.of(context).size.height * 0.50,
+            height: MediaQuery.of(context).size.height * 0.40,
             decoration: new BoxDecoration(
               color: Colors.white,
               borderRadius: new BorderRadius.only(
@@ -309,14 +322,27 @@ void ShowResult(BuildContext context, String question, String opsi,
                               padding: EdgeInsets.only(right: 10, left: 10),
                               margin: EdgeInsets.only(top: 10),
                               alignment: Alignment.centerLeft,
-                              child: new Text(
-                                'Jawaban A',
-                                textAlign: TextAlign.justify,
-                                style: new TextStyle(
-                                  fontFamily: 'helvetica',
-                                  fontSize: 17,
-                                ),
-                              ),
+                              child: new Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  new Text(
+                                    'Jawaban A',
+                                    textAlign: TextAlign.justify,
+                                    style: new TextStyle(
+                                      fontFamily: 'helvetica',
+                                      fontSize: 17,
+                                    ),
+                                  ),
+                                  new Text(
+                                    j1+"/"+total,
+                                    textAlign: TextAlign.justify,
+                                    style: new TextStyle(
+                                      fontFamily: 'helvetica',
+                                      fontSize: 17,
+                                    ),
+                                  ),
+                                ],
+                              )
                             ),
                             new LinearPercentIndicator(
                               padding: EdgeInsets.only(right: 10, left: 10, top: 10),
@@ -324,7 +350,7 @@ void ShowResult(BuildContext context, String question, String opsi,
                               animation: true,
                               animationDuration: 1000,
                               // lineWidth: 8.0,
-                              percent: 1.0,
+                              percent: resJ1,
                               // startAngle: double.parse(quota),
                               // circularStrokeCap: CircularStrokeCap.round,
                               backgroundColor: Colors.yellow,
@@ -333,16 +359,29 @@ void ShowResult(BuildContext context, String question, String opsi,
                             new Container(
                               // height: 200,
                               padding: EdgeInsets.only(right: 10, left: 10),
-                              margin: EdgeInsets.only(top: 10),
+                              margin: EdgeInsets.only(top: 20),
                               alignment: Alignment.centerLeft,
-                              child: new Text(
-                                'Jawaban B',
-                                textAlign: TextAlign.justify,
-                                style: new TextStyle(
-                                  fontFamily: 'helvetica',
-                                  fontSize: 17,
-                                ),
-                              ),
+                              child: new Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  new Text(
+                                    'Jawaban B',
+                                    textAlign: TextAlign.justify,
+                                    style: new TextStyle(
+                                      fontFamily: 'helvetica',
+                                      fontSize: 17,
+                                    ),
+                                  ),
+                                  new Text(
+                                    j2+"/"+total,
+                                    textAlign: TextAlign.justify,
+                                    style: new TextStyle(
+                                      fontFamily: 'helvetica',
+                                      fontSize: 17,
+                                    ),
+                                  ),
+                                ],
+                              )
                             ),
                             new LinearPercentIndicator(
                               padding: EdgeInsets.only(right: 10, left: 10, top: 10),
@@ -350,7 +389,7 @@ void ShowResult(BuildContext context, String question, String opsi,
                               animation: true,
                               animationDuration: 1000,
                               // lineWidth: 8.0,
-                              percent: 0.6,
+                              percent: resJ2,
                               // startAngle: double.parse(quota),
                               // circularStrokeCap: CircularStrokeCap.round,
                               backgroundColor: Colors.yellow,
@@ -359,16 +398,29 @@ void ShowResult(BuildContext context, String question, String opsi,
                             new Container(
                               // height: 200,
                               padding: EdgeInsets.only(right: 10, left: 10),
-                              margin: EdgeInsets.only(top: 10),
+                              margin: EdgeInsets.only(top: 20),
                               alignment: Alignment.centerLeft,
-                              child: new Text(
-                                'Jawaban C',
-                                textAlign: TextAlign.justify,
-                                style: new TextStyle(
-                                  fontFamily: 'helvetica',
-                                  fontSize: 17,
-                                ),
-                              ),
+                              child: new Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  new Text(
+                                    'Jawaban C',
+                                    textAlign: TextAlign.justify,
+                                    style: new TextStyle(
+                                      fontFamily: 'helvetica',
+                                      fontSize: 17,
+                                    ),
+                                  ),
+                                  new Text(
+                                    j3+"/"+total,
+                                    textAlign: TextAlign.justify,
+                                    style: new TextStyle(
+                                      fontFamily: 'helvetica',
+                                      fontSize: 17,
+                                    ),
+                                  ),
+                                ],
+                              )
                             ),
                             new LinearPercentIndicator(
                               padding: EdgeInsets.only(right: 10, left: 10, top: 10),
@@ -376,7 +428,46 @@ void ShowResult(BuildContext context, String question, String opsi,
                               animation: true,
                               animationDuration: 1000,
                               // lineWidth: 8.0,
-                              percent: 0.8,
+                              percent: resJ3,
+                              // startAngle: double.parse(quota),
+                              // circularStrokeCap: CircularStrokeCap.round,
+                              backgroundColor: Colors.yellow,
+                              progressColor: Colors.red,
+                            ),
+                            new Container(
+                              // height: 200,
+                              padding: EdgeInsets.only(right: 10, left: 10),
+                              margin: EdgeInsets.only(top: 20),
+                              alignment: Alignment.centerLeft,
+                              child: new Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  new Text(
+                                    'Jawaban D',
+                                    textAlign: TextAlign.justify,
+                                    style: new TextStyle(
+                                      fontFamily: 'helvetica',
+                                      fontSize: 17,
+                                    ),
+                                  ),
+                                  new Text(
+                                    j4+"/"+total,
+                                    textAlign: TextAlign.justify,
+                                    style: new TextStyle(
+                                      fontFamily: 'helvetica',
+                                      fontSize: 17,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ),
+                            new LinearPercentIndicator(
+                              padding: EdgeInsets.only(right: 10, left: 10, top: 10),
+                              // radius: 50.0,
+                              animation: true,
+                              animationDuration: 1000,
+                              // lineWidth: 8.0,
+                              percent: resJ4,
                               // startAngle: double.parse(quota),
                               // circularStrokeCap: CircularStrokeCap.round,
                               backgroundColor: Colors.yellow,
