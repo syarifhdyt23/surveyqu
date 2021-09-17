@@ -199,7 +199,7 @@ class _SurveyCardState extends State<SurveyCard> {
                               borderRadius: BorderRadius.all(Radius.circular(10)),
                               color: new HexColor("#F07B3F"),
                             ),
-                            child: new Text('Mulai', style: TextStyle(color: Colors.white),),
+                            child: new Text(status_result == '1' ? 'Hasil' : 'Mulai', style: TextStyle(color: Colors.white),),
                           ),
                         ),
                       ],
@@ -234,7 +234,7 @@ class _SurveyCardState extends State<SurveyCard> {
 
 void ShowResult(BuildContext context, String question, String opsi,
     String total, String j1, String j2, String j3, String j4) {
-
+  List<dynamic> jawaban = jsonDecode(opsi);
   var countJ1 = int.parse(j1) / int.parse(total) * 100;
   var countJ2 = int.parse(j2) / int.parse(total) * 100;
   var countJ3 = int.parse(j3) / int.parse(total) * 100;
@@ -248,16 +248,16 @@ void ShowResult(BuildContext context, String question, String opsi,
       isScrollControlled: true,
       useRootNavigator: true,
       isDismissible: false,
-      enableDrag: false,
+      enableDrag: true,
       backgroundColor: Colors.transparent,
       builder: (BuildContext context) {
         return new Container(
-            height: MediaQuery.of(context).size.height * 0.40,
+            height: MediaQuery.of(context).size.height * 0.50,
             decoration: new BoxDecoration(
               color: Colors.white,
               borderRadius: new BorderRadius.only(
-                topLeft: const Radius.circular(7),
-                topRight: const Radius.circular(7),
+                topLeft: const Radius.circular(15),
+                topRight: const Radius.circular(15),
               ),
             ),
             child: new Stack(
@@ -266,36 +266,52 @@ void ShowResult(BuildContext context, String question, String opsi,
                   child: new Column(
                     children: [
                       new Container(
-                        height: 50,
+                        height: 100,
                         decoration: BoxDecoration(
-                          color: new HexColor('#256fa0'),
+                          color: Colors.white,
                           borderRadius: new BorderRadius.only(
-                            topLeft: const Radius.circular(7),
-                            topRight: const Radius.circular(7),
+                            topLeft: const Radius.circular(15),
+                            topRight: const Radius.circular(15),
                           ),
                         ),
                         child: new Padding(
-                          padding: EdgeInsets.only(top: 10, bottom: 10, left: 10, right: 10),
-                          child: new Row(
+                          padding: EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 15),
+                          child: new Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              new Align(
-                                alignment: Alignment.topCenter,
-                                child: new Text(question, style: new TextStyle(color: Colors.white, fontSize: 20),),
-                              ),
                               new Container(
-                                width: 50,
-                                child: new FlatButton(
-                                  highlightColor: Colors.transparent,
-                                  splashColor: Colors.transparent,
-                                  onPressed: () {
-                                    // this.openURL(context, url);
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: new Icon(Icons.close, color: Colors.white, size: 30,
-                                  ),
+                                alignment: Alignment.center,
+                                height: 5,
+                                width: 100,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[300],
+                                  borderRadius: BorderRadius.all(Radius.circular(20))
+
                                 ),
                               ),
+                              new Container(
+                                margin: EdgeInsets.only(top: 10),
+                                alignment: Alignment.centerLeft,
+                                child: new Text(question, style: new TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.w600),),
+                              ),
+                              new Divider(),
+                              new Container(
+                                alignment: Alignment.centerLeft,
+                                child: new Text('Hasil Polling', style: new TextStyle(color: Colors.black, fontSize: 16),),
+                              ),
+                              // new Container(
+                              //   width: 50,
+                              //   child: new FlatButton(
+                              //     highlightColor: Colors.transparent,
+                              //     splashColor: Colors.transparent,
+                              //     onPressed: () {
+                              //       // this.openURL(context, url);
+                              //       Navigator.of(context).pop();
+                              //     },
+                              //     child: new Icon(Icons.close, color: Colors.white, size: 30,
+                              //     ),
+                              //   ),
+                              // ),
                             ],
                           ),
                         ),
@@ -315,18 +331,19 @@ void ShowResult(BuildContext context, String question, String opsi,
                       // ),
 
                       Expanded(
-                        child: Column(
+                        child: ListView(
+                          shrinkWrap: true,
                           children: [
                             new Container(
                               // height: 200,
-                              padding: EdgeInsets.only(right: 10, left: 10),
+                              padding: EdgeInsets.only(right: 15, left: 15),
                               margin: EdgeInsets.only(top: 10),
                               alignment: Alignment.centerLeft,
                               child: new Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   new Text(
-                                    'Jawaban A',
+                                    jawaban[0],
                                     textAlign: TextAlign.justify,
                                     style: new TextStyle(
                                       fontFamily: 'helvetica',
@@ -334,7 +351,7 @@ void ShowResult(BuildContext context, String question, String opsi,
                                     ),
                                   ),
                                   new Text(
-                                    j1+"/"+total,
+                                    countJ1.toInt().toString()+"%",
                                     textAlign: TextAlign.justify,
                                     style: new TextStyle(
                                       fontFamily: 'helvetica',
@@ -345,7 +362,7 @@ void ShowResult(BuildContext context, String question, String opsi,
                               )
                             ),
                             new LinearPercentIndicator(
-                              padding: EdgeInsets.only(right: 10, left: 10, top: 10),
+                              padding: EdgeInsets.only(right: 15, left: 15, top: 10),
                               // radius: 50.0,
                               animation: true,
                               animationDuration: 1000,
@@ -353,19 +370,19 @@ void ShowResult(BuildContext context, String question, String opsi,
                               percent: resJ1,
                               // startAngle: double.parse(quota),
                               // circularStrokeCap: CircularStrokeCap.round,
-                              backgroundColor: Colors.yellow,
-                              progressColor: Colors.red,
+                              backgroundColor: Colors.grey[300],
+                              progressColor: new HexColor('#256fa0'),
                             ),
                             new Container(
                               // height: 200,
-                              padding: EdgeInsets.only(right: 10, left: 10),
+                              padding: EdgeInsets.only(right: 15, left: 15),
                               margin: EdgeInsets.only(top: 20),
                               alignment: Alignment.centerLeft,
                               child: new Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   new Text(
-                                    'Jawaban B',
+                                    jawaban[1],
                                     textAlign: TextAlign.justify,
                                     style: new TextStyle(
                                       fontFamily: 'helvetica',
@@ -373,7 +390,7 @@ void ShowResult(BuildContext context, String question, String opsi,
                                     ),
                                   ),
                                   new Text(
-                                    j2+"/"+total,
+                                    countJ2.toInt().toString()+"%",
                                     textAlign: TextAlign.justify,
                                     style: new TextStyle(
                                       fontFamily: 'helvetica',
@@ -384,7 +401,7 @@ void ShowResult(BuildContext context, String question, String opsi,
                               )
                             ),
                             new LinearPercentIndicator(
-                              padding: EdgeInsets.only(right: 10, left: 10, top: 10),
+                              padding: EdgeInsets.only(right: 15, left: 15, top: 10),
                               // radius: 50.0,
                               animation: true,
                               animationDuration: 1000,
@@ -392,19 +409,19 @@ void ShowResult(BuildContext context, String question, String opsi,
                               percent: resJ2,
                               // startAngle: double.parse(quota),
                               // circularStrokeCap: CircularStrokeCap.round,
-                              backgroundColor: Colors.yellow,
-                              progressColor: Colors.red,
+                              backgroundColor: Colors.grey[300],
+                              progressColor: new HexColor('#256fa0'),
                             ),
                             new Container(
                               // height: 200,
-                              padding: EdgeInsets.only(right: 10, left: 10),
+                              padding: EdgeInsets.only(right: 15, left: 15),
                               margin: EdgeInsets.only(top: 20),
                               alignment: Alignment.centerLeft,
                               child: new Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   new Text(
-                                    'Jawaban C',
+                                    jawaban[2],
                                     textAlign: TextAlign.justify,
                                     style: new TextStyle(
                                       fontFamily: 'helvetica',
@@ -412,7 +429,7 @@ void ShowResult(BuildContext context, String question, String opsi,
                                     ),
                                   ),
                                   new Text(
-                                    j3+"/"+total,
+                                    countJ3.toInt().toString()+"%",
                                     textAlign: TextAlign.justify,
                                     style: new TextStyle(
                                       fontFamily: 'helvetica',
@@ -423,7 +440,7 @@ void ShowResult(BuildContext context, String question, String opsi,
                               )
                             ),
                             new LinearPercentIndicator(
-                              padding: EdgeInsets.only(right: 10, left: 10, top: 10),
+                              padding: EdgeInsets.only(right: 15, left: 15, top: 10),
                               // radius: 50.0,
                               animation: true,
                               animationDuration: 1000,
@@ -431,19 +448,19 @@ void ShowResult(BuildContext context, String question, String opsi,
                               percent: resJ3,
                               // startAngle: double.parse(quota),
                               // circularStrokeCap: CircularStrokeCap.round,
-                              backgroundColor: Colors.yellow,
-                              progressColor: Colors.red,
+                              backgroundColor: Colors.grey[300],
+                              progressColor: new HexColor('#256fa0'),
                             ),
                             new Container(
                               // height: 200,
-                              padding: EdgeInsets.only(right: 10, left: 10),
+                              padding: EdgeInsets.only(right: 15, left: 15),
                               margin: EdgeInsets.only(top: 20),
                               alignment: Alignment.centerLeft,
                               child: new Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   new Text(
-                                    'Jawaban D',
+                                    jawaban[3],
                                     textAlign: TextAlign.justify,
                                     style: new TextStyle(
                                       fontFamily: 'helvetica',
@@ -451,7 +468,7 @@ void ShowResult(BuildContext context, String question, String opsi,
                                     ),
                                   ),
                                   new Text(
-                                    j4+"/"+total,
+                                    countJ4.toInt().toString()+"%",
                                     textAlign: TextAlign.justify,
                                     style: new TextStyle(
                                       fontFamily: 'helvetica',
@@ -462,7 +479,7 @@ void ShowResult(BuildContext context, String question, String opsi,
                               )
                             ),
                             new LinearPercentIndicator(
-                              padding: EdgeInsets.only(right: 10, left: 10, top: 10),
+                              padding: EdgeInsets.only(right: 15, left: 15, top: 10),
                               // radius: 50.0,
                               animation: true,
                               animationDuration: 1000,
@@ -470,8 +487,8 @@ void ShowResult(BuildContext context, String question, String opsi,
                               percent: resJ4,
                               // startAngle: double.parse(quota),
                               // circularStrokeCap: CircularStrokeCap.round,
-                              backgroundColor: Colors.yellow,
-                              progressColor: Colors.red,
+                              backgroundColor: Colors.grey[300],
+                              progressColor: new HexColor('#256fa0'),
                             ),
                           ],
                         ),
