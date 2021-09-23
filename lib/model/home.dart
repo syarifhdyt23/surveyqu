@@ -24,14 +24,18 @@ class Pengumuman {
   String gambar;
   String url;
   String autoscroll;
+  String status;
 
   Pengumuman(
-      {this.judul,
+      {
+        this.judul,
         this.isi,
         this.urutan,
         this.gambar,
         this.url,
-        this.autoscroll});
+        this.autoscroll,
+        this.status
+      });
 
   Pengumuman.fromJson(Map<String, dynamic> json) {
     judul = json['judul'];
@@ -40,6 +44,7 @@ class Pengumuman {
     gambar = json['gambar'];
     url = json['url'];
     autoscroll = json['autoscroll'];
+    status = json['status'];
   }
 
   Map<String, dynamic> toJson() {
@@ -50,6 +55,7 @@ class Pengumuman {
     data['gambar'] = this.gambar;
     data['url'] = this.url;
     data['autoscroll'] = this.autoscroll;
+    data['status'] = this.status;
     return data;
   }
 }
@@ -67,6 +73,7 @@ class Tutorial {
   String headerS;
   String autoscroll;
   String rewards;
+  String status;
 
   Tutorial(
       {this.judul,
@@ -80,7 +87,8 @@ class Tutorial {
         this.header,
         this.headerS,
         this.autoscroll,
-      this.rewards});
+        this.rewards,
+        this.status});
 
   Tutorial.fromJson(Map<String, dynamic> json) {
     judul = json['judul'];
@@ -95,6 +103,7 @@ class Tutorial {
     headerS = json['headerS'];
     autoscroll = json['autoscroll'];
     rewards = json['rewards'];
+    status = json['status'];
   }
 
   Map<String, dynamic> toJson() {
@@ -111,6 +120,7 @@ class Tutorial {
     data['headerS'] = this.headerS;
     data['autoscroll'] = this.autoscroll;
     data['rewards'] = this.rewards;
+    data['status'] = this.status;
     return data;
   }
 }
@@ -129,6 +139,7 @@ class Qscreen {
   String autoscroll;
   String urutan;
   String rewards;
+  String status;
 
   Qscreen(
       {this.judul,
@@ -143,7 +154,9 @@ class Qscreen {
         this.headerS,
         this.autoscroll,
         this.urutan,
-      this.rewards});
+        this.rewards,
+        this.status
+      });
 
   Qscreen.fromJson(Map<String, dynamic> json) {
     judul = json['judul'];
@@ -160,6 +173,7 @@ class Qscreen {
     autoscroll = json['autoscroll'];
     urutan = json['urutan'];
     rewards = json['rewards'];
+    status = json['status'];
   }
 
   Map<String, dynamic> toJson() {
@@ -176,6 +190,7 @@ class Qscreen {
     data['headerS'] = this.headerS;
     data['autoscroll'] = this.autoscroll;
     data['rewards'] = this.rewards;
+    data['status'] = this.status;
     return data;
   }
 }
@@ -193,6 +208,7 @@ class Qsurvey {
   String headerS;
   String autoscroll;
   String rewards;
+  String status;
 
   Qsurvey(
       {this.judul,
@@ -206,7 +222,9 @@ class Qsurvey {
         this.header,
         this.headerS,
         this.autoscroll,
-      this.rewards});
+        this.rewards,
+        this.status
+      });
 
   Qsurvey.fromJson(Map<String, dynamic> json) {
     judul = json['judul'];
@@ -221,6 +239,7 @@ class Qsurvey {
     headerS = json['headerS'];
     autoscroll = json['autoscroll'];
     rewards = json['rewards'];
+    status = json['status'];
   }
 
   Map<String, dynamic> toJson() {
@@ -237,6 +256,7 @@ class Qsurvey {
     data['headerS'] = this.headerS;
     data['autoscroll'] = this.autoscroll;
     data['rewards'] = this.rewards;
+    data['status'] = this.status;
     return data;
   }
 }
@@ -256,6 +276,7 @@ class Qpolling {
   String autoscroll;
   String rewards;
   String status_result;
+  String status;
 
   Qpolling(
       {this.judul,
@@ -270,8 +291,10 @@ class Qpolling {
         this.header,
         this.headerS,
         this.autoscroll,
-      this.rewards,
-      this.status_result});
+        this.rewards,
+        this.status_result,
+        this.status
+      });
 
   Qpolling.fromJson(Map<String, dynamic> json) {
     judul = json['judul'];
@@ -288,6 +311,7 @@ class Qpolling {
     autoscroll = json['autoscroll'];
     rewards = json['rewards'];
     status_result = json['status_result'];
+    status = json['status'];
   }
 
   Map<String, dynamic> toJson() {
@@ -306,6 +330,7 @@ class Qpolling {
     data['autoscroll'] = this.autoscroll;
     data['rewards'] = this.rewards;
     data['status_result'] = this.status_result;
+    data['status'] = this.status;
     return data;
   }
 }
@@ -321,6 +346,7 @@ class Qgames {
   String headerS;
   String autoscroll;
   String rewards;
+  String status;
 
   Qgames(
       {this.judul,
@@ -332,7 +358,9 @@ class Qgames {
         this.header,
         this.headerS,
         this.autoscroll,
-      this.rewards});
+        this.rewards,
+        this.status
+      });
 
   Qgames.fromJson(Map<String, dynamic> json) {
     judul = json['judul'];
@@ -345,6 +373,7 @@ class Qgames {
     headerS = json['headerS'];
     autoscroll = json['autoscroll'];
     rewards = json['rewards'];
+    status = json['status'];
   }
 
   Map<String, dynamic> toJson() {
@@ -359,6 +388,7 @@ class Qgames {
     data['headerS'] = this.headerS;
     data['autoscroll'] = this.autoscroll;
     data['rewards'] = this.rewards;
+    data['status'] = this.status;
     return data;
   }
 }
@@ -374,6 +404,7 @@ class Qnews {
   String headerS;
   String autoscroll;
   String rewards;
+  String status;
 
   Qnews(
       {this.judul,
@@ -385,7 +416,9 @@ class Qnews {
         this.header,
         this.headerS,
         this.autoscroll,
-      this.rewards});
+        this.rewards,
+        this.status
+      });
 
   Qnews.fromJson(Map<String, dynamic> json) {
     judul = json['judul'];
@@ -398,6 +431,7 @@ class Qnews {
     headerS = json['headerS'];
     autoscroll = json['autoscroll'];
     rewards = json['rewards'];
+    status = json['status'];
   }
 
   Map<String, dynamic> toJson() {
@@ -412,6 +446,7 @@ class Qnews {
     data['headerS'] = this.headerS;
     data['autoscroll'] = this.autoscroll;
     data['rewards'] = this.rewards;
+    data['status'] = this.status;
     return data;
   }
 }

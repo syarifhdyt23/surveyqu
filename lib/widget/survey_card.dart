@@ -83,8 +83,9 @@ class _SurveyCardState extends State<SurveyCard> {
                 child: new Container(
                   alignment: Alignment.center,
                   child: ListTile(
-                    title: new Text(judul, style: TextStyle(color: Colors.white)),
-                    subtitle: new Text(deskripsi, style: TextStyle(color: Colors.white)),
+                    //   isThreeLine: true,
+                    title: new Text(judul, style: TextStyle(color: Colors.white), maxLines: 1),
+                    subtitle: new Text(deskripsi, style: TextStyle(color: Colors.white), maxLines: 5),
                     trailing: gambar == '' ? new Container(width: 100,) :
                     new Container(
                           width: 100,
@@ -139,16 +140,20 @@ class _SurveyCardState extends State<SurveyCard> {
                         ) : new Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            new CircularPercentIndicator(
-                              radius: 50.0,
-                              animation: true,
-                              animationDuration: 1000,
-                              lineWidth: 8.0,
-                              percent: _percentage,
-                              // startAngle: double.parse(quota),
-                              circularStrokeCap: CircularStrokeCap.round,
-                              backgroundColor: Colors.yellow,
-                              progressColor: Colors.red,
+                            new Container(
+                              height: 50,
+                              alignment: Alignment.centerLeft,
+                              child: new CircularPercentIndicator(
+                                radius: 40.0,
+                                animation: true,
+                                animationDuration: 1000,
+                                lineWidth: 8.0,
+                                percent: _percentage,
+                                // startAngle: double.parse(quota),
+                                circularStrokeCap: CircularStrokeCap.round,
+                                backgroundColor: Colors.grey[300],
+                                progressColor: new HexColor('#256fa0'),
+                              ),
                             ),
                             new Container(
                                 height: 50,

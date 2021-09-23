@@ -178,9 +178,11 @@ class _SurveyViewState extends State<SurveyView> {
                       ),
                     ],
                   ),
+                  alignment: Alignment.centerLeft,
                   margin: EdgeInsets.only(
-                      top: 10, left: 10, right: 10, bottom: 10),
+                      top: 5, left: 10, right: 10, bottom: 5),
                   child: new ListTile(
+                    isThreeLine: true,
                     title: new Text(
                       listSurvey[i].subJudul,
                       style: TextStyle(color: listSurvey[i].status == '0' ? Colors.white : new HexColor('#256fa0')),
@@ -193,6 +195,7 @@ class _SurveyViewState extends State<SurveyView> {
                       width: 100,
                       child: new Row(
                         mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           new Container(
                             padding: EdgeInsets.only(right: 10),

@@ -6,8 +6,6 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:surveyqu/domain.dart';
 import 'package:surveyqu/model/profile.dart';
-import 'package:surveyqu/survey/surveydetail.dart';
-import 'package:surveyqu/survey/surveyview.dart';
 import 'package:surveyqu/widget/advertisement_card.dart';
 import 'package:surveyqu/home/notif.dart';
 import 'package:surveyqu/widget/survey_card.dart';
@@ -18,7 +16,6 @@ import 'package:surveyqu/loading.dart';
 import 'package:surveyqu/login/login.dart';
 import 'package:surveyqu/model/home.dart';
 import 'package:surveyqu/widget/survey_slider.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../hexacolor.dart';
 import '../network_utils/api.dart';
 import 'package:http/http.dart' as http;
@@ -95,7 +92,10 @@ class _Home extends State<Home> {
 
   Future<void> getHome() async {
     this._getToken();
-    var res = await Network().postToken('/contentHome');
+    var body = {
+      "email": email
+    };
+    var res = await Network().postDataToken(body,'/contentHome');
     if (res.statusCode == 200) {
       var body = jsonDecode(res.body);
       var pengumuman = body['pengumuman'] as List;
@@ -307,7 +307,7 @@ class _Home extends State<Home> {
         },
         body: new RefreshIndicator(
           onRefresh: _onRefresh,
-          child: listNews == null ? new LoadingHome() : new SingleChildScrollView(
+          child: listNews == null || listNews[0].status == '0'? new LoadingHome() : new SingleChildScrollView(
             child:  Column(
               children: <Widget>[
                 new Container(
@@ -318,7 +318,7 @@ class _Home extends State<Home> {
                     viewportFraction: 0.8,
                     scale: 0.9,
                     autoplay: listNews[0].autoscroll == '1' ? true : false,
-                    pagination: new SwiperPagination(
+                    pagination: listNews.length == 1 ? null : new SwiperPagination(
                       alignment: Alignment.bottomCenter,
                       builder: new DotSwiperPaginationBuilder(
                           color: Colors.grey, activeColor: new HexColor('#256fa0')),
@@ -334,7 +334,7 @@ class _Home extends State<Home> {
                     },
                   )
                 ),
-                listTutorial == null ? new Container() : new Container(
+                listTutorial == null || listTutorial[0].status == '0' ? new Container() : new Container(
                     height: 300,
                     margin: EdgeInsets.only(top: 10, bottom: 10),
                     child: new Swiper(
@@ -342,7 +342,7 @@ class _Home extends State<Home> {
                         viewportFraction: 0.9,
                         scale: 0.9,
                         autoplay: listTutorial[0].autoscroll == '1' ? true : false,
-                        pagination: new SwiperPagination(
+                        pagination: listTutorial.length == 1 ? null : new SwiperPagination(
                           alignment: Alignment.bottomCenter,
                           builder: new DotSwiperPaginationBuilder(
                               color: Colors.grey, activeColor: new HexColor('#256fa0')),
@@ -365,7 +365,7 @@ class _Home extends State<Home> {
                         }
                     )
                 ),
-                listQscreen == null ? new Container() : new Container(
+                listQscreen == null || listQscreen[0].status == '0'? new Container() : new Container(
                     height: 300,
                     margin: EdgeInsets.only(top: 10, bottom: 10),
                     child: new Swiper(
@@ -373,7 +373,7 @@ class _Home extends State<Home> {
                         viewportFraction: 0.9,
                         scale: 0.9,
                         autoplay: listQscreen[0].autoscroll == '1' ? true : false,
-                        pagination: new SwiperPagination(
+                        pagination: listQscreen.length == 1 ? null : new SwiperPagination(
                           alignment: Alignment.bottomCenter,
                           builder: new DotSwiperPaginationBuilder(
                               color: Colors.grey, activeColor: new HexColor('#256fa0')),
@@ -396,7 +396,7 @@ class _Home extends State<Home> {
                       }
                     )
                 ),
-                new Container(
+                listQsurvey == null || listQsurvey[0].status == '0'? new Container() : new Container(
                     margin: EdgeInsets.only(left: 30, top: 10),
                     width: size.width,
                     child: new Column(
@@ -407,22 +407,22 @@ class _Home extends State<Home> {
                       ],
                     )
                 ),
-                listQsurvey == null ? new Container() : new Container(
+                listQsurvey == null || listQsurvey[0].status == '0'? new Container() : new Container(
                     height: 300,
                     // width: 150,
                     margin: EdgeInsets.only(top: 10, bottom: 10),
-                    child: new ListView.builder(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
+                    child: new Swiper(
+                      // shrinkWrap: true,
+                      // scrollDirection: Axis.horizontal,
                         itemCount: listQsurvey == null ? 0 : listQsurvey.length,
-                        // viewportFraction: 0.9,
-                        // scale: 0.9,
-                        // autoplay: listQsurvey[0].autoscroll == '1' ? true : false,
-                        // pagination: new SwiperPagination(
-                        //   alignment: Alignment.bottomCenter,
-                        //   builder: new DotSwiperPaginationBuilder(
-                        //       color: Colors.grey, activeColor: new HexColor('#256fa0')),
-                        // ),
+                        viewportFraction: 0.9,
+                        scale: 0.9,
+                        autoplay: listQsurvey[0].autoscroll == '1' ? true : false,
+                        pagination: listQsurvey.length == 1 ? null : new SwiperPagination(
+                          alignment: Alignment.bottomCenter,
+                          builder: new DotSwiperPaginationBuilder(
+                              color: Colors.grey, activeColor: new HexColor('#256fa0')),
+                        ),
                         itemBuilder: (BuildContext context, int i) {
                           return SurveyCard(
                             gambar: listQsurvey[i].gambar,
@@ -440,7 +440,7 @@ class _Home extends State<Home> {
                         }
                   )
                 ),
-                new Container(
+                listQpolling == null || listQpolling[0].status == '0' ? new Container() : new Container(
                     margin: EdgeInsets.only(left: 30, top: 10),
                     width: size.width,
                     child: new Column(
@@ -451,7 +451,7 @@ class _Home extends State<Home> {
                       ],
                     )
                 ),
-                listQpolling == null ? new Container() : new Container(
+                listQpolling == null || listQpolling[0].status == '0' ? new Container() : new Container(
                     height: 300,
                     margin: EdgeInsets.only(top: 10, bottom: 10),
                     child: new Swiper(
@@ -459,7 +459,7 @@ class _Home extends State<Home> {
                         viewportFraction: 0.9,
                         scale: 0.9,
                         autoplay: listQpolling[0].autoscroll == '1' ? true : false,
-                        pagination: new SwiperPagination(
+                        pagination: listQgames.length == 1 ? null :new SwiperPagination(
                           alignment: Alignment.bottomCenter,
                           builder: new DotSwiperPaginationBuilder(
                               color: Colors.grey, activeColor: new HexColor('#256fa0')),
@@ -481,7 +481,7 @@ class _Home extends State<Home> {
                         }
                     )
                 ),
-                new Container(
+                listQgames == null || listQgames[0].status == '0'? new Container() : new Container(
                   margin: EdgeInsets.only(left: 30, top: 10),
                   width: size.width,
                   child: new Column(
@@ -492,7 +492,7 @@ class _Home extends State<Home> {
                     ],
                   )
                 ),
-                listQgames == null ? new Container() : new Container(
+                listQgames == null || listQgames[0].status == '0'? new Container() : new Container(
                     height: 180,
                     margin: EdgeInsets.only(top: 10, bottom: 10),
                     child: new Swiper(
@@ -500,7 +500,11 @@ class _Home extends State<Home> {
                       viewportFraction: 0.9,
                       scale: 0.9,
                       autoplay: listQgames[0].autoscroll == '1' ? true : false,
-                      pagination: new SwiperPagination(),
+                      pagination: listQgames.length == 1 ? null : new SwiperPagination(
+                        alignment: Alignment.bottomCenter,
+                        builder: new DotSwiperPaginationBuilder(
+                            color: Colors.grey, activeColor: new HexColor('#256fa0')),
+                      ),
                       itemBuilder: (BuildContext context, int i) {
                         return SurveySlider(
                           gambar: listQgames[i].gambar,
@@ -514,7 +518,7 @@ class _Home extends State<Home> {
                       },
                     )
                 ),
-                new Container(
+                listQnews == null || listQnews[0].status == '0'? new Container() : new Container(
                     margin: EdgeInsets.only(left: 30, top: 10),
                     width: size.width,
                     child: new Column(
@@ -525,7 +529,7 @@ class _Home extends State<Home> {
                       ],
                     )
                 ),
-                listQnews == null ? new Container() : new Container(
+                listQnews == null || listQnews[0].status == '0'? new Container() : new Container(
                     height: 180,
                     margin: EdgeInsets.only(top: 10, bottom: 10),
                     child: new Swiper(
@@ -533,7 +537,11 @@ class _Home extends State<Home> {
                       viewportFraction: 0.9,
                       scale: 0.9,
                       autoplay: listQnews[0].autoscroll == '1' ? true : false,
-                      pagination: new SwiperPagination(),
+                      pagination: listQnews.length == 1 ? null : new SwiperPagination(
+                        alignment: Alignment.bottomCenter,
+                        builder: new DotSwiperPaginationBuilder(
+                            color: Colors.grey, activeColor: new HexColor('#256fa0')),
+                      ),
                       itemBuilder: (BuildContext context, int i) {
                         return SurveySlider(
                           gambar: listQnews[i].gambar,
