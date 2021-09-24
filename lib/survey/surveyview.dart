@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -62,6 +63,10 @@ class _SurveyViewState extends State<SurveyView> {
       info.messagesNoButton(context, 'info', 'Survey Error');
     }
     return listSurvey;
+  }
+
+  FutureOr onGoBack(dynamic value) {
+    this.getSurvey();
   }
 
   @override
@@ -134,62 +139,64 @@ class _SurveyViewState extends State<SurveyView> {
             )
         ),
       ),
-      body: listSurvey == null
-          ? new Container(
+      body: listSurvey == null ?
+      new Container(
         margin: EdgeInsets.only(top: 30),
-        child: new Loading(),
-      )
-          : new ListView.builder(
-          shrinkWrap: true,
-          itemCount: listSurvey == null ? 0 : listSurvey.length,
-          itemBuilder: (context, i) {
-            return new InkWell(
-              onTap: () {
-                if (jenis == 'qn'){
-                  Navigator.of(context).push(new MaterialPageRoute(
-                      builder: (context) => SliderDetail(
-                        id: listSurvey[i].id,
-                        urutanSoal: '1',
-                        jenis: jenis,
-                        email: email,
-                      ))
-                  );
-                } else if(listSurvey[i].status == '0'){
-                  Navigator.of(context).push(new MaterialPageRoute(
-                      builder: (context) => SurveyDetail(
-                        id: listSurvey[i].id,
-                        urutanSoal: '1',
-                        jenis: jenis,
-                        email: email,
-                      ))
-                  );
-                }
-              },
-              child: new Container(
-                  decoration: BoxDecoration(
-                    color: listSurvey[i].status == '0' ? new HexColor('#256fa0') : Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 1,
-                        blurRadius: 2,
-                        offset: Offset(1, 2), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                  alignment: Alignment.centerLeft,
-                  margin: EdgeInsets.only(
-                      top: 5, left: 10, right: 10, bottom: 5),
+        child: new Loading(),) :
+      new ListView.builder(
+        padding: EdgeInsets.only(top: 10),
+        shrinkWrap: true,
+        itemCount: listSurvey == null ? 0 : listSurvey.length,
+        itemBuilder: (context, i) {
+          return new InkWell(
+            onTap: () {
+              if (jenis == 'qn'){
+                Navigator.of(context).push(new MaterialPageRoute(
+                    builder: (context) => SliderDetail(
+                      id: listSurvey[i].id,
+                      urutanSoal: '1',
+                      jenis: jenis,
+                      email: email,
+                    ))
+                ).then(onGoBack);
+              } else if(listSurvey[i].status == '0'){
+                Navigator.of(context).push(new MaterialPageRoute(
+                    builder: (context) => SurveyDetail(
+                      id: listSurvey[i].id,
+                      urutanSoal: '1',
+                      jenis: jenis,
+                      email: email,
+                    ))
+                ).then(onGoBack);
+              }
+            },
+            child: new Container(
+                decoration: BoxDecoration(
+                  color: listSurvey[i].status == '0' ? new HexColor('#256fa0') : Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 1,
+                      blurRadius: 2,
+                      offset: Offset(1, 2), // changes position of shadow
+                    ),
+                  ],
+                ),
+                margin: EdgeInsets.only(
+                    top: 5, left: 10, right: 10, bottom: 5),
+                child: new Container(
+                  alignment: Alignment.center,
                   child: new ListTile(
-                    isThreeLine: true,
                     title: new Text(
                       listSurvey[i].subJudul,
                       style: TextStyle(color: listSurvey[i].status == '0' ? Colors.white : new HexColor('#256fa0')),
+                      maxLines: 1,
                     ),
                     subtitle: new Text(
                       listSurvey[i].deskripsi,
                       style: TextStyle(color: listSurvey[i].status == '0' ? Colors.white : new HexColor('#256fa0')),
+                      maxLines: 1,
                     ),
                     trailing: new Container(
                       width: 100,
@@ -200,8 +207,9 @@ class _SurveyViewState extends State<SurveyView> {
                           new Container(
                             padding: EdgeInsets.only(right: 10),
                             child: new Text(
-                              listSurvey[i].rewards,
+                              listSurvey[i].rewards+' poin',
                               style: TextStyle(color: listSurvey[i].status == '0' ? Colors.white : new HexColor('#256fa0')),
+                              maxLines: 1,
                             ),
                           ),
                           new Icon(
@@ -211,9 +219,11 @@ class _SurveyViewState extends State<SurveyView> {
                         ],
                       ),
                     ),
-                  )),
-            );
-          }),
+                  ),
+                )
+            ),
+          );
+      }),
     );
   }
 }

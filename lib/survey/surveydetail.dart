@@ -254,7 +254,7 @@ class _SurveyDetailState extends State<SurveyDetail> {
                           onPressed: () async {
                             setState(() {
                               if(message == 'done'){
-                                Navigator.of(context, rootNavigator: true).pop();
+                                Navigator.pop(context);
                               } else {
                                 if (type == "check_opt"){
                                   if(opsiValue == null || opsiValue.length == 0){
@@ -269,10 +269,20 @@ class _SurveyDetailState extends State<SurveyDetail> {
                                     this.nextQuestion(idSoal, urutanSoal, opsiValue);
                                   }
                                 } else if (type == "radio_opt"){
-                                  if(radioValue == ''){
-                                    info.messagesNoButton(context, "info", "Pilih salah satu jawaban anda");
+                                  if(jenis == 'qt'){
+                                    if(radioValue == ''){
+                                      info.messagesNoButton(context, "info", "Pilih salah satu jawaban anda");
+                                    } else if(radioValue == 'Tidak'){
+                                      info.messagesNoButton(context, "info", "Baca lagi dan pahami lebih baik pernyataan pertanyaan-nya yuks");
+                                    } else {
+                                      this.nextQuestion(idSoal, urutanSoal, radioValue);
+                                    }
                                   } else {
-                                    this.nextQuestion(idSoal, urutanSoal, radioValue);
+                                    if(radioValue == ''){
+                                      info.messagesNoButton(context, "info", "Pilih salah satu jawaban anda");
+                                    } else {
+                                      this.nextQuestion(idSoal, urutanSoal, radioValue);
+                                    }
                                   }
                                 } else if (type == "textfield_s"){
                                   if(_textanswer.text == ''){
@@ -335,13 +345,13 @@ class _SurveyDetailState extends State<SurveyDetail> {
 
           new Container(
             margin: const EdgeInsets.only(top: 10),
-            child: new Text('Survey done', style: new TextStyle(fontSize: 20),),
+            child: new Text('Survey selesai', style: new TextStyle(fontSize: 20),),
           ),
 
           new Container(
             alignment: Alignment.center,
             margin: const EdgeInsets.only(top: 3, left: 15, right: 15),
-            child: new Text('Back to home', style: new TextStyle(fontSize: 15, color: Colors.grey[500]),),
+            child: new Text('Kembali ke beranda', style: new TextStyle(fontSize: 15, color: Colors.grey[500]),),
           ),
 
           // new Container(
