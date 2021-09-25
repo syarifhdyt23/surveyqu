@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:surveyqu/domain.dart';
 import 'package:surveyqu/home/tab_navigator.dart';
+import 'package:surveyqu/svq_icon_icons.dart';
 
 class MainHome extends StatefulWidget {
   @override
@@ -88,7 +89,7 @@ class _MainHomeState extends State<MainHome> {
             items: [
               BottomNavigationBarItem(
                 title: Text('Beranda', style: TextStyle(fontSize: 10),),
-                icon: Icon(CupertinoIcons.home),
+                icon: Icon(SvqIcon.svqicon),
               ),
               BottomNavigationBarItem(
                 title: Text('Hadiah', style: TextStyle(fontSize: 10),),

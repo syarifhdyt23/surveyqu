@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:surveyqu/domain.dart';
 import 'package:surveyqu/model/profile.dart';
+import 'package:surveyqu/svq_icon_icons.dart';
 import 'package:surveyqu/widget/advertisement_card.dart';
 import 'package:surveyqu/home/notif.dart';
 import 'package:surveyqu/widget/survey_card.dart';
@@ -317,6 +318,7 @@ class _Home extends State<Home> {
                     itemCount: listNews == null ? 0 : listNews.length,
                     viewportFraction: 0.8,
                     scale: 0.9,
+                    physics: listNews.length == 1 ? NeverScrollableScrollPhysics() : null,
                     autoplay: listNews[0].autoscroll == '1' ? true : false,
                     pagination: listNews.length == 1 ? null : new SwiperPagination(
                       alignment: Alignment.bottomCenter,
@@ -336,11 +338,12 @@ class _Home extends State<Home> {
                 ),
                 listTutorial == null || listTutorial[0].status == '0' ? new Container() : new Container(
                     height: 300,
-                    margin: EdgeInsets.only(top: 10, bottom: 10),
+                    margin: EdgeInsets.only(top: 10),
                     child: new Swiper(
                         itemCount: listTutorial == null ? 0 : listTutorial.length,
                         viewportFraction: 0.9,
                         scale: 0.9,
+                        physics: listTutorial.length == 1 ? NeverScrollableScrollPhysics() : null,
                         autoplay: listTutorial[0].autoscroll == '1' ? true : false,
                         pagination: listTutorial.length == 1 ? null : new SwiperPagination(
                           alignment: Alignment.bottomCenter,
@@ -367,11 +370,12 @@ class _Home extends State<Home> {
                 ),
                 listQscreen == null || listQscreen[0].status == '0'? new Container() : new Container(
                     height: 300,
-                    margin: EdgeInsets.only(top: 10, bottom: 10),
+                    margin: EdgeInsets.only(bottom: 10),
                     child: new Swiper(
                         itemCount: listQscreen == null ? 0 : listQscreen.length,
                         viewportFraction: 0.9,
                         scale: 0.9,
+                        physics: listQscreen.length == 1 ? NeverScrollableScrollPhysics() : null,
                         autoplay: listQscreen[0].autoscroll == '1' ? true : false,
                         pagination: listQscreen.length == 1 ? null : new SwiperPagination(
                           alignment: Alignment.bottomCenter,
@@ -410,13 +414,14 @@ class _Home extends State<Home> {
                 listQsurvey == null || listQsurvey[0].status == '0'? new Container() : new Container(
                     height: 300,
                     // width: 150,
-                    margin: EdgeInsets.only(top: 10, bottom: 10),
+                    margin: EdgeInsets.only(bottom: 10),
                     child: new Swiper(
                       // shrinkWrap: true,
                       // scrollDirection: Axis.horizontal,
                         itemCount: listQsurvey == null ? 0 : listQsurvey.length,
                         viewportFraction: 0.9,
                         scale: 0.9,
+                        physics: listQsurvey.length == 1 ? NeverScrollableScrollPhysics() : null,
                         autoplay: listQsurvey[0].autoscroll == '1' ? true : false,
                         pagination: listQsurvey.length == 1 ? null : new SwiperPagination(
                           alignment: Alignment.bottomCenter,
@@ -453,11 +458,12 @@ class _Home extends State<Home> {
                 ),
                 listQpolling == null || listQpolling[0].status == '0' ? new Container() : new Container(
                     height: 300,
-                    margin: EdgeInsets.only(top: 10, bottom: 10),
+                    margin: EdgeInsets.only(bottom: 10),
                     child: new Swiper(
                         itemCount: listQpolling == null ? 0 : listQpolling.length,
                         viewportFraction: 0.9,
                         scale: 0.9,
+                        physics: listQpolling.length == 1 ? NeverScrollableScrollPhysics() : null,
                         autoplay: listQpolling[0].autoscroll == '1' ? true : false,
                         pagination: listQgames.length == 1 ? null :new SwiperPagination(
                           alignment: Alignment.bottomCenter,
@@ -499,6 +505,7 @@ class _Home extends State<Home> {
                       itemCount: listQgames == null ? 0 : listQgames.length,
                       viewportFraction: 0.9,
                       scale: 0.9,
+                      physics: listQgames.length == 1 ? NeverScrollableScrollPhysics() : null,
                       autoplay: listQgames[0].autoscroll == '1' ? true : false,
                       pagination: listQgames.length == 1 ? null : new SwiperPagination(
                         alignment: Alignment.bottomCenter,
@@ -536,6 +543,7 @@ class _Home extends State<Home> {
                       itemCount: listQnews == null ? 0 : listQnews.length,
                       viewportFraction: 0.9,
                       scale: 0.9,
+                      physics: listQnews.length == 1 ? NeverScrollableScrollPhysics() : null,
                       autoplay: listQnews[0].autoscroll == '1' ? true : false,
                       pagination: listQnews.length == 1 ? null : new SwiperPagination(
                         alignment: Alignment.bottomCenter,
@@ -719,7 +727,7 @@ class _Home extends State<Home> {
                                     margin: const EdgeInsets.only(
                                       left: 10,
                                     ),
-                                    child: new Icon(Icons.account_balance_wallet_outlined)),
+                                    child: new Icon(SvqIcon.rewards, color: new HexColor('#256fa0'),)),
                                 new Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -747,7 +755,7 @@ class _Home extends State<Home> {
                                         sqreward == '0' || sqreward == null ? "Rp.0" : currencyFormat.format(int.parse(sqreward)),
                                         style: new TextStyle(
                                             fontFamily: "helvetica, bold",
-                                            color: Colors.black,
+                                            color: new HexColor('#256fa0'),
                                             fontSize: 10,
                                             fontWeight: FontWeight.w600),
                                       ),
@@ -764,7 +772,7 @@ class _Home extends State<Home> {
                             child: new Row(
                               children: [
                                 new Container(
-                                    child: new Icon(Icons.payment_outlined)),
+                                    child: new Icon(SvqIcon.poin, color: new HexColor('#256fa0'),)),
                                 new Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -792,7 +800,7 @@ class _Home extends State<Home> {
                                         sqpoint == null ? '0' : sqpoint,
                                         style: new TextStyle(
                                             fontFamily: "helvetica, bold",
-                                            color: Colors.black,
+                                            color: new HexColor('#256fa0'),
                                             fontSize: 10,
                                             fontWeight: FontWeight.w600),
                                       ),

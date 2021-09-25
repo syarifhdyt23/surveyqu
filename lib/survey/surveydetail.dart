@@ -25,7 +25,8 @@ class _SurveyDetailState extends State<SurveyDetail> {
   String radioValue = '';
   String id, email;
   Info info = new Info();
-  String type, soal, idSoal, urutanSoal, nextId, nextUrutan, message, prevId, prevUrutan, jenis;
+  // nextId, nextUrutan, message, prevId, prevUrutan,
+  String type, soal, idSoal, urutanSoal, message, jenis;
   TextEditingController _textanswer = new TextEditingController();
   List<Result> listSoal;
   List<dynamic> opsi;
@@ -35,7 +36,7 @@ class _SurveyDetailState extends State<SurveyDetail> {
 
   _SurveyDetailState({this.id, this.urutanSoal, this.message, this.jenis, this.email});
 
-  Future<List<Result>> getQuestion() async {
+  Future<List<Result>> getQuestion(id, urutanSoal, jenis, email) async {
     var data = {
       'id': id,
       'urutan' : urutanSoal,
@@ -43,31 +44,33 @@ class _SurveyDetailState extends State<SurveyDetail> {
       'email' : email
     };
     var res = await Network().postDataToken(data, '/detailQ');
-    if (res.statusCode == 200) {
-      var body = jsonDecode(res.body);
-      var dataJson = body['result'];
-      if(dataJson[0]['id'] == ''){
-        setState(() {
-          message = 'done';
-        });
-      } else {
-        setState(() {
-          listSoal =
-              dataJson.map<Result>((json) => Result.fromJson(json)).toList();
-        });
-        idSoal = listSoal[0].id;
-        soal = listSoal[0].question;
-        type = listSoal[0].type;
-        urutanSoal = listSoal[0].urutan;
-        opsi = listSoal[0].opsi;
-        for (var i = 0; i < 5; i++) {
-          opsiStatus.add(false);
+    if(this.mounted) {
+      if (res.statusCode == 200) {
+        var body = jsonDecode(res.body);
+        var dataJson = body['result'];
+        if (dataJson[0]['id'] == '') {
+          setState(() {
+            message = 'done';
+          });
+        } else {
+          setState(() {
+            listSoal =
+                dataJson.map<Result>((json) => Result.fromJson(json)).toList();
+          });
+          idSoal = listSoal[0].id;
+          soal = listSoal[0].question;
+          type = listSoal[0].type;
+          urutanSoal = listSoal[0].urutan;
+          opsi = listSoal[0].opsi;
+          for (var i = 0; i < 5; i++) {
+            opsiStatus.add(false);
+          }
         }
+      } else {
+        info.messagesNoButton(context, 'info', 'Survey Error');
       }
-    } else {
-      info.messagesNoButton(context, 'info','Survey Error');
+      return listSoal;
     }
-    return listSoal;
   }
 
   Future<void> nextQuestion(id, urutan, jawaban) async {
@@ -79,17 +82,21 @@ class _SurveyDetailState extends State<SurveyDetail> {
       'email' : email
     };
     var res = await Network().postDataToken(data, '/nextQ');
-    if (res.statusCode == 200) {
-      final jsonData = json.decode(res.body);
-      nextQ nextQuest = nextQ.fromJson(jsonData);
-      setState(() {
-        nextId = nextQuest.id;
-        nextUrutan = nextQuest.urutan;
-        message = nextQuest.message;
-        Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context) => SurveyDetail(id: nextId, urutanSoal: nextUrutan, message: message, email: email, jenis: jenis,)));
-      });
-    } else {
-      info.messagesNoButton(context, 'info','Survey Error');
+    if(this.mounted) {
+      if (res.statusCode == 200) {
+        final jsonData = json.decode(res.body);
+        nextQ nextQuest = nextQ.fromJson(jsonData);
+        setState(() {
+          idSoal = nextQuest.id;
+          urutanSoal = nextQuest.urutan;
+          message = nextQuest.message;
+          this.clearData();
+          this.getQuestion(idSoal, urutanSoal, jenis, email);
+          // Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context) => SurveyDetail(id: nextId, urutanSoal: nextUrutan, message: message, email: email, jenis: jenis,)));
+        });
+      } else {
+        info.messagesNoButton(context, 'info', 'Survey Error');
+      }
     }
   }
 
@@ -102,17 +109,27 @@ class _SurveyDetailState extends State<SurveyDetail> {
       'email' : email
     };
     var res = await Network().postDataToken(data, '/prevQ');
-    if (res.statusCode == 200) {
-      final jsonData = json.decode(res.body);
-      nextQ nextQuest = nextQ.fromJson(jsonData);
-      setState(() {
-        prevId = nextQuest.id;
-        prevUrutan = nextQuest.urutan;
-        message = nextQuest.message;
-        Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context) => SurveyDetail(id: prevId, urutanSoal: prevUrutan, message: message, email: email, jenis: jenis,)));
-      });
-    } else {
-      info.messagesNoButton(context, 'info','Survey Error');
+    if(this.mounted) {
+      if (res.statusCode == 200) {
+        final jsonData = json.decode(res.body);
+        prevQ prevQuest = prevQ.fromJson(jsonData);
+        setState(() {
+          // prevId = nextQuest.id;
+          // prevUrutan = nextQuest.urutan;
+          // message = nextQuest.message;
+          // this.getQuestion(prevId, prevUrutan, jenis, email);
+
+          idSoal = prevQuest.id;
+          urutanSoal = prevQuest.urutan;
+          message = prevQuest.message;
+          this.clearData();
+          this.getQuestion(idSoal, urutanSoal, jenis, email);
+
+          // Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context) => SurveyDetail(id: prevId, urutanSoal: prevUrutan, message: message, email: email, jenis: jenis,)));
+        });
+      } else {
+        info.messagesNoButton(context, 'info', 'Survey Error');
+      }
     }
   }
 
@@ -122,7 +139,7 @@ class _SurveyDetailState extends State<SurveyDetail> {
   String base64Image, fileName, imgProfile, image;
   String errMessage = 'Error Uploading Image';
   File _image;
-  final picker = ImagePicker();
+  var picker = ImagePicker();
 
   startUpload(BuildContext context) {
     fileName = _image == null ? image.split('/').last : _image.path.split('/').last;
@@ -137,17 +154,26 @@ class _SurveyDetailState extends State<SurveyDetail> {
       'email' : email
     };
     var res = await Network().postDataToken(data, '/nextQ');
-    if (res.statusCode == 200) {
-      final jsonData = json.decode(res.body);
-      nextQ nextQuest = nextQ.fromJson(jsonData);
-      setState(() {
-        prevId = nextQuest.id;
-        prevUrutan = nextQuest.urutan;
-        message = nextQuest.message;
-        Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context) => SurveyDetail(id: prevId, urutanSoal: prevUrutan, message: message, email: email, jenis: jenis,)));
-      });
-    } else {
-      info.messagesNoButton(context, 'info','Survey Error');
+    if(this.mounted) {
+      if (res.statusCode == 200) {
+        final jsonData = json.decode(res.body);
+        nextQ nextQuest = nextQ.fromJson(jsonData);
+        setState(() {
+          // nextId = nextQuest.id;
+          // nextUrutan = nextQuest.urutan;
+          // message = nextQuest.message;
+          // this.getQuestion(nextId, nextUrutan, jenis, email);
+          idSoal = nextQuest.id;
+          urutanSoal = nextQuest.urutan;
+          message = nextQuest.message;
+          this.clearData();
+          this.getQuestion(idSoal, urutanSoal, jenis, email);
+
+          // Navigator.of(context).pushReplacement(new MaterialPageRoute(builder: (context) => SurveyDetail(id: prevId, urutanSoal: prevUrutan, message: message, email: email, jenis: jenis,)));
+        });
+      } else {
+        info.messagesNoButton(context, 'info', 'Survey Error');
+      }
     }
   }
 
@@ -187,10 +213,28 @@ class _SurveyDetailState extends State<SurveyDetail> {
   }
   /// upload image ///
 
+  clearData(){
+    setState(() {
+      soal = null;
+      type = null;
+      radioValue = null;
+      _image = null;
+      base64Image = null;
+      imgProfile = null;
+      fileName = null;
+      pict = false;
+      picker = null;
+      opsi.clear();
+      opsiStatus.clear();
+      opsiValue.clear();
+      listSoal.clear();
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-    this.getQuestion();
+    this.getQuestion(id, urutanSoal, jenis, email);
   }
 
   @override

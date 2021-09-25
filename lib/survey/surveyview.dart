@@ -51,18 +51,20 @@ class _SurveyViewState extends State<SurveyView> {
       'email': email
     };
     var res = await Network().postDataToken(data, '/detailS');
-    if (res.statusCode == 200) {
-      var body = jsonDecode(res.body);
-      var dataJson = body['result'] as List;
-      setState(() {
-        listSurvey = dataJson
-            .map<HeaderSurvey>((json) => HeaderSurvey.fromJson(json))
-            .toList();
-      });
-    } else {
-      info.messagesNoButton(context, 'info', 'Survey Error');
+    if(this.mounted) {
+      if (res.statusCode == 200) {
+        var body = jsonDecode(res.body);
+        var dataJson = body['result'] as List;
+        setState(() {
+          listSurvey = dataJson
+              .map<HeaderSurvey>((json) => HeaderSurvey.fromJson(json))
+              .toList();
+        });
+      } else {
+        info.messagesNoButton(context, 'info', 'Survey Error');
+      }
+      return listSurvey;
     }
-    return listSurvey;
   }
 
   FutureOr onGoBack(dynamic value) {
@@ -78,6 +80,7 @@ class _SurveyViewState extends State<SurveyView> {
   @override
   Widget build(BuildContext context) {
     size = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: MediaQuery.of(context).size,
@@ -109,7 +112,7 @@ class _SurveyViewState extends State<SurveyView> {
                 ),
                 new Container(
                   alignment: Alignment.center,
-                  padding: EdgeInsets.only(top: 60, left: 10, right: 10, bottom: 10),
+                  padding: EdgeInsets.only(top: 80, left: 25, right: 25, bottom: 10),
                   child: new Column(
                     // mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -124,7 +127,7 @@ class _SurveyViewState extends State<SurveyView> {
                             : listSurvey.length.toString() +" Survey",
                         style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.w600),
                       ),
-                      new Padding(padding: EdgeInsets.all(10)),
+                      new Padding(padding: EdgeInsets.all(5)),
                       new Text(
                         "$deskripsi",
                         style: TextStyle(
@@ -151,23 +154,33 @@ class _SurveyViewState extends State<SurveyView> {
           return new InkWell(
             onTap: () {
               if (jenis == 'qn'){
-                Navigator.of(context).push(new MaterialPageRoute(
+                Navigator.push(context, new MaterialPageRoute(
                     builder: (context) => SliderDetail(
                       id: listSurvey[i].id,
                       urutanSoal: '1',
                       jenis: jenis,
                       email: email,
                     ))
-                ).then(onGoBack);
+                ).then((value) {
+                  setState(() {
+                    // refresh state of Page1
+                    this.getSurvey();
+                  });
+                });
               } else if(listSurvey[i].status == '0'){
-                Navigator.of(context).push(new MaterialPageRoute(
+                Navigator.push(context, new MaterialPageRoute(
                     builder: (context) => SurveyDetail(
                       id: listSurvey[i].id,
                       urutanSoal: '1',
                       jenis: jenis,
                       email: email,
                     ))
-                ).then(onGoBack);
+                ).then((value) {
+                  setState(() {
+                    // refresh state of Page1
+                    this.getSurvey();
+                  });
+                });
               }
             },
             child: new Container(
@@ -207,7 +220,7 @@ class _SurveyViewState extends State<SurveyView> {
                           new Container(
                             padding: EdgeInsets.only(right: 10),
                             child: new Text(
-                              listSurvey[i].rewards+' poin',
+                              listSurvey[i].rewards,
                               style: TextStyle(color: listSurvey[i].status == '0' ? Colors.white : new HexColor('#256fa0')),
                               maxLines: 1,
                             ),
