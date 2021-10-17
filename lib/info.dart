@@ -330,26 +330,26 @@ class Info {
                             ),
                           ),
                         ),
-                        new Container(
-                          margin: EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 10),
-                          height: 215,
-                          width: 500,
-                          decoration: BoxDecoration(
-                            //boxShadow: kElevationToShadow[2],
-                            borderRadius: new BorderRadius.circular(7.0),
-                            image: new DecorationImage(
-                              image: new NetworkImage(image),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
+                        // new Container(
+                        //   margin: EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 10),
+                        //   height: 215,
+                        //   width: 500,
+                        //   decoration: BoxDecoration(
+                        //     //boxShadow: kElevationToShadow[2],
+                        //     borderRadius: new BorderRadius.circular(7.0),
+                        //     image: new DecorationImage(
+                        //       image: new NetworkImage(image),
+                        //       fit: BoxFit.cover,
+                        //     ),
+                        //   ),
+                        // ),
 
                         Expanded(
                           child: ListView(
                             children: [
                               new Container(
                                 // height: 200,
-                                padding: EdgeInsets.only(right: 10, left: 10),
+                                padding: EdgeInsets.only(right: 10, left: 10, top: 10),
                                 margin: EdgeInsets.only(bottom: 10),
                                 child: new Text(
                                   desk,

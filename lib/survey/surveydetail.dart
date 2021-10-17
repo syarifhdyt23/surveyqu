@@ -314,7 +314,7 @@ class _SurveyDetailState extends State<SurveyDetail> {
                                   }
                                 } else if (type == "radio_opt"){
                                   if(jenis == 'qt'){
-                                    if(radioValue == ''){
+                                    if(radioValue == '' || radioValue == null){
                                       info.messagesNoButton(context, "info", "Pilih salah satu jawaban anda");
                                     } else if(radioValue == 'Tidak'){
                                       info.messagesNoButton(context, "info", "Baca lagi dan pahami lebih baik pernyataan pertanyaan-nya yuks");
@@ -322,7 +322,7 @@ class _SurveyDetailState extends State<SurveyDetail> {
                                       this.nextQuestion(idSoal, urutanSoal, radioValue);
                                     }
                                   } else {
-                                    if(radioValue == ''){
+                                    if(radioValue == '' || radioValue == null){
                                       info.messagesNoButton(context, "info", "Pilih salah satu jawaban anda");
                                     } else {
                                       this.nextQuestion(idSoal, urutanSoal, radioValue);
@@ -341,7 +341,7 @@ class _SurveyDetailState extends State<SurveyDetail> {
                                     upload(context, idSoal, urutanSoal, base64Image);
                                   }
                                 } else {
-                                  if(radioValue == ''){
+                                  if(radioValue == ''|| radioValue == null){
                                     info.messagesNoButton(context, "info", "Jawaban anda masih kosong");
                                   } else {
                                     this.nextQuestion(idSoal, urutanSoal, _textanswer.text);
