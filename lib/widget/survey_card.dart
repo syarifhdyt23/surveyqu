@@ -271,6 +271,17 @@ void ShowResult(BuildContext context, String question, String opsi,
                   child: new Column(
                     children: [
                       new Container(
+                        margin: EdgeInsets.only(top: 10),
+                        alignment: Alignment.center,
+                        height: 5,
+                        width: 100,
+                        decoration: BoxDecoration(
+                            color: Colors.grey[300],
+                            borderRadius: BorderRadius.all(Radius.circular(20))
+
+                        ),
+                      ),
+                      new Container(
                         height: 100,
                         decoration: BoxDecoration(
                           color: Colors.white,
@@ -280,30 +291,16 @@ void ShowResult(BuildContext context, String question, String opsi,
                           ),
                         ),
                         child: new Padding(
-                          padding: EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 15),
-                          child: new Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          padding: EdgeInsets.only(bottom: 10, left: 15, right: 15),
+                          child: new ListView(
+                            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              new Container(
-                                alignment: Alignment.center,
-                                height: 5,
-                                width: 100,
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[300],
-                                  borderRadius: BorderRadius.all(Radius.circular(20))
-
-                                ),
-                              ),
                               new Container(
                                 margin: EdgeInsets.only(top: 10),
                                 alignment: Alignment.centerLeft,
                                 child: new Text(question, style: new TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.w600),),
                               ),
                               new Divider(),
-                              new Container(
-                                alignment: Alignment.centerLeft,
-                                child: new Text('Hasil Polling', style: new TextStyle(color: Colors.black, fontSize: 16),),
-                              ),
                               // new Container(
                               //   width: 50,
                               //   child: new FlatButton(
@@ -339,6 +336,11 @@ void ShowResult(BuildContext context, String question, String opsi,
                         child: ListView(
                           shrinkWrap: true,
                           children: [
+                            new Container(
+                              padding: EdgeInsets.only(right: 15, left: 15),
+                              alignment: Alignment.centerLeft,
+                              child: new Text('Hasil Polling:', style: new TextStyle(color: Colors.black, fontSize: 16),),
+                            ),
                             new Container(
                               // height: 200,
                               padding: EdgeInsets.only(right: 15, left: 15),
