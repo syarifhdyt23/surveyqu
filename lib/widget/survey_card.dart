@@ -176,7 +176,7 @@ class _SurveyCardState extends State<SurveyCard> {
                         ),
                         new InkWell(
                           onTap: (){
-                            if(quota == '0'){
+                            if(quota == totalquota){
                               info.MessageInfo(context, 'info','Survey sudah memenuhi kuota');
                             } else {
                               if(jenis == 'qpl' || jenis == 'qsc'){
